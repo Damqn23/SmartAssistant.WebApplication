@@ -1,4 +1,6 @@
-﻿namespace SmartAssistant.WebApplication.Utilities
+﻿using SmartAssistant.WebApplication.Data.Enumerations;
+
+namespace SmartAssistant.WebApplication.Utilities
 {
     public static class Constants
     {
@@ -7,8 +9,14 @@
 
 		public const string DefaultReminderMessage = "Don't forget!";
 
-		// Subscription types
-		public const string SubscriptionTypeMonthly = "Monthly";
-		public const string SubscriptionTypeYearly = "Yearly";
+		public const string DefaultDescription = "New Task";
+		public const bool DefaultCompletionStatus = false;
+
+		public const int MaxTeamNameLength = 10;
+
+		public const int DescriptionMaxLength = 200;
+
+		public const int DefaultSubscriptionDurationMonths = 1;
+		public const PaymentStatus DefaultPaymentStatus = PaymentStatus.Pending;
 	}
 }

@@ -2,6 +2,8 @@
 using SmartAssistant.WebApplication.Data.Enumerations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static SmartAssistant.WebApplication.Utilities.Constants;
+
 
 namespace SmartAssistant.WebApp.Data.Entities
 {
@@ -31,8 +33,8 @@ namespace SmartAssistant.WebApp.Data.Entities
 			// Check if the current date is after the subscription end date
 			if (DateTime.Now > EndDate)
 			{		
-				EndDate = EndDate.AddMonths(1);
-			    PaymentStatus = PaymentStatus.Paid;
+				EndDate = EndDate.AddMonths(DefaultSubscriptionDurationMonths);
+			    PaymentStatus = DefaultPaymentStatus;
 			}
 			else
 			{
