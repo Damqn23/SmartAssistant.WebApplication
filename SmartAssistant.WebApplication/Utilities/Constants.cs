@@ -16,6 +16,10 @@ namespace SmartAssistant.WebApplication.Utilities
 
 		public const int DescriptionMaxLength = 200;
 
+		public const int EventTitleMaxLength = 50;
+
+		public const int CategoryNameMaxLength = 50;
+
 		public const int DefaultSubscriptionDurationMonths = 1;
 		public const PaymentStatus DefaultPaymentStatus = PaymentStatus.Pending;
 	}

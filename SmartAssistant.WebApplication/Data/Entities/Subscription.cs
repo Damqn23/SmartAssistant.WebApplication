@@ -25,7 +25,7 @@ namespace SmartAssistant.WebApp.Data.Entities
 
 		// Navigation property example
 		public User User { get; set; }
-		public int UserId { get; set; }
+		public string UserId { get; set; }
 
 		// Custom method example
 		public void RenewSubscription()
