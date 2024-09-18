@@ -9,7 +9,7 @@ namespace SmartAssistant.Shared.Models
 	public class ReminderModel
 	{
 		public int Id { get; set; }
-		
+
 		public string ReminderMessage { get; set; }
 
 		public DateTime ReminderDate { get; set; }

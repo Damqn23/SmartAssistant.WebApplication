@@ -6,42 +6,37 @@ namespace SmartAssistant.Shared.Repositories
 {
 	public class ReminderRepository : IReminderRepository
 	{
-		public readonly ApplicationDbContext _context;
-		public ReminderRepository(ApplicationDbContext context)
-		{
-			_context = context;
-		}
-		public void Add(ReminderModel entity)
-		{
-			_context.Reminders.Add(entity);
-		}
-
-		public void Delete(ReminderModel entity)
+		public Task AddAsync(ReminderModel entity)
 		{
 			throw new NotImplementedException();
 		}
 
-		public IEnumerable<ReminderModel> GetAll()
+		public Task DeleteAsync(ReminderModel entity)
 		{
 			throw new NotImplementedException();
 		}
 
-		public ReminderModel GetById(int id)
+		public Task<IEnumerable<ReminderModel>> GetAllAsync()
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<List<ReminderModel>> GetRemindersByUserId(string userId)
+		public Task<ReminderModel> GetByIdAsync(int id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void Update(ReminderModel entity)
+		public Task<List<ReminderModel>> GetRemindersByUserIdAsync(string userId)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task UpdateReminderStatus(int reminderId, bool status)
+		public Task UpdateAsync(ReminderModel entity)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task UpdateReminderStatusAsync(int reminderId, bool status)
 		{
 			throw new NotImplementedException();
 		}

@@ -9,8 +9,8 @@ namespace SmartAssistant.Shared.Interfaces
 {
     public interface IReminderRepository : IRepository<ReminderModel>
     {
-        Task<List<ReminderModel>> GetRemindersByUserId(string userId);
+        Task<List<ReminderModel>> GetRemindersByUserIdAsync(string userId);
 
-        Task UpdateReminderStatus(int reminderId, bool status);
+        Task UpdateReminderStatusAsync(int reminderId, bool status);
     }
 }
