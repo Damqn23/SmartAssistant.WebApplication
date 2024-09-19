@@ -182,7 +182,7 @@ namespace SmartAssistant.WebApplication.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ActivityLogs");
+                    b.ToTable("ActivityLogs", (string)null);
                 });
 
             modelBuilder.Entity("SmartAssistant.WebApp.Data.Entities.Attachment", b =>
@@ -211,7 +211,7 @@ namespace SmartAssistant.WebApplication.Data.Migrations
 
                     b.HasIndex("TaskId");
 
-                    b.ToTable("Attachments");
+                    b.ToTable("Attachments", (string)null);
                 });
 
             modelBuilder.Entity("SmartAssistant.WebApp.Data.Entities.Category", b =>
@@ -230,7 +230,7 @@ namespace SmartAssistant.WebApplication.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("SmartAssistant.WebApp.Data.Entities.Comment", b =>
@@ -258,7 +258,7 @@ namespace SmartAssistant.WebApplication.Data.Migrations
 
                     b.HasIndex("TaskId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("SmartAssistant.WebApp.Data.Entities.Event", b =>
@@ -288,7 +288,7 @@ namespace SmartAssistant.WebApplication.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Events");
+                    b.ToTable("Events", (string)null);
                 });
 
             modelBuilder.Entity("SmartAssistant.WebApp.Data.Entities.Note", b =>
@@ -317,7 +317,7 @@ namespace SmartAssistant.WebApplication.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notes");
+                    b.ToTable("Notes", (string)null);
                 });
 
             modelBuilder.Entity("SmartAssistant.WebApp.Data.Entities.Preference", b =>
@@ -347,7 +347,7 @@ namespace SmartAssistant.WebApplication.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Preferences");
+                    b.ToTable("Preferences", (string)null);
                 });
 
             modelBuilder.Entity("SmartAssistant.WebApp.Data.Entities.Reminder", b =>
@@ -376,7 +376,7 @@ namespace SmartAssistant.WebApplication.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Reminders");
+                    b.ToTable("Reminders", (string)null);
                 });
 
             modelBuilder.Entity("SmartAssistant.WebApp.Data.Entities.Subscription", b =>
@@ -408,7 +408,7 @@ namespace SmartAssistant.WebApplication.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Subscriptions");
+                    b.ToTable("Subscriptions", (string)null);
                 });
 
             modelBuilder.Entity("SmartAssistant.WebApp.Data.Entities.Task", b =>
@@ -442,7 +442,7 @@ namespace SmartAssistant.WebApplication.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Tasks");
+                    b.ToTable("Tasks", (string)null);
                 });
 
             modelBuilder.Entity("SmartAssistant.WebApp.Data.Entities.Team", b =>
@@ -460,7 +460,7 @@ namespace SmartAssistant.WebApplication.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Teams");
+                    b.ToTable("Teams", (string)null);
                 });
 
             modelBuilder.Entity("SmartAssistant.WebApp.Data.Entities.User", b =>
@@ -540,7 +540,7 @@ namespace SmartAssistant.WebApplication.Data.Migrations
 
                     b.HasIndex("TeamForeignKey");
 
-                    b.ToTable("UserTeam");
+                    b.ToTable("UserTeam", (string)null);
                 });
 
             modelBuilder.Entity("TeamUser", b =>
@@ -555,7 +555,7 @@ namespace SmartAssistant.WebApplication.Data.Migrations
 
                     b.HasIndex("TeamsId");
 
-                    b.ToTable("TeamUser");
+                    b.ToTable("TeamUser", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

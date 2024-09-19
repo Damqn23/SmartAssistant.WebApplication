@@ -14,7 +14,7 @@ namespace SmartAssistant.WebApplication.Data
 		{
 		}
 
-		public DbSet<User> Users { get; set; }
+		
 		public DbSet<SmartAssistant.WebApp.Data.Entities.Task> Tasks { get; set; }
 		public DbSet<Reminder> Reminders { get; set; }
 		public DbSet<Note> Notes { get; set; }
