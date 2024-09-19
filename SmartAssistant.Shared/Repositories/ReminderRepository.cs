@@ -1,44 +1,69 @@
-﻿using SmartAssistant.Shared.Interfaces;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using SmartAssistant.Shared.Interfaces;
 using SmartAssistant.Shared.Models;
+using SmartAssistant.WebApp.Data.Entities;
 using SmartAssistant.WebApplication.Data;
 
 namespace SmartAssistant.Shared.Repositories
 {
 	public class ReminderRepository : IReminderRepository
 	{
-		public Task AddAsync(ReminderModel entity)
+		private readonly ApplicationDbContext context;
+		private readonly IMapper mapper;
+		public ReminderRepository(ApplicationDbContext _context, IMapper _mapper)
 		{
-			throw new NotImplementedException();
+			context = _context;
+			mapper = _mapper;
+		}
+		public async System.Threading.Tasks.Task AddAsync(ReminderModel entity)
+		{
+			var reminder = mapper.Map<Reminder>(entity);
+
+			context.Reminders.Add(reminder);
+			await context.SaveChangesAsync();
 		}
 
-		public Task DeleteAsync(ReminderModel entity)
+		public async System.Threading.Tasks.Task DeleteAsync(ReminderModel entity)
 		{
-			throw new NotImplementedException();
+			var reminder = mapper.Map<Reminder>(entity);
+			context.Reminders.Remove(reminder);
+			await context.SaveChangesAsync();
 		}
 
-		public Task<IEnumerable<ReminderModel>> GetAllAsync()
+		public async System.Threading.Tasks.Task<IEnumerable<ReminderModel>> GetAllAsync()
 		{
-			throw new NotImplementedException();
+			var reminder = await context.Reminders.ToListAsync();
+			return mapper.Map<List<ReminderModel>>(reminder);
 		}
 
-		public Task<ReminderModel> GetByIdAsync(int id)
+		public async System.Threading.Tasks.Task<ReminderModel> GetByIdAsync(int id)
 		{
-			throw new NotImplementedException();
+			var reminder = await context.Reminders.FindAsync(id);
+			return mapper.Map<ReminderModel>(reminder);
 		}
 
-		public Task<List<ReminderModel>> GetRemindersByUserIdAsync(string userId)
+		public async System.Threading.Tasks.Task<List<ReminderModel>> GetRemindersByUserIdAsync(string userId)
 		{
-			throw new NotImplementedException();
+			var reminder = await context.Reminders.Where(x => x.UserId == userId).ToListAsync();
+			return mapper.Map<List<ReminderModel>>(reminder);
 		}
 
-		public Task UpdateAsync(ReminderModel entity)
+		public async System.Threading.Tasks.Task UpdateAsync(ReminderModel entity)
 		{
-			throw new NotImplementedException();
+			var reminder = mapper.Map<Reminder>(entity);
+			context.Reminders.Update(reminder);
+			await context.SaveChangesAsync();
 		}
 
-		public Task UpdateReminderStatusAsync(int reminderId, bool status)
+		public async System.Threading.Tasks.Task UpdateReminderStatusAsync(int reminderId, bool status)
 		{
-			throw new NotImplementedException();
+			var reminder = await context.Reminders.FindAsync(reminderId);
+			if(reminder != null)
+			{
+				reminder.ReminderDate = status ? DateTime.Now : reminder.ReminderDate;
+				await context.SaveChangesAsync();
+			}
 		}
 	}
 }
