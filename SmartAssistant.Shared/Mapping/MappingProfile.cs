@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SmartAssistant.Shared.Models;
+using SmartAssistant.WebApp.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +13,10 @@ namespace SmartAssistant.Shared.Mapping
     {
         public MappingProfile() 
         {
-            CreateMap<ReminderModel, ReminderModel>()
-                .ForMember(dest => dest.UserId, opt => opt.Ignore());
+            CreateMap<Reminder, ReminderModel>()
+                .ForMember(dest => dest.User, opt => opt.MapFrom<UserResolver>());
+            CreateMap<ReminderModel, Reminder>();
+            CreateMap<ReminderCreateModel, ReminderModel>();
         }
     }
 }

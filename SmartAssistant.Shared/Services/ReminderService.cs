@@ -21,7 +21,12 @@ namespace SmartAssistant.Shared.Services
 			await reminderRepository.AddAsync(reminder);
 		}
 
-		public async Task DeleteReminderAsync(int id)
+        public Task AddReminderAsync(ReminderCreateModel reminder)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task DeleteReminderAsync(int id)
 		{
 			var reminder = await reminderRepository.GetByIdAsync(id);
 			if(reminder != null)

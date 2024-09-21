@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartAssistant.Shared.Interfaces;
 using SmartAssistant.Shared.Models;
+using System.Security.Claims;
 
 namespace SmartAssistant.WebApplication.Controllers
 {
@@ -9,10 +11,12 @@ namespace SmartAssistant.WebApplication.Controllers
 	public class ReminderController : Controller
 	{
 		private readonly IReminderService reminderService;
+        private readonly IMapper mapper;
 
-		public ReminderController(IReminderService _reminderService)
+		public ReminderController(IReminderService _reminderService, IMapper _mapper)
 		{
 			reminderService = _reminderService;
+			mapper = _mapper;
 		}
 		public async Task<IActionResult> Index()
 		{
@@ -36,20 +40,22 @@ namespace SmartAssistant.WebApplication.Controllers
 			return View();
 		}
 
-        // POST: Reminder/Create
-        // POST: Reminder/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ReminderModel reminder)
+        public async Task<IActionResult> Create(ReminderCreateModel reminder)
         {
             if (ModelState.IsValid)
             {
-                // Set the UserId from the logged-in user
-                reminder.UserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value;
+                // Map ReminderCreateModel to ReminderModel
+                var reminderModel = mapper.Map<ReminderModel>(reminder);
 
-                await reminderService.AddReminderAsync(reminder);
+                // Set the UserId from the logged-in user
+                reminderModel.UserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                await reminderService.AddReminderAsync(reminderModel);
                 return RedirectToAction(nameof(Index));
             }
+
             return View(reminder);
         }
 

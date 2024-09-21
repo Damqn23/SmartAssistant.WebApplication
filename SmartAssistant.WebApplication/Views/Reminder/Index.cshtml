@@ -19,9 +19,9 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>@item.ReminderMessage</td>
-                <td>@item.ReminderDate</td>
-                <td>@item.User.UserName</td>
+                <td>@(item.ReminderMessage ?? "N/A")</td>
+                <td>@(item.ReminderDate != DateTime.MinValue ? item.ReminderDate.ToString() : "N/A")</td>
+                <td>@(item.User != null ? item.User.Email : "N/A")</td>
                 <td>
                     <a href="@Url.Action("Details", new { id = item.Id })">Details</a> |
                     <a href="@Url.Action("Edit", new { id = item.Id })">Edit</a> |

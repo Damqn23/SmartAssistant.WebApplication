@@ -8,6 +8,7 @@ using SmartAssistant.Shared.Repositories;
 using SmartAssistant.Shared.Services;
 using SmartAssistant.WebApp.Data.Entities;
 using SmartAssistant.Shared.Mapping;
+using SmartAssistant.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,9 @@ builder.Services.AddScoped<IReminderService, ReminderService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<UserResolver>();
 
 var app = builder.Build();
 
@@ -46,6 +50,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
