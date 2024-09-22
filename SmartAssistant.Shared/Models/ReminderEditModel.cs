@@ -9,13 +9,11 @@ namespace SmartAssistant.Shared.Models
 {
     public class ReminderEditModel
     {
-        public int Id { get; set; }
-
-        [Required(ErrorMessage = "Reminder message is required")]
+        public int Id { get; set; } // Ensure this is populated for editing
+        [Required]
         public string ReminderMessage { get; set; }
-
-        [Required(ErrorMessage = "Reminder date is required")]
-        [DataType(DataType.DateTime)]
+        [Required]
         public DateTime ReminderDate { get; set; }
     }
+
 }
