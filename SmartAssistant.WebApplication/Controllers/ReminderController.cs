@@ -61,56 +61,82 @@ namespace SmartAssistant.WebApplication.Controllers
 
 
         // GET: Reminder/Edit/5
+        [HttpGet]
         public async Task<IActionResult> Edit(int id)
-		{
-			var reminder = await reminderService.GetReminderByIdAsync(id);
-			if (reminder == null)
-			{
-				return NotFound();
-			}
-			return View(reminder);
-		}
+        {
+            var reminder = await reminderService.GetReminderByIdAsync(id);
+            if (reminder == null)
+            {
+                return NotFound();
+            }
 
-		// POST: Reminder/Edit/5
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(int id, ReminderModel reminder)
-		{
-			if (id != reminder.Id)
-			{
-				return NotFound();
-			}
+            // Map the ReminderModel to ReminderEditModel
+            var editModel = mapper.Map<ReminderEditModel>(reminder);
 
-			if (ModelState.IsValid)
-			{
-				await reminderService.UpdateReminderAsync(reminder);
-				return RedirectToAction(nameof(Index));
-			}
-			return View(reminder);
-		}
+            return View(editModel);
+        }
 
-		// GET: Reminder/Delete/5
-		public async Task<IActionResult> Delete(int id)
-		{
-			var reminder = await reminderService.GetReminderByIdAsync(id);
-			if (reminder == null)
-			{
-				return NotFound();
-			}
-			return View(reminder);
-		}
 
-		// POST: Reminder/Delete/5
-		[HttpPost, ActionName("Delete")]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> DeleteConfirmed(int id)
-		{
-			await reminderService.DeleteReminderAsync(id);
-			return RedirectToAction(nameof(Index));
-		}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, ReminderEditModel editModel)
+        {
+            if (id != editModel.Id)
+            {
+                return NotFound();
+            }
 
-		// POST: UpdateReminderStatus
-		[HttpPost]
+            if (ModelState.IsValid)
+            {
+                var reminder = mapper.Map<ReminderModel>(editModel);
+
+                // Retrieve the original reminder from the database to preserve the UserId
+                var existingReminder = await reminderService.GetReminderByIdAsync(id);
+                if (existingReminder == null)
+                {
+                    return NotFound();
+                }
+
+                // Ensure the UserId is preserved
+                reminder.UserId = existingReminder.UserId;
+
+                await reminderService.UpdateReminderAsync(reminder);
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(editModel);
+        }
+
+
+        // GET: Reminder/Delete/5
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var reminder = await reminderService.GetReminderByIdAsync(id);
+            if (reminder == null)
+            {
+                return NotFound();
+            }
+
+            // Map the ReminderModel to ReminderDeleteModel
+            var deleteModel = mapper.Map<ReminderDeleteModel>(reminder);
+
+            return View(deleteModel);
+        }
+
+
+        // POST: Reminder/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            await reminderService.DeleteReminderAsync(id);
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        // POST: UpdateReminderStatus
+        [HttpPost]
 		public async Task<IActionResult> UpdateReminderStatus(int reminderId, bool status)
 		{
 			await reminderService.UpdateReminderStatusAsync(reminderId, status);
