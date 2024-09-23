@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SmartAssistant.Shared.Models;
+using SmartAssistant.Shared.Models.Task;
 using SmartAssistant.WebApp.Data.Entities;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,13 @@ namespace SmartAssistant.Shared.Mapping
             CreateMap<ReminderModel, ReminderDeleteModel>();
 
             CreateMap<UserModel, User>();
+
+            CreateMap<SmartAssistant.WebApp.Data.Entities.Task, TaskModel>();
+            CreateMap<TaskModel, SmartAssistant.WebApp.Data.Entities.Task>();
+
+            CreateMap<TaskCreateModel, TaskModel>();
+            CreateMap<TaskModel, TaskEditModel>();
+            CreateMap<TaskEditModel, TaskModel>();
         }
     }
 }
