@@ -1,63 +1,78 @@
-﻿using SmartAssistant.Shared.Interfaces;
+﻿using Microsoft.AspNetCore.SignalR;
+using SmartAssistant.Shared.Hubs;
+using SmartAssistant.Shared.Interfaces;
 using SmartAssistant.Shared.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SmartAssistant.Shared.Services
 {
-	public class ReminderService : IReminderService
-	{
-		private readonly IReminderRepository reminderRepository;
+    public class ReminderService : IReminderService
+    {
+        private readonly IReminderRepository reminderRepository;
+        private readonly IHubContext<NotificationHub> hubContext;
 
-		public ReminderService(IReminderRepository _reminderRepository)
-		{
-			reminderRepository = _reminderRepository;
-		}
-		public async Task AddReminderAsync(ReminderModel reminder)
-		{
-			await reminderRepository.AddAsync(reminder);
-		}
-
-        public Task AddReminderAsync(ReminderCreateModel reminder)
+        public ReminderService(IReminderRepository _reminderRepository, IHubContext<NotificationHub> _hubContext)
         {
-            throw new NotImplementedException();
+            reminderRepository = _reminderRepository;
+            hubContext = _hubContext;
+        }
+
+        public async Task<ReminderModel> AddReminderAsync(ReminderCreateModel model, string userId)
+        {
+            var reminder = new ReminderModel
+            {
+                ReminderMessage = model.ReminderMessage,
+                ReminderDate = model.ReminderDate,
+                UserId = userId
+            };
+
+            await reminderRepository.AddAsync(reminder);
+
+            // Send notification
+            await hubContext.Clients.User(reminder.UserId).SendAsync("ReceiveReminderNotification",
+                $"Reminder: {reminder.ReminderMessage} is set for {reminder.ReminderDate}");
+
+            return reminder;
         }
 
         public async Task DeleteReminderAsync(int id)
-		{
-			var reminder = await reminderRepository.GetByIdAsync(id);
-			if(reminder != null)
-			{
-				await reminderRepository.DeleteAsync(reminder);
-			}
-		}
+        {
+            var reminder = await reminderRepository.GetByIdAsync(id);
+            if (reminder != null)
+            {
+                await reminderRepository.DeleteAsync(reminder);
+            }
+        }
 
-		public async Task<IEnumerable<ReminderModel>> GetAllRemindersAsync()
-		{
-			return await reminderRepository.GetAllAsync();
-		}
+        public async Task<IEnumerable<ReminderModel>> GetAllRemindersAsync()
+        {
+            return await reminderRepository.GetAllAsync();
+        }
 
-		public async Task<ReminderModel> GetReminderByIdAsync(int id)
-		{
-			return await reminderRepository.GetByIdAsync(id);
-		}
+        public async Task<ReminderModel> GetReminderByIdAsync(int id)
+        {
+            return await reminderRepository.GetByIdAsync(id);
+        }
 
-		public async Task<List<ReminderModel>> GetRemindersByUserIdAsync(string userId)
-		{
-			return await reminderRepository.GetRemindersByUserIdAsync(userId);
-		}
+        public async Task<List<ReminderModel>> GetRemindersByUserIdAsync(string userId)
+        {
+            return await reminderRepository.GetRemindersByUserIdAsync(userId);
+        }
 
-		public async Task UpdateReminderAsync(ReminderModel reminder)
-		{
-			await reminderRepository.UpdateAsync(reminder);
-		}
+        public async Task UpdateReminderAsync(ReminderModel reminder)
+        {
+            await reminderRepository.UpdateAsync(reminder);
+        }
 
-		public async Task UpdateReminderStatusAsync(int reminderId, bool status)
-		{
-			await reminderRepository.UpdateReminderStatusAsync(reminderId, status);
-		}
-	}
+        public async Task UpdateReminderStatusAsync(int reminderId, bool status)
+        {
+            await reminderRepository.UpdateReminderStatusAsync(reminderId, status);
+        }
+
+        public async Task<List<ReminderModel>> GetUpcomingRemindersAsync()
+        {
+            return await reminderRepository.GetRemindersDueSoonAsync();
+        }
+    }
 }

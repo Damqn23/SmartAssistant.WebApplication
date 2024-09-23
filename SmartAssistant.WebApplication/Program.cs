@@ -9,6 +9,7 @@ using SmartAssistant.Shared.Services;
 using SmartAssistant.WebApp.Data.Entities;
 using SmartAssistant.Shared.Mapping;
 using SmartAssistant.Shared;
+using SmartAssistant.Shared.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IReminderRepository, ReminderRepository>();
 builder.Services.AddScoped<IReminderService, ReminderService>();
+
+builder.Services.AddSignalR();
 
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddAutoMapper(typeof(MappingProfile));
@@ -57,5 +60,11 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<NotificationHub>("/notificationHub");
+});
 
 app.Run();

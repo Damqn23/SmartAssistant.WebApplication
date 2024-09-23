@@ -1,44 +1,50 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using SmartAssistant.Shared.Hubs;
 using SmartAssistant.Shared.Interfaces;
 using SmartAssistant.Shared.Models;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace SmartAssistant.WebApplication.Controllers
 {
-	[Authorize]
-	public class ReminderController : Controller
-	{
-		private readonly IReminderService reminderService;
+    [Authorize]
+    public class ReminderController : Controller
+    {
+        private readonly IReminderService reminderService;
         private readonly IMapper mapper;
+        private readonly IHubContext<NotificationHub> hubContext;
 
-		public ReminderController(IReminderService _reminderService, IMapper _mapper)
-		{
-			reminderService = _reminderService;
-			mapper = _mapper;
-		}
-		public async Task<IActionResult> Index()
-		{
-			var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value;
-			var reminders = await reminderService.GetRemindersByUserIdAsync(userId);
-			return View(reminders);
-		}
+        public ReminderController(IReminderService _reminderService, IMapper _mapper, IHubContext<NotificationHub> _hubContext)
+        {
+            reminderService = _reminderService;
+            mapper = _mapper;
+            hubContext = _hubContext;
+        }
 
-		public async Task<IActionResult> Details(int id)
-		{
-			var reminder = await reminderService.GetReminderByIdAsync(id);
-			if (reminder == null)
-			{
-				return NotFound();
-			}
-			return View(reminder);
-		}
-		// GET: Reminder/Create
-		public IActionResult Create()
-		{
-			return View();
-		}
+        public async Task<IActionResult> Index()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var reminders = await reminderService.GetRemindersByUserIdAsync(userId);
+            return View(reminders);
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var reminder = await reminderService.GetReminderByIdAsync(id);
+            if (reminder == null)
+            {
+                return NotFound();
+            }
+            return View(reminder);
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -46,22 +52,18 @@ namespace SmartAssistant.WebApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Map ReminderCreateModel to ReminderModel
-                var reminderModel = mapper.Map<ReminderModel>(reminder);
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var reminderModel = await reminderService.AddReminderAsync(reminder, userId);
 
-                // Set the UserId from the logged-in user
-                reminderModel.UserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                await hubContext.Clients.User(userId).SendAsync("ReceiveReminderNotification",
+                    $"Reminder: {reminderModel.ReminderMessage} is set for {reminderModel.ReminderDate}");
 
-                await reminderService.AddReminderAsync(reminderModel);
                 return RedirectToAction(nameof(Index));
             }
 
             return View(reminder);
         }
 
-
-        // GET: Reminder/Edit/5
-        [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             var reminder = await reminderService.GetReminderByIdAsync(id);
@@ -70,12 +72,9 @@ namespace SmartAssistant.WebApplication.Controllers
                 return NotFound();
             }
 
-            // Map the ReminderModel to ReminderEditModel
             var editModel = mapper.Map<ReminderEditModel>(reminder);
-
             return View(editModel);
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -89,17 +88,13 @@ namespace SmartAssistant.WebApplication.Controllers
             if (ModelState.IsValid)
             {
                 var reminder = mapper.Map<ReminderModel>(editModel);
-
-                // Retrieve the original reminder from the database to preserve the UserId
                 var existingReminder = await reminderService.GetReminderByIdAsync(id);
                 if (existingReminder == null)
                 {
                     return NotFound();
                 }
 
-                // Ensure the UserId is preserved
                 reminder.UserId = existingReminder.UserId;
-
                 await reminderService.UpdateReminderAsync(reminder);
                 return RedirectToAction(nameof(Index));
             }
@@ -107,9 +102,6 @@ namespace SmartAssistant.WebApplication.Controllers
             return View(editModel);
         }
 
-
-        // GET: Reminder/Delete/5
-        [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
             var reminder = await reminderService.GetReminderByIdAsync(id);
@@ -118,14 +110,10 @@ namespace SmartAssistant.WebApplication.Controllers
                 return NotFound();
             }
 
-            // Map the ReminderModel to ReminderDeleteModel
             var deleteModel = mapper.Map<ReminderDeleteModel>(reminder);
-
             return View(deleteModel);
         }
 
-
-        // POST: Reminder/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -134,13 +122,24 @@ namespace SmartAssistant.WebApplication.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
-        // POST: UpdateReminderStatus
         [HttpPost]
-		public async Task<IActionResult> UpdateReminderStatus(int reminderId, bool status)
-		{
-			await reminderService.UpdateReminderStatusAsync(reminderId, status);
-			return RedirectToAction(nameof(Index));
-		}
-	}
+        public async Task<IActionResult> UpdateReminderStatus(int reminderId, bool status)
+        {
+            await reminderService.UpdateReminderStatusAsync(reminderId, status);
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUpcomingReminders()
+        {
+            var upcomingReminders = await reminderService.GetUpcomingRemindersAsync();
+
+            foreach (var reminder in upcomingReminders)
+            {
+                await hubContext.Clients.User(reminder.UserId).SendAsync("ReceiveNotification", reminder);
+            }
+
+            return Ok();
+        }
+    }
 }

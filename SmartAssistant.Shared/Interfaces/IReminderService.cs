@@ -11,11 +11,12 @@ namespace SmartAssistant.Shared.Interfaces
 	{
 		Task<IEnumerable<ReminderModel>> GetAllRemindersAsync();
 		Task<ReminderModel> GetReminderByIdAsync(int id);
-		Task AddReminderAsync(ReminderModel reminder);
-		Task UpdateReminderAsync(ReminderModel reminder);
+        Task<ReminderModel> AddReminderAsync(ReminderCreateModel reminder, string userId);
+        Task UpdateReminderAsync(ReminderModel reminder);
 		Task DeleteReminderAsync(int id);
 		Task UpdateReminderStatusAsync(int reminderId, bool status);
 		Task<List<ReminderModel>> GetRemindersByUserIdAsync(string userId);
+        Task<List<ReminderModel>> GetUpcomingRemindersAsync();
 
-	}
+    }
 }
