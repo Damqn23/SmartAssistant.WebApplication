@@ -9,16 +9,24 @@ namespace SmartAssistant.WebApp.Data.Entities
 {
     public class Task
     {
-		public int Id { get; set; } // Unique identifier
+        public int Id { get; set; } // Unique identifier
 
-		[Required(ErrorMessage = "Task description is required")]
-		[MaxLength(DescriptionMaxLength, ErrorMessage = "Task description is too long")]
-		public string Description { get; set; } // Task description
+        [Required(ErrorMessage = "Task description is required")]
+        [MaxLength(DescriptionMaxLength, ErrorMessage = "Task description is too long")]
+        public string Description { get; set; } // Task description
 
-		[DefaultValue(DefaultCompletionStatus)]
-		public bool IsCompleted { get; set; } // Flag to indicate task completion
+        [DefaultValue(DefaultCompletionStatus)]
+        public bool IsCompleted { get; set; } // Flag to indicate task completion
 
-		[Required]
-		public DateTime DueDate { get; set; } // Due date for the tas
-	}
+        [Required]
+        public DateTime DueDate { get; set; } // Due date for the task
+
+        // New properties
+        [Range(1, 1440, ErrorMessage = "Time must be between 1 minute and 24 hours.")]
+        public int EstimatedTimeToComplete { get; set; } // Time required in minutes
+
+        [Range(1, 5, ErrorMessage = "Priority must be between 1 and 5.")]
+        public int Priority { get; set; } // Task priority (1 = Low, 5 = High)
+    }
+
 }
