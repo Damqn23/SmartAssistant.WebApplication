@@ -27,6 +27,11 @@ namespace SmartAssistant.WebApp.Data.Entities
 
         [Range(1, 5, ErrorMessage = "Priority must be between 1 and 5.")]
         public int Priority { get; set; } // Task priority (1 = Low, 5 = High)
+
+        [ForeignKey("User")]
+        public string UserId { get; set; } // Foreign key to the User
+
+        public User User { get; set; } // Navigation property to the User
     }
 
 }

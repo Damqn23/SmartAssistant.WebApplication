@@ -1,0 +1,33 @@
+﻿@using SmartAssistant.Shared.Models.Task
+@model IEnumerable<TaskModel>
+
+<h2>Tasks</h2>
+
+<p>
+    <a href="@Url.Action("Create")" class="btn btn-primary">Create New Task</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Description</th>
+            <th>Due Date</th>
+            <th>Is Completed</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Description</td>
+                <td>@item.DueDate</td>
+                <td>@(item.IsCompleted ? "Yes" : "No")</td>
+                <td>
+                    <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-warning">Edit</a>
+                    <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

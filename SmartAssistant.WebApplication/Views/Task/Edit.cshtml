@@ -1,40 +1,36 @@
 ﻿@using SmartAssistant.Shared.Models.Task
 @model TaskEditModel
 
-@{
-    ViewData["Title"] = "Edit Task";
-}
-
 <h2>Edit Task</h2>
 
 <form asp-action="Edit">
     <input type="hidden" asp-for="Id" />
-
     <div class="form-group">
         <label asp-for="Description" class="control-label"></label>
         <input asp-for="Description" class="form-control" />
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
-
     <div class="form-group">
         <label asp-for="DueDate" class="control-label"></label>
-        <input asp-for="DueDate" class="form-control" type="datetime-local" />
+        <input asp-for="DueDate" type="datetime-local" class="form-control" />
         <span asp-validation-for="DueDate" class="text-danger"></span>
     </div>
-
     <div class="form-group">
         <label asp-for="EstimatedTimeToComplete" class="control-label"></label>
         <input asp-for="EstimatedTimeToComplete" class="form-control" />
         <span asp-validation-for="EstimatedTimeToComplete" class="text-danger"></span>
     </div>
-
     <div class="form-group">
         <label asp-for="Priority" class="control-label"></label>
-        <input asp-for="Priority" class="form-control" type="number" min="1" max="5" />
+        <select asp-for="Priority" class="form-control" asp-items="Html.GetEnumSelectList<PriorityLevel>()">
+        </select>
         <span asp-validation-for="Priority" class="text-danger"></span>
     </div>
-
+    <div class="form-check">
+        <input asp-for="IsCompleted" class="form-check-input" />
+        <label asp-for="IsCompleted" class="form-check-label"></label>
+    </div>
     <button type="submit" class="btn btn-primary">Save</button>
 </form>
 
-<a asp-action="Index">Back to List</a>
+<a href="@Url.Action("Index")" class="btn btn-secondary">Back to List</a>

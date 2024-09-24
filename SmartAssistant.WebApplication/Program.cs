@@ -25,6 +25,9 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IReminderRepository, ReminderRepository>();
 builder.Services.AddScoped<IReminderService, ReminderService>();
+builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+
 
 builder.Services.AddSignalR();
 
