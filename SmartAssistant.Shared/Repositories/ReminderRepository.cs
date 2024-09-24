@@ -73,11 +73,11 @@ namespace SmartAssistant.Shared.Repositories
             }
         }
 
-        public async Task<List<ReminderModel>> GetRemindersDueSoonAsync()
+        public async Task<List<ReminderModel>> GetRemindersDueSoonAsync(int minutes)
         {
             var currentTime = DateTime.Now;
             var upcomingReminders = await context.Reminders
-                .Where(r => r.ReminderDate >= currentTime && r.ReminderDate <= currentTime.AddHours(1)) // Next 1 hour
+                .Where(r => r.ReminderDate >= currentTime && r.ReminderDate <= currentTime.AddMinutes(minutes))
                 .ToListAsync();
 
             return mapper.Map<List<ReminderModel>>(upcomingReminders);

@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.SignalR;
+using SmartAssistant.Shared.Hubs;
 using SmartAssistant.Shared.Interfaces;
+using SmartAssistant.Shared.Models;
 using SmartAssistant.Shared.Models.Task;
 using System;
 using System.Collections.Generic;
@@ -13,10 +16,14 @@ namespace SmartAssistant.Shared.Services
     public class TaskService : ITaskService
     {
         private readonly ITaskRepository taskRepository;
+        private readonly IReminderService reminderService;
+        IHubContext<NotificationHub> hubContext;
 
-        public TaskService(ITaskRepository _taskRepository)
+        public TaskService(ITaskRepository _taskRepository, IReminderService _reminderService, IHubContext<NotificationHub> _hubContext)
         {
             taskRepository = _taskRepository;
+            reminderService = _reminderService;
+            hubContext = _hubContext;
         }
         public async Task AddTaskAsync(TaskCreateModel taskCreateModel, string userId)
         {
@@ -31,6 +38,16 @@ namespace SmartAssistant.Shared.Services
             };
 
             await taskRepository.AddAsync(task);
+
+            var reminderCreateModel = new ReminderCreateModel
+            {
+                ReminderMessage = $"Reminder for task: {task.Description}",
+                ReminderDate = task.DueDate.AddHours(-1),
+                 };
+
+            await reminderService.AddReminderAsync(reminderCreateModel,userId);
+
+            await hubContext.Clients.User(userId).SendAsync("ReceiveReminderNotification", $"Task '{task.Description}' is created, and a reminder is set for {reminderCreateModel.ReminderDate}");
         }
 
         public async Task DeleteTaskAsync(int id)

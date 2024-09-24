@@ -13,6 +13,8 @@ namespace SmartAssistant.Shared.Interfaces
 
         Task UpdateReminderStatusAsync(int reminderId, bool status);
 
-        Task<List<ReminderModel>> GetRemindersDueSoonAsync();
+        Task<List<ReminderModel>> GetRemindersDueSoonAsync(int minutes);
+
+
     }
 }

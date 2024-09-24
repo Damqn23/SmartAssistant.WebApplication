@@ -30,16 +30,19 @@ namespace SmartAssistant.WebApplication.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(TaskCreateModel createModel)
+        public async Task<IActionResult> Create(TaskCreateModel taskCreateModel)
         {
             if (ModelState.IsValid)
             {
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                await taskService.AddTaskAsync(createModel, userId);
+                await taskService.AddTaskAsync(taskCreateModel, userId);
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(createModel);
+
+            return View(taskCreateModel);
         }
+
 
         public async Task<IActionResult> Edit(int id)
         {

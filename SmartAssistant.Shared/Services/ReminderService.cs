@@ -70,9 +70,22 @@ namespace SmartAssistant.Shared.Services
             await reminderRepository.UpdateReminderStatusAsync(reminderId, status);
         }
 
-        public async Task<List<ReminderModel>> GetUpcomingRemindersAsync()
+        
+
+        public async Task<List<ReminderModel>> GetRemindersDueSoonAsync(int minutes)
         {
-            return await reminderRepository.GetRemindersDueSoonAsync();
+            var currentTime = DateTime.Now;
+            var upcomingReminders = await reminderRepository.GetRemindersDueSoonAsync(minutes);
+
+            foreach (var reminder in upcomingReminders)
+            {
+                await hubContext.Clients.User(reminder.UserId).SendAsync("ReceiveReminderNotification", $"Reminder: {reminder.ReminderMessage} is coming up at {reminder.ReminderDate}");
+            }
+
+            return upcomingReminders;
         }
+
+
+
     }
 }

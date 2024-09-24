@@ -16,7 +16,8 @@ namespace SmartAssistant.Shared.Interfaces
 		Task DeleteReminderAsync(int id);
 		Task UpdateReminderStatusAsync(int reminderId, bool status);
 		Task<List<ReminderModel>> GetRemindersByUserIdAsync(string userId);
-        Task<List<ReminderModel>> GetUpcomingRemindersAsync();
+        
+        Task<List<ReminderModel>> GetRemindersDueSoonAsync(int minutes);
 
     }
 }
