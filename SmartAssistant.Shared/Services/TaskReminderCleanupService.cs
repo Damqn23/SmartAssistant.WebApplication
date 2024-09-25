@@ -14,7 +14,7 @@ namespace SmartAssistant.Shared.Services
 
         private readonly IServiceProvider serviceProvider;
 
-        private readonly TimeSpan cleanUpInterval = TimeSpan.FromSeconds(30);
+        private readonly TimeSpan cleanUpInterval = TimeSpan.FromMinutes(60);
 
         public TaskReminderCleanupService(IServiceProvider _serviceProvider)
         {
