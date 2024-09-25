@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SmartAssistant.Shared.Services.Event.CleanUps
+namespace SmartAssistant.Shared.Services.CleanUps
 {
     public class TaskReminderCleanupService : BackgroundService
     {

@@ -63,5 +63,30 @@ namespace SmartAssistant.Shared.Repositories.Event
             context.Events.Update(eventEntity);
             await context.SaveChangesAsync();
         }
+
+        public async Task DeleteEventAsync(int eventId)
+        {
+            var eventEntity = await context.Events.FindAsync(eventId);
+            if (eventEntity != null)
+            {
+                context.Events.Remove(eventEntity);
+                await context.SaveChangesAsync();
+            }
+        }
+
+        public async Task RemoveExpiredEventsAsync()
+        {
+            var currentDate = DateTime.Now;
+            var expiredEvents = await context.Events
+                .Where(e => e.EventDate < currentDate)
+                .ToListAsync();
+
+            if (expiredEvents.Any())
+            {
+                context.Events.RemoveRange(expiredEvents);
+                await context.SaveChangesAsync();
+            }
+        }
+
     }
 }

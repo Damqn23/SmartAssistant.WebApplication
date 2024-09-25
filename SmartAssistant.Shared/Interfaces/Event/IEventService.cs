@@ -15,5 +15,7 @@ namespace SmartAssistant.Shared.Interfaces.Event
         Task<IEnumerable<EventModel>> GetAllEventsAsync();
         Task<EventModel> GetEventByIdAsync(int id);
         Task<List<EventModel>> GetEventsByUserIdAsync(string userId);
+
+        Task RemoveExpiredEventsAsync();
     }
 }
