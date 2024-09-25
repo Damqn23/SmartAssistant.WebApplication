@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using SmartAssistant.Shared.Interfaces;
 using SmartAssistant.Shared.Interfaces.Event;
 using SmartAssistant.Shared.Models.Event;
+using SmartAssistant.Shared.Services;
 using System.Security.Claims;
 
 namespace SmartAssistant.WebApplication.Controllers
@@ -10,10 +12,12 @@ namespace SmartAssistant.WebApplication.Controllers
     {
         private readonly IEventService eventService;
         private readonly IMapper mapper;
+        private readonly ITaskService taskService;
 
-        public EventController(IEventService _eventService, IMapper _mapper)
+        public EventController(IEventService _eventService, IMapper _mapper, ITaskService _taskService)
         {
             eventService = _eventService;
+            taskService = _taskService;
             mapper = _mapper;
         }
 
@@ -86,5 +90,43 @@ namespace SmartAssistant.WebApplication.Controllers
             await eventService.DeleteEventAsync(id);
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCalendarEvents()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            // Get all events and tasks for the logged-in user
+            var events = await eventService.GetEventsByUserIdAsync(userId);
+            var tasks = await taskService.GetTasksByUserIdAsync(userId);
+
+            // Prepare the data for FullCalendar
+            var calendarEvents = new List<object>();
+
+            // Add events to calendar data
+            foreach (var evt in events)
+            {
+                calendarEvents.Add(new
+                {
+                    title = evt.EventTitle,
+                    start = evt.EventDate.ToString("yyyy-MM-ddTHH:mm:ss"),
+                    color = "blue"
+                });
+            }
+
+            // Add tasks to calendar data
+            foreach (var task in tasks)
+            {
+                calendarEvents.Add(new
+                {
+                    title = task.Description,
+                    start = task.DueDate.ToString("yyyy-MM-ddTHH:mm:ss"),
+                    color = "green"
+                });
+            }
+
+            return Json(calendarEvents);
+        }
+
     }
 }

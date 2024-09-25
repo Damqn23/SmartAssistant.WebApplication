@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SmartAssistant.Shared.Services
+namespace SmartAssistant.Shared.Services.Event.CleanUps
 {
     public class TaskReminderCleanupService : BackgroundService
     {
@@ -36,7 +36,7 @@ namespace SmartAssistant.Shared.Services
                 var taskService = scope.ServiceProvider.GetRequiredService<ITaskService>();
                 var reminderService = scope.ServiceProvider.GetRequiredService<IReminderService>();
 
-                await taskService.RemoveExpiredTasksAsync();  
+                await taskService.RemoveExpiredTasksAsync();
                 await reminderService.RemoveExpiredRemindersAsync();
             }
         }

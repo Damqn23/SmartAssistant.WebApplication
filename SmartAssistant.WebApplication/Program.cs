@@ -13,6 +13,7 @@ using SmartAssistant.Shared.Hubs;
 using SmartAssistant.Shared.Interfaces.Event;
 using SmartAssistant.Shared.Repositories.Event;
 using SmartAssistant.Shared.Services.Event;
+using SmartAssistant.Shared.Services.Event.CleanUps;
 
 var builder = WebApplication.CreateBuilder(args);
 
