@@ -69,9 +69,10 @@
     <!-- Polling Script for Upcoming Reminders -->
     <script>
         setInterval(function () {
-            $.get('/Reminder/GetUpcomingReminders');
-        }, 60000); // Poll every minute for reminders
+            $.get('/Reminder/GetUpcomingReminders'); // Poll every minute for upcoming reminders
+        }, 60000); // Check for upcoming reminders every minute
     </script>
+
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

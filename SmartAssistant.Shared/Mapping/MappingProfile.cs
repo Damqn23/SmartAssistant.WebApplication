@@ -36,6 +36,7 @@ namespace SmartAssistant.Shared.Mapping
             CreateMap<TaskCreateModel, TaskModel>();
             CreateMap<TaskModel, TaskEditModel>();
             CreateMap<TaskEditModel, TaskModel>();
+            CreateMap<TaskModel, TaskDeleteModel>();
         }
     }
 }

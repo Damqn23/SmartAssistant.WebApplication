@@ -29,9 +29,7 @@ namespace SmartAssistant.Shared.Services
 
             await reminderRepository.AddAsync(reminder);
 
-            // Send notification
-            await hubContext.Clients.User(reminder.UserId).SendAsync("ReceiveReminderNotification",
-                $"Reminder: {reminder.ReminderMessage} is set for {reminder.ReminderDate}");
+            
 
             return reminder;
         }
@@ -70,20 +68,24 @@ namespace SmartAssistant.Shared.Services
             await reminderRepository.UpdateReminderStatusAsync(reminderId, status);
         }
 
-        
+
 
         public async Task<List<ReminderModel>> GetRemindersDueSoonAsync(int minutes)
         {
             var currentTime = DateTime.Now;
-            var upcomingReminders = await reminderRepository.GetRemindersDueSoonAsync(minutes);
+            var upcomingReminders = await reminderRepository.GetRemindersDueSoonAsync(minutes); // Get reminders due in the next X minutes
 
             foreach (var reminder in upcomingReminders)
             {
-                await hubContext.Clients.User(reminder.UserId).SendAsync("ReceiveReminderNotification", $"Reminder: {reminder.ReminderMessage} is coming up at {reminder.ReminderDate}");
+                // Notify the user via SignalR when the reminder is due
+                await hubContext.Clients.User(reminder.UserId).SendAsync("ReceiveReminderNotification",
+                    $"Reminder: {reminder.ReminderMessage} is coming up at {reminder.ReminderDate}");
             }
 
             return upcomingReminders;
         }
+
+
 
 
 

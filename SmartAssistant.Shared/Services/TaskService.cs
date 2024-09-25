@@ -39,16 +39,18 @@ namespace SmartAssistant.Shared.Services
 
             await taskRepository.AddAsync(task);
 
+            // Automatically create a reminder for the task, set 1 hour before the task's due date
             var reminderCreateModel = new ReminderCreateModel
             {
-                ReminderMessage = $"Reminder for task: {task.Description}",
-                ReminderDate = task.DueDate.AddHours(-1),
-                 };
+                ReminderMessage = $"You have {task.Description} coming up at {task.DueDate}",
+                ReminderDate = task.DueDate.AddHours(-1),  // Reminder set for 1 hour before task's due date
+            };
 
-            await reminderService.AddReminderAsync(reminderCreateModel,userId);
+            // Add the reminder to the database (but don't send notification yet)
+            await reminderService.AddReminderAsync(reminderCreateModel, userId);
 
-            await hubContext.Clients.User(userId).SendAsync("ReceiveReminderNotification", $"Task '{task.Description}' is created, and a reminder is set for {reminderCreateModel.ReminderDate}");
         }
+
 
         public async Task DeleteTaskAsync(int id)
         {

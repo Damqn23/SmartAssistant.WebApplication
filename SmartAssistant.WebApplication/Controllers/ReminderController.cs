@@ -132,9 +132,10 @@ namespace SmartAssistant.WebApplication.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUpcomingReminders()
         {
-            await reminderService.GetRemindersDueSoonAsync(60); // Check for tasks due in the next 60 minutes
-            return Ok();
+            await reminderService.GetRemindersDueSoonAsync(60); // Check for reminders due in the next 60 minutes
+            return Ok(); // Return 200 OK after sending notifications
         }
+
 
 
 
