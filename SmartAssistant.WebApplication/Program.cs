@@ -10,6 +10,9 @@ using SmartAssistant.WebApp.Data.Entities;
 using SmartAssistant.Shared.Mapping;
 using SmartAssistant.Shared;
 using SmartAssistant.Shared.Hubs;
+using SmartAssistant.Shared.Interfaces.Event;
+using SmartAssistant.Shared.Repositories.Event;
+using SmartAssistant.Shared.Services.Event;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +33,8 @@ builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 
 builder.Services.AddHostedService<TaskReminderCleanupService>();
 
+builder.Services.AddScoped<IEventRepository, EventRepository>();
+builder.Services.AddScoped<IEventService, EventService>();
 
 builder.Services.AddSignalR();
 

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SmartAssistant.Shared.Models;
+using SmartAssistant.Shared.Models.Event;
 using SmartAssistant.Shared.Models.Task;
 using SmartAssistant.WebApp.Data.Entities;
 using System;
@@ -37,6 +38,13 @@ namespace SmartAssistant.Shared.Mapping
             CreateMap<TaskModel, TaskEditModel>();
             CreateMap<TaskEditModel, TaskModel>();
             CreateMap<TaskModel, TaskDeleteModel>();
+
+            CreateMap<Event, EventModel>();
+            CreateMap<EventModel, Event>();
+
+            CreateMap<EventCreateModel, EventModel>();
+            CreateMap<EventEditModel, EventModel>().ForMember(dest => dest.UserId, opt => opt.Ignore());
+            CreateMap<EventModel, EventEditModel>();
         }
     }
 }
