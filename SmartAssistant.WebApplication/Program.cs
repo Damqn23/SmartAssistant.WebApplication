@@ -28,6 +28,8 @@ builder.Services.AddScoped<IReminderService, ReminderService>();
 builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 
+builder.Services.AddHostedService<TaskReminderCleanupService>();
+
 
 builder.Services.AddSignalR();
 

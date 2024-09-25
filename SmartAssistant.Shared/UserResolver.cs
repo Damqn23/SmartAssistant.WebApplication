@@ -22,7 +22,15 @@ namespace SmartAssistant.Shared
 
         public UserModel Resolve(Reminder source, ReminderModel destination, UserModel destMember, ResolutionContext context)
         {
-            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var httpContext = _httpContextAccessor.HttpContext;
+
+            if (httpContext == null || !httpContext.User.Identity.IsAuthenticated)
+            {
+                // Handle non-HTTP or unauthenticated cases (e.g., return null or some default user)
+                return null;
+            }
+
+            var userId = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             if (userId != null)
             {
@@ -35,5 +43,6 @@ namespace SmartAssistant.Shared
 
             return null;
         }
+
     }
 }

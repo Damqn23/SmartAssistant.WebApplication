@@ -17,5 +17,7 @@ namespace SmartAssistant.Shared.Interfaces
         Task DeleteTaskAsync(int id);
 
         Task<List<TaskModel>> GetTasksByUserIdAsync(string userId);
+
+        Task RemoveExpiredTasksAsync();
     }
 }

@@ -101,5 +101,16 @@ namespace SmartAssistant.Shared.Services
             await taskRepository.UpdateAsync(task);
         }
 
+        public async Task RemoveExpiredTasksAsync()
+        {
+            var tasks = await taskRepository.GetAllAsync();
+            var expiredTasks = tasks.Where(t => t.DueDate <= DateTime.Now).ToList();
+
+            foreach (var task in expiredTasks)
+            {
+                await taskRepository.DeleteAsync(task);
+            }
+        }
+
     }
 }

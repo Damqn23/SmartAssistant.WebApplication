@@ -85,8 +85,16 @@ namespace SmartAssistant.Shared.Services
             return upcomingReminders;
         }
 
+        public async Task RemoveExpiredRemindersAsync()
+        {
+            var reminders = await reminderRepository.GetAllAsync();
+            var expiredReminders = reminders.Where(r => r.ReminderDate <= DateTime.Now).ToList();
 
-
+            foreach (var reminder in expiredReminders)
+            {
+                await reminderRepository.DeleteAsync(reminder);
+            }
+        }
 
 
     }

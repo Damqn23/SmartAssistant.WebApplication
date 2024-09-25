@@ -19,5 +19,7 @@ namespace SmartAssistant.Shared.Interfaces
         
         Task<List<ReminderModel>> GetRemindersDueSoonAsync(int minutes);
 
+		Task RemoveExpiredRemindersAsync();
+
     }
 }
