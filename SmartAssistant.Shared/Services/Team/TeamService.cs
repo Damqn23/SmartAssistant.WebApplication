@@ -1,4 +1,5 @@
 ﻿using SmartAssistant.Shared.Interfaces.Team;
+using SmartAssistant.Shared.Interfaces.User;
 using SmartAssistant.Shared.Models.Team;
 using System;
 using System.Collections.Generic;
