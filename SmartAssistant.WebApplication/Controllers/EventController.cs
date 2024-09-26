@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using SmartAssistant.Shared.Interfaces;
 using SmartAssistant.Shared.Interfaces.Event;
+using SmartAssistant.Shared.Interfaces.Task;
 using SmartAssistant.Shared.Models.Event;
 using SmartAssistant.Shared.Services;
 using System.Security.Claims;

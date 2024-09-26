@@ -1,6 +1,8 @@
-﻿namespace SmartAssistant.Shared.Models
+﻿using SmartAssistant.Shared.Models.Reminder;
+
+namespace SmartAssistant.Shared.Models
 {
-	public class UserModel
+    public class UserModel
 	{
 		public string UserId { get; set; }
 		public string UserName { get; set; }

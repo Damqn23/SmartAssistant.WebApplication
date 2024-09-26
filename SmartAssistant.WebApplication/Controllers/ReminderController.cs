@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using SmartAssistant.Shared.Hubs;
-using SmartAssistant.Shared.Interfaces;
-using SmartAssistant.Shared.Models;
+using SmartAssistant.Shared.Interfaces.Reminder;
+using SmartAssistant.Shared.Models.Reminder;
 using System.Security.Claims;
 using System.Threading.Tasks;
 

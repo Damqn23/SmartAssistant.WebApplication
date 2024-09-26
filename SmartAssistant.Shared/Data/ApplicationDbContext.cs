@@ -26,6 +26,7 @@ namespace SmartAssistant.WebApplication.Data
         public DbSet<ActivityLog> ActivityLogs { get; set; }
         public DbSet<Preference> Preferences { get; set; }
         public DbSet<Team> Teams { get; set; }
+        public DbSet<UserTeam> UserTeams { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

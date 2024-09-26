@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SmartAssistant.Shared.Interfaces;
+using SmartAssistant.Shared.Interfaces.Reminder;
+using SmartAssistant.Shared.Interfaces.Task;
 using System;
 using System.Collections.Generic;
 using System.Linq;

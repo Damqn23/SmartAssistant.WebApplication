@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SmartAssistant.Shared.Interfaces
+namespace SmartAssistant.Shared.Interfaces.Task
 {
     public interface ITaskRepository : IRepository<TaskModel>
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using SmartAssistant.Shared.Hubs;
-using SmartAssistant.Shared.Interfaces;
-using SmartAssistant.Shared.Models;
+using SmartAssistant.Shared.Interfaces.Reminder;
+using SmartAssistant.Shared.Models.Reminder;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using SmartAssistant.Shared.Models;
 using SmartAssistant.Shared.Models.Event;
+using SmartAssistant.Shared.Models.Reminder;
 using SmartAssistant.Shared.Models.Task;
 using SmartAssistant.WebApp.Data.Entities;
 using System;

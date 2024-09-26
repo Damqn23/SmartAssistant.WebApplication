@@ -8,8 +8,8 @@ namespace SmartAssistant.Shared.Interfaces
 	{
 		Task<T> GetByIdAsync(int id);
 		Task<IEnumerable<T>> GetAllAsync();
-		Task AddAsync(T entity);
-		Task UpdateAsync(T entity);
-		Task DeleteAsync(T entity);
+        System.Threading.Tasks.Task AddAsync(T entity);
+		System.Threading.Tasks.Task UpdateAsync(T entity);
+        System.Threading.Tasks.Task DeleteAsync(T entity);
 	}
 }

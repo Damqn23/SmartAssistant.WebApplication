@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using SmartAssistant.Shared.Models;
+using SmartAssistant.Shared.Models.Reminder;
 using SmartAssistant.WebApp.Data.Entities;
 using System;
 using System.Collections.Generic;

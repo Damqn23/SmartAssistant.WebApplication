@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using SmartAssistant.Shared.Interfaces;
+using SmartAssistant.Shared.Interfaces.Task;
 using SmartAssistant.Shared.Models.Task;
 using SmartAssistant.WebApplication.Data;
 using System;

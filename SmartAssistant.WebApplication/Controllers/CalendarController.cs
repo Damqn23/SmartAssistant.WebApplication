@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SmartAssistant.Shared.Interfaces.Event;
-using SmartAssistant.Shared.Interfaces;
 using System.Security.Claims;
 using SmartAssistant.Shared.Models.Calendar;
+using SmartAssistant.Shared.Interfaces.Task;
 
 namespace SmartAssistant.WebApplication.Controllers
 {

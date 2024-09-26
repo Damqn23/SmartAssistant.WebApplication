@@ -10,7 +10,7 @@ namespace SmartAssistant.Shared.Interfaces.Event
     public interface IEventRepository : IRepository<EventModel>
     {
         Task<List<EventModel>> GetEventsByUserIdAsync(string userId);
-        Task DeleteEventAsync(int eventId); 
-        Task RemoveExpiredEventsAsync(); 
+        System.Threading.Tasks.Task DeleteEventAsync(int eventId); 
+        System.Threading.Tasks.Task RemoveExpiredEventsAsync(); 
     }
 }

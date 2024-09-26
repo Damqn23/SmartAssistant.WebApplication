@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using SmartAssistant.WebApplication.Data;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
-using SmartAssistant.Shared.Interfaces;
 using SmartAssistant.Shared.Repositories;
 using SmartAssistant.Shared.Services;
 using SmartAssistant.WebApp.Data.Entities;
@@ -14,6 +13,8 @@ using SmartAssistant.Shared.Interfaces.Event;
 using SmartAssistant.Shared.Repositories.Event;
 using SmartAssistant.Shared.Services.Event;
 using SmartAssistant.Shared.Services.CleanUps;
+using SmartAssistant.Shared.Interfaces.Reminder;
+using SmartAssistant.Shared.Interfaces.Task;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using SmartAssistant.Shared.Interfaces;
-using SmartAssistant.Shared.Models;
+using SmartAssistant.Shared.Interfaces.Reminder;
+using SmartAssistant.Shared.Models.Reminder;
 using SmartAssistant.WebApp.Data.Entities;
 using SmartAssistant.WebApplication.Data;
 using System.Collections.Generic;

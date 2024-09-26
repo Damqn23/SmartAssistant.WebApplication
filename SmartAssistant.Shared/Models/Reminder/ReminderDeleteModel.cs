@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SmartAssistant.Shared.Models
+namespace SmartAssistant.Shared.Models.Reminder
 {
     public class ReminderDeleteModel
     {
