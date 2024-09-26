@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SmartAssistant.WebApplication.Data.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using static SmartAssistant.WebApplication.Utilities.Constants;
@@ -8,13 +9,17 @@ namespace SmartAssistant.WebApp.Data.Entities
 {
     public class Team
     {
-		public int Id { get; set; } // Unique identifier
+        public int Id { get; set; } // Unique identifier
 
-		[Required(ErrorMessage = "Team name is required")]
-		[MaxLength(MaxTeamNameLength)]
-		public string TeamName { get; set; } // Team name
+        [Required(ErrorMessage = "Team name is required")]
+        [MaxLength(TeamNameMaxLength)]  // Adjust length based on your constant
+        public string TeamName { get; set; } // Team name
 
-		// Navigation property
-		public ICollection<User> Members { get; set; } = new List<User>(); // Team members
-	}
+        [ForeignKey("User")]
+        public string OwnerId { get; set; } // The creator/owner of the team
+        public User Owner { get; set; } // Navigation property for owner
+
+        // Use UserTeam for many-to-many relationship
+        public ICollection<UserTeam> UserTeams { get; set; } = new List<UserTeam>();
+    }
 }

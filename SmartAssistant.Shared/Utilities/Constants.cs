@@ -22,5 +22,7 @@ namespace SmartAssistant.WebApplication.Utilities
 
 		public const int DefaultSubscriptionDurationMonths = 1;
 		public const PaymentStatus DefaultPaymentStatus = PaymentStatus.Pending;
+
+		public const int TeamNameMaxLength = 100;
 	}
 }
