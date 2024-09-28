@@ -31,15 +31,22 @@ namespace SmartAssistant.Shared.Repositories.Team
 
         public async Task AddUserToTeamAsync(string userId, int teamId)
         {
+            // Ensure that userId is not null or empty
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentException("UserId cannot be null or empty", nameof(userId));
+            }
+
             var userTeam = new UserTeam
             {
-                UserId = userId,
+                UserId = userId,  // This should now be correctly set
                 TeamId = teamId
             };
 
             context.UserTeams.Add(userTeam);
             await context.SaveChangesAsync();
         }
+
 
         public async Task DeleteAsync(TeamModel entity)
         {

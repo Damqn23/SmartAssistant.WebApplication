@@ -4,6 +4,7 @@ using SmartAssistant.Shared.Hubs;
 using SmartAssistant.Shared.Interfaces.Reminder;
 using SmartAssistant.Shared.Interfaces.Task;
 using SmartAssistant.Shared.Models;
+using SmartAssistant.Shared.Models.Reminder;
 using SmartAssistant.Shared.Models.Task;
 using System;
 using System.Collections.Generic;

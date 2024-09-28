@@ -37,7 +37,7 @@ namespace SmartAssistant.Shared
             {
                 return new UserModel
                 {
-                    UserId = userId,
+                    Id = userId,
                     // Populate other user properties as needed
                 };
             }

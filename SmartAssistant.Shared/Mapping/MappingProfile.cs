@@ -3,7 +3,9 @@ using SmartAssistant.Shared.Models;
 using SmartAssistant.Shared.Models.Event;
 using SmartAssistant.Shared.Models.Reminder;
 using SmartAssistant.Shared.Models.Task;
+using SmartAssistant.Shared.Models.Team;
 using SmartAssistant.WebApp.Data.Entities;
+using SmartAssistant.WebApplication.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +22,7 @@ namespace SmartAssistant.Shared.Mapping
                 .ForMember(dest => dest.User, opt => opt.MapFrom<UserResolver>());
             CreateMap<ReminderModel, Reminder>()
               .ForMember(dest => dest.User, opt => opt.Ignore());
-            
+
             CreateMap<ReminderCreateModel, ReminderModel>();
 
             CreateMap<ReminderModel, ReminderEditModel>();
@@ -46,6 +48,20 @@ namespace SmartAssistant.Shared.Mapping
             CreateMap<EventCreateModel, EventModel>();
             CreateMap<EventEditModel, EventModel>().ForMember(dest => dest.UserId, opt => opt.Ignore());
             CreateMap<EventModel, EventEditModel>();
+
+            CreateMap<Team, TeamModel>()
+              .ForMember(dest => dest.Members, opt => opt.MapFrom(src => src.UserTeams.Select(ut => ut.User)))
+              .ForMember(dest => dest.OwnerUserName, opt => opt.MapFrom(src => src.Owner.UserName));
+
+
+            CreateMap<TeamModel, Team>();
+            CreateMap<TeamCreateModel, Team>();
+
+            // Mapping for User
+            CreateMap<User, UserModel>().ReverseMap();
+
+            // Mapping for UserTeam
+            CreateMap<UserTeam, UserTeamModel>().ReverseMap();
         }
     }
 }

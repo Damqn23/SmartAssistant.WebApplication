@@ -22,12 +22,23 @@ namespace SmartAssistant.Shared.Services.Teams
 
         public async Task<TeamModel> GetTeamByIdAsync(int id)
         {
-            return await _teamRepository.GetByIdAsync(id);
+            var team = await _teamRepository.GetByIdAsync(id);
+            var owner = await _userRepository.GetUserByIdAsync(team.OwnerId);  // Fetch owner details
+            team.OwnerUserName = owner.UserName;  // Set owner's username
+            return team;
         }
 
         public async Task<IEnumerable<TeamModel>> GetAllTeamsAsync()
         {
-            return await _teamRepository.GetAllAsync();
+            var teams = await _teamRepository.GetAllAsync();
+
+            foreach (var team in teams)
+            {
+                var owner = await _userRepository.GetUserByIdAsync(team.OwnerId);  // Fetch owner details
+                team.OwnerUserName = owner.UserName;  // Set owner's username
+            }
+
+            return teams;
         }
 
         public async Task CreateTeamAsync(TeamCreateModel teamCreateModel, string ownerId)

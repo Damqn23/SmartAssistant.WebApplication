@@ -99,5 +99,12 @@ namespace SmartAssistant.Shared.Repositories.User
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<UserModel> GetUserByUserNameAsync(string userName)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
+            return _mapper.Map<UserModel>(user);
+        }
+
     }
 }

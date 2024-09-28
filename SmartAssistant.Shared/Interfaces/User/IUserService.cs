@@ -7,14 +7,12 @@ using System.Threading.Tasks;
 
 namespace SmartAssistant.Shared.Interfaces.User
 {
-    public interface IUserRepository : IRepository<UserModel>
+    public interface IUserService
     {
         Task<UserModel> GetUserByIdAsync(string userId);
         Task<IEnumerable<UserModel>> GetAllUsersAsync();
         System.Threading.Tasks.Task AddUserAsync(UserModel user);
         System.Threading.Tasks.Task UpdateUserAsync(UserModel user);
         System.Threading.Tasks.Task DeleteUserAsync(string userId);
-        Task<UserModel> GetUserByUserNameAsync(string userName);
-
     }
 }

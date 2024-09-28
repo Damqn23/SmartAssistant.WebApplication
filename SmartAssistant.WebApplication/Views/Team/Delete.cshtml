@@ -1,0 +1,11 @@
+﻿@model SmartAssistant.Shared.Models.Team.TeamModel
+
+<h2>Delete Team</h2>
+
+<p>Are you sure you want to delete the team <strong>@Model.TeamName</strong>?</p>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

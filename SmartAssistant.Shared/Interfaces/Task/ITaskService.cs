@@ -11,13 +11,13 @@ namespace SmartAssistant.Shared.Interfaces.Task
     {
         Task<IEnumerable<TaskModel>> GetAllTasksAsync();
         Task<TaskModel> GetTaskByIdAsync(int id);
-        Task AddTaskAsync(TaskCreateModel task, string userId);
-        Task UpdateTaskAsync(TaskEditModel task);
+        System.Threading.Tasks.Task AddTaskAsync(TaskCreateModel task, string userId);
+        System.Threading.Tasks.Task UpdateTaskAsync(TaskEditModel task);
 
-        Task DeleteTaskAsync(int id);
+        System.Threading.Tasks.Task DeleteTaskAsync(int id);
 
         Task<List<TaskModel>> GetTasksByUserIdAsync(string userId);
 
-        Task RemoveExpiredTasksAsync();
+        System.Threading.Tasks.Task RemoveExpiredTasksAsync();
     }
 }

@@ -9,13 +9,13 @@ namespace SmartAssistant.Shared.Interfaces.Event
 {
     public interface IEventService
     {
-        Task AddEventAsync(EventCreateModel model, string userId);
-        Task UpdateEventAsync(EventEditModel model);
-        Task DeleteEventAsync(int id);
+        System.Threading.Tasks.Task AddEventAsync(EventCreateModel model, string userId);
+        System.Threading.Tasks.Task UpdateEventAsync(EventEditModel model);
+        System.Threading.Tasks.Task DeleteEventAsync(int id);
         Task<IEnumerable<EventModel>> GetAllEventsAsync();
         Task<EventModel> GetEventByIdAsync(int id);
         Task<List<EventModel>> GetEventsByUserIdAsync(string userId);
 
-        Task RemoveExpiredEventsAsync();
+        System.Threading.Tasks.Task RemoveExpiredEventsAsync();
     }
 }

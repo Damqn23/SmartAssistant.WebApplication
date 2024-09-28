@@ -1,0 +1,37 @@
+﻿@using SmartAssistant.Shared.Models.Team
+@model TeamModel
+
+<h2>Team Details: @Model.TeamName</h2>
+
+<p><strong>Owner:</strong> @Model.OwnerId</p>
+
+<h3>Members</h3>
+<ul>
+    @foreach (var member in Model.Members)
+    {
+        <li>@member.UserName</li>
+    }
+</ul>
+
+<h4>Add a Member</h4>
+<form asp-action="AddUserToTeam" method="post">
+    <input type="hidden" name="teamId" value="@Model.Id" />
+    <div class="form-group">
+        <label for="userName">Username</label>
+        <input type="text" id="userName" name="userName" class="form-control" />
+
+    </div>
+    <button type="submit" class="btn btn-primary">Add Member</button>
+</form>
+
+<h4>Remove a Member</h4>
+<form asp-action="RemoveUserFromTeam" method="post">
+    <input type="hidden" name="teamId" value="@Model.Id" />
+    <div class="form-group">
+        <label for="userName">Username</label>
+        <input type="text" id="userName" name="userName" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-danger">Remove Member</button>
+</form>
+
+<a asp-action="Index" class="btn btn-secondary">Back to Team List</a>

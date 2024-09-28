@@ -15,6 +15,12 @@ using SmartAssistant.Shared.Services.Event;
 using SmartAssistant.Shared.Services.CleanUps;
 using SmartAssistant.Shared.Interfaces.Reminder;
 using SmartAssistant.Shared.Interfaces.Task;
+using SmartAssistant.Shared.Interfaces.Team;
+using SmartAssistant.Shared.Interfaces.User;
+using SmartAssistant.Shared.Repositories.Team;
+using SmartAssistant.Shared.Repositories.User;
+using SmartAssistant.Shared.Services.Teams;
+using SmartAssistant.Shared.Services.User;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,7 +41,10 @@ builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 
 builder.Services.AddHostedService<TaskReminderCleanupService>();
 
-
+builder.Services.AddScoped<ITeamRepository, TeamRepository>();
+builder.Services.AddScoped<ITeamService, TeamService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>(); // If you plan to use user-related functionality
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IEventService, EventService>();
