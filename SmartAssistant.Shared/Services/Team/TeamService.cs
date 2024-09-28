@@ -24,7 +24,16 @@ namespace SmartAssistant.Shared.Services.Teams
         {
             var team = await _teamRepository.GetByIdAsync(id);
             var owner = await _userRepository.GetUserByIdAsync(team.OwnerId);  // Fetch owner details
-            team.OwnerUserName = owner.UserName;  // Set owner's username
+
+            if (owner != null)
+            {
+                team.OwnerUserName = owner.UserName;  // Set owner's username
+            }
+            else
+            {
+                team.OwnerUserName = "Unknown"; // Fallback in case owner not found
+            }
+
             return team;
         }
 
@@ -35,7 +44,15 @@ namespace SmartAssistant.Shared.Services.Teams
             foreach (var team in teams)
             {
                 var owner = await _userRepository.GetUserByIdAsync(team.OwnerId);  // Fetch owner details
-                team.OwnerUserName = owner.UserName;  // Set owner's username
+
+                if (owner != null)
+                {
+                    team.OwnerUserName = owner.UserName;  // Set owner's username
+                }
+                else
+                {
+                    team.OwnerUserName = "Unknown"; // Fallback in case owner not found
+                }
             }
 
             return teams;
@@ -73,5 +90,46 @@ namespace SmartAssistant.Shared.Services.Teams
                 await _teamRepository.AddUserToTeamAsync(userId, teamId);
             }
         }
+
+        public async Task AddUserToTeamAsync(int teamId, string userId, string currentUserId)
+        {
+            var team = await _teamRepository.GetByIdAsync(teamId);
+            if (team.OwnerId != currentUserId)
+            {
+                throw new UnauthorizedAccessException("Only the team creator can add members.");
+            }
+
+            await _teamRepository.AddUserToTeamAsync(userId, teamId);
+        }
+
+        public async Task RemoveUserFromTeamAsync(int teamId, string userId, string currentUserId)
+        {
+            var team = await _teamRepository.GetByIdAsync(teamId);
+            if (team.OwnerId != currentUserId)
+            {
+                throw new UnauthorizedAccessException("Only the team creator can remove members.");
+            }
+
+            await _teamRepository.RemoveUserFromTeamAsync(teamId, userId);
+        }
+
+        public async Task<IEnumerable<TeamModel>> GetTeamsByUserIdAsync(string userId)
+        {
+            // Fetch teams where the user is a member
+            var memberTeams = await _teamRepository.GetTeamsByUserIdAsync(userId);
+
+            // Fetch teams where the user is the owner
+            var ownedTeams = await _teamRepository.GetTeamsByOwnerIdAsync(userId); // Separate method for owned teams
+
+            // Combine both sets of teams, avoiding duplication by team ID
+            var allTeams = memberTeams.Concat(ownedTeams)
+                                      .GroupBy(t => t.Id)
+                                      .Select(g => g.First())
+                                      .ToList();
+
+            return allTeams;
+        }
+
+
     }
 }

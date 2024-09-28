@@ -17,10 +17,14 @@
         {
             <tr>
                 <td>@team.TeamName</td>
-                <td>@team.OwnerUserName</td>
+                <td>@team.OwnerUserName"</td>
                 <td>
                     <a asp-action="Details" asp-route-id="@team.Id" class="btn btn-info">Details</a>
+                    @if (User.Identity.Name == team.OwnerUserName)
+                    {
                     <a asp-action="Delete" asp-route-id="@team.Id" class="btn btn-danger">Delete</a>
+                        
+                    }
                 </td>
             </tr>
         }

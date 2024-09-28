@@ -25,9 +25,12 @@ namespace SmartAssistant.Shared.Repositories.Team
         public async Task AddAsync(TeamModel entity)
         {
             var teamEntity = mapper.Map<WebApp.Data.Entities.Team>(entity);  // Map to Team entity
+
+            // Add the team entity once and save changes
             context.Teams.Add(teamEntity);
-            await context.SaveChangesAsync();
+            await context.SaveChangesAsync();  // Ensure this is called only once
         }
+
 
         public async Task AddUserToTeamAsync(string userId, int teamId)
         {
@@ -51,33 +54,68 @@ namespace SmartAssistant.Shared.Repositories.Team
         public async Task DeleteAsync(TeamModel entity)
         {
             var teamEntity = await context.Teams.FindAsync(entity.Id);
+
             if (teamEntity != null)
             {
+                // Delete all related UserTeam entries before deleting the team
+                var userTeams = await context.UserTeams.Where(ut => ut.TeamId == teamEntity.Id).ToListAsync();
+                if (userTeams.Any())
+                {
+                    context.UserTeams.RemoveRange(userTeams);
+                }
+
+                // Now you can delete the team
                 context.Teams.Remove(teamEntity);
+
                 await context.SaveChangesAsync();
             }
         }
 
+
         public async Task<IEnumerable<TeamModel>> GetAllAsync()
         {
-            var teams = await context.Teams.ToListAsync();
-            return mapper.Map<List<TeamModel>>(teams);  // Return list of TeamModels
+            var teams = await context.Teams
+                .Include(t => t.Owner)  // Eager load the Owner property
+                .ToListAsync();
+
+            return mapper.Map<List<TeamModel>>(teams);  // Return list of TeamModels with OwnerUserName populated
         }
+
 
         public async Task<TeamModel> GetByIdAsync(int id)
         {
-            var teamEntity = await context.Teams.AsNoTracking().FirstOrDefaultAsync(t => t.Id == id);
+            var teamEntity = await context.Teams
+                .Include(t => t.Owner)  // Eager load Owner
+                .AsNoTracking()
+                .FirstOrDefaultAsync(t => t.Id == id);
+
             return mapper.Map<TeamModel>(teamEntity);
         }
 
         public async Task<IEnumerable<TeamModel>> GetTeamsByUserIdAsync(string userId)
         {
-            var teams = await context.Teams
-               .Where(t => t.UserTeams.Any(ut => ut.UserId == userId))
-               .ToListAsync();
+            // Fetch teams where the user is a member
+            var memberTeams = await context.Teams
+                .Where(t => t.UserTeams.Any(ut => ut.UserId == userId))
+                .ToListAsync();
 
-            return mapper.Map<List<TeamModel>>(teams);
+            // Fetch teams where the user is the owner
+            var ownedTeams = await context.Teams
+                .Where(t => t.OwnerId == userId)
+                .ToListAsync();
+
+            // Combine both sets of teams and return distinct results
+            var allTeams = memberTeams.Concat(ownedTeams)
+                .GroupBy(t => t.Id)        // Group by Team ID
+                .Select(g => g.First())    // Select only the first occurrence of each team
+                .ToList();
+
+            // Debugging: Output the teams to verify
+
+            return mapper.Map<List<TeamModel>>(allTeams);
         }
+
+
 
         public async Task RemoveUserFromTeamAsync(int teamId, string userId)
         {
@@ -99,6 +137,15 @@ namespace SmartAssistant.Shared.Repositories.Team
             await context.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<TeamModel>> GetTeamsByOwnerIdAsync(string ownerId)
+        {
+            // Fetch teams where the user is the owner
+            var ownedTeams = await context.Teams
+                .Where(t => t.OwnerId == ownerId)
+                .ToListAsync();
+
+            return mapper.Map<List<TeamModel>>(ownedTeams);
+        }
 
     }
 }

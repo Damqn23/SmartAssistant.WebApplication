@@ -23,6 +23,8 @@ namespace SmartAssistant.WebApplication.Controllers
             return View(teams);
         }
 
+
+
         // GET: /Team/Details/{id}
         public async Task<IActionResult> Details(int id)
         {
@@ -48,10 +50,21 @@ namespace SmartAssistant.WebApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                var ownerId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value;
-                await _teamService.CreateTeamAsync(model, ownerId);
+                var ownerId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                if (ownerId != null)
+                {
+                    // Ensure that the team is not created twice by mistake
+                    await _teamService.CreateTeamAsync(model, ownerId);
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Unable to find the current user.");
+                    return View(model);
+                }
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(model);
         }
 
@@ -60,14 +73,25 @@ namespace SmartAssistant.WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddUserToTeam(int teamId, string userName)
         {
+            var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value;
             var user = await _userRepository.GetUserByUserNameAsync(userName);  // Fetch user by UserName
+
             if (user == null)
             {
                 ModelState.AddModelError("", "User not found.");
                 return RedirectToAction("Details", new { id = teamId });
             }
 
-            await _teamService.AddUserToTeamAsync(teamId, user.Id);  // Use UserId for internal handling
+            try
+            {
+                await _teamService.AddUserToTeamAsync(teamId, user.Id, currentUserId);  // Use UserId for internal handling, ensure only creator can add
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return RedirectToAction("Details", new { id = teamId });
+            }
+
             return RedirectToAction("Details", new { id = teamId });
         }
 
@@ -76,14 +100,25 @@ namespace SmartAssistant.WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveUserFromTeam(int teamId, string userName)
         {
+            var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value;
             var user = await _userRepository.GetUserByUserNameAsync(userName);  // Fetch user by UserName
+
             if (user == null)
             {
                 ModelState.AddModelError("", "User not found.");
                 return RedirectToAction("Details", new { id = teamId });
             }
 
-            await _teamService.RemoveUserFromTeamAsync(teamId, user.Id);  // Use UserId for internal handling
+            try
+            {
+                await _teamService.RemoveUserFromTeamAsync(teamId, user.Id, currentUserId);  // Ensure only creator can remove
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return RedirectToAction("Details", new { id = teamId });
+            }
+
             return RedirectToAction("Details", new { id = teamId });
         }
 

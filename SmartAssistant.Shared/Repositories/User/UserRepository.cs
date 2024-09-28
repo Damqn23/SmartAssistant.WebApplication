@@ -25,6 +25,10 @@ namespace SmartAssistant.Shared.Repositories.User
         public async Task<UserModel> GetUserByIdAsync(string userId)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null)
+            {
+                throw new Exception($"User with ID {userId} not found.");
+            }
             return _mapper.Map<UserModel>(user);
         }
 
