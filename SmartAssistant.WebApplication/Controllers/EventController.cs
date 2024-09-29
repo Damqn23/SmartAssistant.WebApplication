@@ -96,14 +96,14 @@ namespace SmartAssistant.WebApplication.Controllers
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            // Get all events and tasks for the logged-in user
+            
             var events = await eventService.GetEventsByUserIdAsync(userId);
             var tasks = await taskService.GetTasksByUserIdAsync(userId);
 
-            // Prepare the data for FullCalendar
+            
             var calendarEvents = new List<object>();
 
-            // Add events to calendar data
+            
             foreach (var evt in events)
             {
                 calendarEvents.Add(new
@@ -114,7 +114,7 @@ namespace SmartAssistant.WebApplication.Controllers
                 });
             }
 
-            // Add tasks to calendar data
+           
             foreach (var task in tasks)
             {
                 calendarEvents.Add(new

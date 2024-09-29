@@ -68,7 +68,5 @@ namespace SmartAssistant.Shared.Services.Event
         {
             await eventRepository.RemoveExpiredEventsAsync();
         }
-
-
     }
 }
