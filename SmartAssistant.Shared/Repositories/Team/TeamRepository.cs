@@ -46,7 +46,7 @@ namespace SmartAssistant.Shared.Repositories.Team
                 TeamId = teamId
             };
 
-            context.UserTeams.Add(userTeam);
+            await context.UserTeams.AddAsync(userTeam);
             await context.SaveChangesAsync();
         }
 
@@ -78,14 +78,14 @@ namespace SmartAssistant.Shared.Repositories.Team
                 .Include(t => t.Owner)  // Eager load the Owner property
                 .ToListAsync();
 
-            return mapper.Map<List<TeamModel>>(teams);  // Return list of TeamModels with OwnerUserName populated
+            return mapper.Map<List<TeamModel>>(teams);  
         }
 
 
         public async Task<TeamModel> GetByIdAsync(int id)
         {
             var teamEntity = await context.Teams
-                .Include(t => t.Owner)  // Eager load Owner
+                .Include(t => t.Owner) 
                 .AsNoTracking()
                 .FirstOrDefaultAsync(t => t.Id == id);
 

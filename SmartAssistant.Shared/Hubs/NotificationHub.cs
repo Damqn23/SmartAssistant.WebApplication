@@ -13,5 +13,15 @@ namespace SmartAssistant.Shared.Hubs
         {
             await Clients.All.SendAsync("ReceiveReminderNotification", message);
         }
+
+        public async Task SendNewTeamMemberNotification(string message)
+        {
+            await Clients.All.SendAsync("UserAddedToTeam", message);
+        }
+
+        public async Task RemoveTeamMemberNotification(string message)
+        {
+            await Clients.All.SendAsync("UserRemovedFromTeam", message);
+        }
     }
 }

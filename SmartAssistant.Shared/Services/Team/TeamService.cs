@@ -1,6 +1,9 @@
-﻿using SmartAssistant.Shared.Interfaces.Team;
+﻿using Microsoft.AspNetCore.SignalR;
+using SmartAssistant.Shared.Hubs;
+using SmartAssistant.Shared.Interfaces.Team;
 using SmartAssistant.Shared.Interfaces.User;
 using SmartAssistant.Shared.Models.Team;
+using SmartAssistant.WebApp.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,19 +14,21 @@ namespace SmartAssistant.Shared.Services.Teams
 {
     public class TeamService : ITeamService
     {
-        private readonly ITeamRepository _teamRepository;
-        private readonly IUserRepository _userRepository;
+        private readonly ITeamRepository teamRepository;
+        private readonly IUserRepository userRepository;
+        private readonly IHubContext<NotificationHub> hubContext;
 
-        public TeamService(ITeamRepository teamRepository, IUserRepository userRepository)
+        public TeamService(ITeamRepository _teamRepository, IUserRepository _userRepository, IHubContext<NotificationHub> _hubContext)
         {
-            _teamRepository = teamRepository;
-            _userRepository = userRepository;
+            teamRepository = _teamRepository;
+            userRepository = _userRepository;
+            hubContext = _hubContext;
         }
 
         public async Task<TeamModel> GetTeamByIdAsync(int id)
         {
-            var team = await _teamRepository.GetByIdAsync(id);
-            var owner = await _userRepository.GetUserByIdAsync(team.OwnerId);  // Fetch owner details
+            var team = await teamRepository.GetByIdAsync(id);
+            var owner = await userRepository.GetUserByIdAsync(team.OwnerId);  // Fetch owner details
 
             if (owner != null)
             {
@@ -39,11 +44,11 @@ namespace SmartAssistant.Shared.Services.Teams
 
         public async Task<IEnumerable<TeamModel>> GetAllTeamsAsync()
         {
-            var teams = await _teamRepository.GetAllAsync();
+            var teams = await teamRepository.GetAllAsync();
 
             foreach (var team in teams)
             {
-                var owner = await _userRepository.GetUserByIdAsync(team.OwnerId);  // Fetch owner details
+                var owner = await userRepository.GetUserByIdAsync(team.OwnerId);  // Fetch owner details
 
                 if (owner != null)
                 {
@@ -58,70 +63,75 @@ namespace SmartAssistant.Shared.Services.Teams
             return teams;
         }
 
-        public async Task CreateTeamAsync(TeamCreateModel teamCreateModel, string ownerId)
+        public async System.Threading.Tasks.Task CreateTeamAsync(TeamCreateModel teamCreateModel, string ownerId)
         {
             var team = new TeamModel
             {
                 TeamName = teamCreateModel.TeamName,
                 OwnerId = ownerId
             };
-            await _teamRepository.AddAsync(team);
+            await teamRepository.AddAsync(team);
         }
 
-        public async Task RemoveUserFromTeamAsync(int teamId, string userId)
+        public async System.Threading.Tasks.Task RemoveUserFromTeamAsync(int teamId, string userId)
         {
-            await _teamRepository.RemoveUserFromTeamAsync(teamId, userId);
+            await teamRepository.RemoveUserFromTeamAsync(teamId, userId);
         }
 
-        public async Task DeleteTeamAsync(int id)
+        public async System.Threading.Tasks.Task DeleteTeamAsync(int id)
         {
-            var team = await _teamRepository.GetByIdAsync(id);
+            var team = await teamRepository.GetByIdAsync(id);
             if (team != null)
             {
-                await _teamRepository.DeleteAsync(team);
+                await teamRepository.DeleteAsync(team);
             }
         }
 
-        public async Task AddUserToTeamAsync(int teamId, string userId)
+        public async System.Threading.Tasks.Task AddUserToTeamAsync(int teamId, string userId, string currentUserId)
         {
-            var team = await _teamRepository.GetByIdAsync(teamId);
-            if (team != null)
-            {
-                await _teamRepository.AddUserToTeamAsync(userId, teamId);
-            }
-        }
-
-        public async Task AddUserToTeamAsync(int teamId, string userId, string currentUserId)
-        {
-            var team = await _teamRepository.GetByIdAsync(teamId);
+            var team = await teamRepository.GetByIdAsync(teamId);
+            var user = await userRepository.GetUserByIdAsync(userId);
             if (team.OwnerId != currentUserId)
             {
                 throw new UnauthorizedAccessException("Only the team creator can add members.");
             }
 
-            await _teamRepository.AddUserToTeamAsync(userId, teamId);
+            await teamRepository.AddUserToTeamAsync(userId, teamId);
+
+            if(user != null && team != null)
+            {
+                string message = $"User {user.UserName} was added to the team {team.TeamName}";
+                await hubContext.Clients.All.SendAsync("UserAddedToTeam", message);
+            }
         }
 
-        public async Task RemoveUserFromTeamAsync(int teamId, string userId, string currentUserId)
+        public async System.Threading.Tasks.Task RemoveUserFromTeamAsync(int teamId, string userId, string currentUserId)
         {
-            var team = await _teamRepository.GetByIdAsync(teamId);
+            var team = await teamRepository.GetByIdAsync(teamId);
+            var user = await userRepository.GetUserByIdAsync(userId);
             if (team.OwnerId != currentUserId)
             {
                 throw new UnauthorizedAccessException("Only the team creator can remove members.");
             }
 
-            await _teamRepository.RemoveUserFromTeamAsync(teamId, userId);
+            await teamRepository.RemoveUserFromTeamAsync(teamId, userId);
+
+            if (user != null && team != null)
+            {
+                string message = $"User {user.UserName} was removed from the team {team.TeamName}";
+                await hubContext.Clients.All.SendAsync("UserRemovedFromTeam", message);
+            }
         }
 
         public async Task<IEnumerable<TeamModel>> GetTeamsByUserIdAsync(string userId)
         {
-            // Fetch teams where the user is a member
-            var memberTeams = await _teamRepository.GetTeamsByUserIdAsync(userId);
+            
+            var memberTeams = await teamRepository.GetTeamsByUserIdAsync(userId);
 
-            // Fetch teams where the user is the owner
-            var ownedTeams = await _teamRepository.GetTeamsByOwnerIdAsync(userId); // Separate method for owned teams
+            
+            var ownedTeams = await teamRepository.GetTeamsByOwnerIdAsync(userId); 
 
-            // Combine both sets of teams, avoiding duplication by team ID
+            
             var allTeams = memberTeams.Concat(ownedTeams)
                                       .GroupBy(t => t.Id)
                                       .Select(g => g.First())

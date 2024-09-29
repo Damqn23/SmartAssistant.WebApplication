@@ -70,12 +70,21 @@
             .withUrl("/notificationHub")
             .build();
 
+        connection.start().then(() => {
+            console.log("SignalR connected!");
+        }).catch((err) => console.error(err.toString()));
+
         connection.on("ReceiveReminderNotification", function (message) {
             alert(message); // You can customize this to use a more elegant UI for notifications (e.g., toast notifications).
         });
 
-        connection.start().catch(function (err) {
-            console.error(err.toString());
+        // Listen for the "UserAddedToTeam" event
+        connection.on("UserAddedToTeam", function (message) {
+            alert(message);  // Or show a custom notification
+        });
+
+        connection.on("UserRemovedFromTeam", function (message) {
+            alert(message);  // Show a notification when a user is removed
         });
     </script>
 
