@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SmartAssistant.Shared.Data.Entities;
 using SmartAssistant.WebApplication.Data.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -21,5 +22,9 @@ namespace SmartAssistant.WebApp.Data.Entities
 
         // Use UserTeam for many-to-many relationship
         public ICollection<UserTeam> UserTeams { get; set; } = new List<UserTeam>();
+
+        public virtual ICollection<Message> Messages { get; set; }
+
+        public virtual ICollection<TeamDocument> TeamDocuments { get; set; }
     }
 }

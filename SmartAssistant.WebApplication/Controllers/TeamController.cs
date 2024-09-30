@@ -19,7 +19,12 @@ namespace SmartAssistant.WebApplication.Controllers
         // GET: /Team/Index
         public async Task<IActionResult> Index()
         {
-            var teams = await _teamService.GetAllTeamsAsync();
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+            var teams = await _teamService.GetTeamsByUserIdAsync(userId);
             return View(teams);
         }
 

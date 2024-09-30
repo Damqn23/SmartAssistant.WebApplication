@@ -42,9 +42,9 @@ namespace SmartAssistant.Shared.Services.Teams
             return team;
         }
 
-        public async Task<IEnumerable<TeamModel>> GetAllTeamsAsync()
+        public async Task<IEnumerable<TeamModel>> GetAllTeamsAsync(string userId)
         {
-            var teams = await teamRepository.GetAllAsync();
+            var teams = await teamRepository.GetTeamsByUserIdAsync(userId);
 
             foreach (var team in teams)
             {
@@ -127,16 +127,11 @@ namespace SmartAssistant.Shared.Services.Teams
         {
             
             var memberTeams = await teamRepository.GetTeamsByUserIdAsync(userId);
-
-            
-            var ownedTeams = await teamRepository.GetTeamsByOwnerIdAsync(userId); 
-
-            
+            var ownedTeams = await teamRepository.GetTeamsByOwnerIdAsync(userId);
             var allTeams = memberTeams.Concat(ownedTeams)
                                       .GroupBy(t => t.Id)
                                       .Select(g => g.First())
                                       .ToList();
-
             return allTeams;
         }
 

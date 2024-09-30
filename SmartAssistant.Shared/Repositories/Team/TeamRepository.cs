@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
+using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SmartAssistant.Shared.Interfaces.Team;
 using SmartAssistant.Shared.Models.Team;
 using SmartAssistant.WebApplication.Data;
 using SmartAssistant.WebApplication.Data.Entities;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,8 +19,9 @@ namespace SmartAssistant.Shared.Repositories.Team
     {
         private readonly ApplicationDbContext context;
         private readonly IMapper mapper;
+        private readonly ILogger<TeamRepository> logger;
 
-        public TeamRepository(ApplicationDbContext _context, IMapper _mapper)
+        public TeamRepository(ApplicationDbContext _context, IMapper _mapper, ILogger<TeamRepository> _logger)
         {
             context = _context;
             mapper = _mapper;
@@ -97,11 +101,13 @@ namespace SmartAssistant.Shared.Repositories.Team
             // Fetch teams where the user is a member
             var memberTeams = await context.Teams
                 .Where(t => t.UserTeams.Any(ut => ut.UserId == userId))
+                .Include(t => t.Owner)
                 .ToListAsync();
 
             // Fetch teams where the user is the owner
             var ownedTeams = await context.Teams
                 .Where(t => t.OwnerId == userId)
+                .Include(t => t.Owner)
                 .ToListAsync();
 
             // Combine both sets of teams and return distinct results
@@ -110,7 +116,7 @@ namespace SmartAssistant.Shared.Repositories.Team
                 .Select(g => g.First())    // Select only the first occurrence of each team
                 .ToList();
 
-            // Debugging: Output the teams to verify
+           
 
             return mapper.Map<List<TeamModel>>(allTeams);
         }

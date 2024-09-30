@@ -43,7 +43,7 @@ builder.Services.AddHostedService<TaskReminderCleanupService>();
 
 builder.Services.AddScoped<ITeamRepository, TeamRepository>();
 builder.Services.AddScoped<ITeamService, TeamService>();
-builder.Services.AddScoped<IUserRepository, UserRepository>(); // If you plan to use user-related functionality
+builder.Services.AddScoped<IUserRepository, UserRepository>(); 
 builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<IEventRepository, EventRepository>();

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SmartAssistant.Shared.Data.Entities;
 using SmartAssistant.WebApp.Data.Entities;
 using SmartAssistant.WebApplication.Data.Entities;
 using System.Reflection.Emit;
@@ -17,14 +18,9 @@ namespace SmartAssistant.WebApplication.Data
 
         public DbSet<SmartAssistant.WebApp.Data.Entities.Task> Tasks { get; set; }
         public DbSet<Reminder> Reminders { get; set; }
-        public DbSet<Note> Notes { get; set; }
-        public DbSet<Category> Categories { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<TeamDocument> TeamDocuments { get; set; }
         public DbSet<Event> Events { get; set; }
-        public DbSet<Subscription> Subscriptions { get; set; }
-        public DbSet<Attachment> Attachments { get; set; }
-        public DbSet<Comment> Comments { get; set; }
-        public DbSet<ActivityLog> ActivityLogs { get; set; }
-        public DbSet<Preference> Preferences { get; set; }
         public DbSet<Team> Teams { get; set; }
         public DbSet<UserTeam> UserTeams { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
@@ -46,7 +42,19 @@ namespace SmartAssistant.WebApplication.Data
                 .HasOne(ut => ut.Team)
                 .WithMany(t => t.UserTeams)
                 .HasForeignKey(ut => ut.TeamId)
-                .OnDelete(DeleteBehavior.Restrict);  // Dis
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Message>()
+        .HasOne(m => m.Team)
+        .WithMany(t => t.Messages)
+        .HasForeignKey(m => m.TeamId)
+        .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
+
+            builder.Entity<TeamDocument>()
+                .HasOne(td => td.Team)
+                .WithMany(t => t.TeamDocuments)
+                .HasForeignKey(td => td.TeamId)
+                .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
         }
     }
 }

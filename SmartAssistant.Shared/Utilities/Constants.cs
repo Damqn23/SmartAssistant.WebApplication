@@ -24,5 +24,10 @@ namespace SmartAssistant.WebApplication.Utilities
 		public const PaymentStatus DefaultPaymentStatus = PaymentStatus.Pending;
 
 		public const int TeamNameMaxLength = 100;
-	}
+
+        public const int ContentMaxLength = 1000;
+
+        public const int FileNameMaxLength = 255;
+
+    }
 }
