@@ -52,6 +52,12 @@ builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddHostedService<EventCleanupService>();
 builder.Services.AddSignalR();
 
+builder.Services.AddSignalR().AddJsonProtocol(options =>
+{
+    options.PayloadSerializerOptions.PropertyNamingPolicy = null; // Keep property names as-is
+});
+
+
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
@@ -89,6 +95,7 @@ app.MapRazorPages();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapHub<NotificationHub>("/notificationHub");
+    endpoints.MapHub<ChatHub>("/chatHub");
 });
 
 app.Run();

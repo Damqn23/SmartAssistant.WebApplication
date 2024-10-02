@@ -22,16 +22,14 @@ namespace SmartAssistant.Shared.Data.Entities
         [Required]
         [ForeignKey("User")]
         public string UserId { get; set; }  // AspNetUsers
+        public virtual User User { get; set; }
 
         [Required]
         [ForeignKey("Team")]
         public int TeamId { get; set; }  // Teams
+        public virtual Team Team { get; set; }
 
         [Required]
         public DateTime SentAt { get; set; }
-
-        
-        public virtual Team Team { get; set; }
-        public virtual User User { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SmartAssistant.Shared.Data.Entities;
 using SmartAssistant.Shared.Models;
 using SmartAssistant.Shared.Models.Event;
 using SmartAssistant.Shared.Models.Reminder;
@@ -64,6 +65,9 @@ namespace SmartAssistant.Shared.Mapping
 
             // Mapping for UserTeam
             CreateMap<UserTeam, UserTeamModel>().ReverseMap();
+
+            
+
         }
     }
 }

@@ -2,6 +2,7 @@
 using SmartAssistant.Shared.Interfaces.Team;
 using SmartAssistant.Shared.Interfaces.User;
 using SmartAssistant.Shared.Models.Team;
+using System.Security.Claims;
 
 namespace SmartAssistant.WebApplication.Controllers
 {
@@ -145,6 +146,30 @@ namespace SmartAssistant.WebApplication.Controllers
         {
             await _teamService.DeleteTeamAsync(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Chat(int teamId)
+        {
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var teams = await _teamService.GetTeamsByUserIdAsync(userId);
+
+            return View(teams);
+        }
+
+        public IActionResult TeamChat(int teamId)
+        {
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            
+
+            var model = new ChatViewModel
+            {
+                TeamId = teamId,
+                UserId = userId
+            };
+
+            return View(model);
         }
     }
 }
