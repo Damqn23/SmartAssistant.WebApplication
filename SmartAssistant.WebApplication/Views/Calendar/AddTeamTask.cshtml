@@ -1,0 +1,40 @@
+﻿@using SmartAssistant.Shared.Models.Team
+@model TeamTaskCreateModel
+
+<h2>Add Task for Team</h2>
+
+<form asp-action="AddTeamTask" method="post">
+    @Html.HiddenFor(m => m.TeamId)
+
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <input asp-for="Description" class="form-control" />
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DueDate"></label>
+        <input asp-for="DueDate" type="datetime-local" class="form-control" />
+        <span asp-validation-for="DueDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="AssignedUserId">Assign to Member</label>
+        @Html.DropDownListFor(m => m.AssignedUserId, Model.TeamMembers, "Select a member", new { @class = "form-control" })
+        <span asp-validation-for="AssignedUserId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EstimatedTimeToComplete"></label>
+        <input asp-for="EstimatedTimeToComplete" class="form-control" />
+        <span asp-validation-for="EstimatedTimeToComplete" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Priority"></label>
+        <input asp-for="Priority" class="form-control" />
+        <span asp-validation-for="Priority" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Task</button>
+</form>

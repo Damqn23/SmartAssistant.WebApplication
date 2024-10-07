@@ -32,6 +32,11 @@ namespace SmartAssistant.WebApp.Data.Entities
         public string UserId { get; set; } // Foreign key to the User
 
         public User User { get; set; } // Navigation property to the User
+
+        [ForeignKey("Team")]
+        public int? TeamId { get; set; } // Foreign key to the Team
+
+        public Team Team { get; set; } // Navigation property to the Team
     }
 
 }

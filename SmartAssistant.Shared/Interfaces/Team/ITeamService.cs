@@ -1,4 +1,5 @@
-﻿using SmartAssistant.Shared.Models.Team;
+﻿using SmartAssistant.Shared.Models;
+using SmartAssistant.Shared.Models.Team;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace SmartAssistant.Shared.Interfaces.Team
         System.Threading.Tasks.Task DeleteTeamAsync(int id);
 
         Task<IEnumerable<TeamModel>> GetTeamsByUserIdAsync(string userId);  // Add this method
+        Task<IEnumerable<UserModel>> GetTeamMembersByTeamIdAsync(int teamId);
 
     }
 }

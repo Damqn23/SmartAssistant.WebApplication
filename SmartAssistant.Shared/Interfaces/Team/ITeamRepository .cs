@@ -1,4 +1,5 @@
-﻿using SmartAssistant.Shared.Models.Team;
+﻿using SmartAssistant.Shared.Models;
+using SmartAssistant.Shared.Models.Team;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace SmartAssistant.Shared.Interfaces.Team
 
         Task<IEnumerable<TeamModel>> GetTeamsByOwnerIdAsync(string ownerId); // Add this line
 
+        Task<IEnumerable<UserModel>> GetTeamMembersByTeamIdAsync(int teamId);
 
     }
 }

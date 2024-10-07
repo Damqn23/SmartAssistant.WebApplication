@@ -3,6 +3,7 @@ using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SmartAssistant.Shared.Interfaces.Team;
+using SmartAssistant.Shared.Models;
 using SmartAssistant.Shared.Models.Team;
 using SmartAssistant.WebApplication.Data;
 using SmartAssistant.WebApplication.Data.Entities;
@@ -152,6 +153,14 @@ namespace SmartAssistant.Shared.Repositories.Team
 
             return mapper.Map<List<TeamModel>>(ownedTeams);
         }
+        public async Task<IEnumerable<UserModel>> GetTeamMembersByTeamIdAsync(int teamId)
+        {
+            var members = await context.UserTeams
+                                       .Where(ut => ut.TeamId == teamId)
+                                       .Select(ut => ut.User) // Ensure 'User' is properly included
+                                       .ToListAsync();
 
+            return mapper.Map<List<UserModel>>(members);
+        }
     }
 }

@@ -2,6 +2,7 @@
 using SmartAssistant.Shared.Hubs;
 using SmartAssistant.Shared.Interfaces.Team;
 using SmartAssistant.Shared.Interfaces.User;
+using SmartAssistant.Shared.Models;
 using SmartAssistant.Shared.Models.Team;
 using SmartAssistant.WebApp.Data.Entities;
 using System;
@@ -135,6 +136,10 @@ namespace SmartAssistant.Shared.Services.Teams
             return allTeams;
         }
 
-
+        public async Task<IEnumerable<UserModel>> GetTeamMembersByTeamIdAsync(int teamId)
+        {
+            var members = await teamRepository.GetTeamMembersByTeamIdAsync(teamId);
+            return members ?? new List<UserModel>(); // Return empty list if null
+        }
     }
 }

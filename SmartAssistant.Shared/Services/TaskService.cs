@@ -6,6 +6,7 @@ using SmartAssistant.Shared.Interfaces.Task;
 using SmartAssistant.Shared.Models;
 using SmartAssistant.Shared.Models.Reminder;
 using SmartAssistant.Shared.Models.Task;
+using SmartAssistant.Shared.Models.Team;
 using System;
 using System.Collections.Generic;
 using System.Composition.Convention;
@@ -114,5 +115,13 @@ namespace SmartAssistant.Shared.Services
             }
         }
 
+        public async Task<List<TaskModel>> GetTasksByTeamIdAsync(int teamId)
+        {
+            return await taskRepository.GetTasksByTeamIdAsync(teamId);
+        }
+        public async Task AddTeamTaskAsync(TeamTaskCreateModel model, string userId)
+        {
+            await taskRepository.AddTeamTaskAsync(model);
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using SmartAssistant.Shared.Models.Task;
+using SmartAssistant.Shared.Models.Team;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +20,10 @@ namespace SmartAssistant.Shared.Interfaces.Task
         Task<List<TaskModel>> GetTasksByUserIdAsync(string userId);
 
         System.Threading.Tasks.Task RemoveExpiredTasksAsync();
+
+        Task<List<TaskModel>> GetTasksByTeamIdAsync(int teamId);
+
+        System.Threading.Tasks.Task AddTeamTaskAsync(TeamTaskCreateModel model, string userId);
+
     }
 }

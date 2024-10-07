@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SmartAssistant.Shared.Interfaces.Event;
 using SmartAssistant.Shared.Models.Event;
+using SmartAssistant.Shared.Models.Team;
 using SmartAssistant.WebApplication.Data;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,18 @@ namespace SmartAssistant.Shared.Repositories.Event
             await context.SaveChangesAsync();
         }
 
+        public async Task AddTeamEventAsync(TeamEventCreateModel entity)
+        {
+            var eventEntity = new WebApp.Data.Entities.Event
+            {
+                TeamId = entity.TeamId,
+                EventTitle = entity.EventTitle,
+                EventDate = entity.EventDate,
+                UserId = entity.AssignedUserId // Assign to a team member
+            };
+            await context.Events.AddAsync(eventEntity);
+            await context.SaveChangesAsync();
+        }
         public async Task DeleteAsync(EventModel entity)
         {
             var eventEntity = await context.Events.FindAsync(entity.Id);
@@ -76,6 +89,14 @@ namespace SmartAssistant.Shared.Repositories.Event
                 context.Events.RemoveRange(expiredEvents);
                 await context.SaveChangesAsync();
             }
+        }
+
+        public async Task<List<EventModel>> GetEventsByTeamIdAsync(int teamId)
+        {
+            var events = await context.Events
+                                      .Where(e => e.TeamId == teamId)
+                                      .ToListAsync();
+            return mapper.Map<List<EventModel>>(events);
         }
 
     }

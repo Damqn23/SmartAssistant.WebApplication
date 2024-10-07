@@ -1,5 +1,6 @@
 ﻿using SmartAssistant.Shared.Interfaces.Event;
 using SmartAssistant.Shared.Models.Event;
+using SmartAssistant.Shared.Models.Team;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,6 +68,15 @@ namespace SmartAssistant.Shared.Services.Event
         public async Task RemoveExpiredEventsAsync()
         {
             await eventRepository.RemoveExpiredEventsAsync();
+        }
+
+        public async Task<List<EventModel>> GetEventsByTeamIdAsync(int teamId)
+        {
+           return await eventRepository.GetEventsByTeamIdAsync(teamId);
+        }
+        public async Task AddTeamEventAsync(TeamEventCreateModel model, string userId)
+        {
+            await eventRepository.AddTeamEventAsync(model);
         }
     }
 }

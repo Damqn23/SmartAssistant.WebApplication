@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SmartAssistant.Shared.Interfaces.Task;
 using SmartAssistant.Shared.Models.Task;
+using SmartAssistant.Shared.Models.Team;
 using SmartAssistant.WebApplication.Data;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,21 @@ namespace SmartAssistant.Shared.Repositories
         {
             var task = mapper.Map<WebApp.Data.Entities.Task>(entity);
             context.Tasks.Add(task);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task AddTeamTaskAsync(TeamTaskCreateModel entity)
+        {
+            var task = new WebApp.Data.Entities.Task
+            {
+                TeamId = entity.TeamId,
+                Description = entity.Description,
+                DueDate = entity.DueDate,
+                EstimatedTimeToComplete = entity.EstimatedTimeToComplete,
+                Priority = entity.Priority,
+                UserId = entity.AssignedUserId // Assign to a team member
+            };
+            await context.Tasks.AddAsync(task);
             await context.SaveChangesAsync();
         }
 
@@ -75,5 +91,14 @@ namespace SmartAssistant.Shared.Repositories
                 await context.SaveChangesAsync();
             }
         }
+
+        public async Task<List<TaskModel>> GetTasksByTeamIdAsync(int teamId)
+        {
+            var tasks = await context.Tasks
+                                     .Where(t => t.TeamId == teamId)
+                                     .ToListAsync();
+            return mapper.Map<List<TaskModel>>(tasks);
+        }
+
     }
 }

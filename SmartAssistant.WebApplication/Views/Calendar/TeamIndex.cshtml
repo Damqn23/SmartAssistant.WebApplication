@@ -1,0 +1,89 @@
+﻿@using SmartAssistant.Shared.Models.Calendar
+@model CalendarViewModel
+
+@{
+    ViewData["Title"] = "Team Calendar";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Sunday</th>
+                        <th>Monday</th>
+                        <th>Tuesday</th>
+                        <th>Wednesday</th>
+                        <th>Thursday</th>
+                        <th>Friday</th>
+                        <th>Saturday</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var firstDayOfMonth = new DateTime(Model.CurrentMonth.Year, Model.CurrentMonth.Month, 1);
+                        var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+                        var currentDay = firstDayOfMonth;
+                        var dayOfWeekOffset = (int)firstDayOfMonth.DayOfWeek;
+
+                        for (int row = 0; row < 6; row++)
+                        {
+                            <tr>
+                                @for (int col = 0; col < 7; col++)
+                                {
+                                    if (row == 0 && col < dayOfWeekOffset)
+                                    {
+                                        <td></td> <!-- Empty cells for previous month's days -->
+                                    }
+                                    else if (currentDay <= lastDayOfMonth)
+                                    {
+                                        var dayViewModel = Model.Days.FirstOrDefault(d => d.Date.Date == currentDay.Date);
+
+                                        <td>
+                                            <strong>@currentDay.Day</strong>
+                                            <ul>
+                                                @if (dayViewModel != null)
+                                                {
+                                                    @foreach (var task in dayViewModel.Tasks)
+                                                    {
+                                                        <li>@task.Description (Task)</li>
+                                                    }
+
+                                                    @foreach (var evnt in dayViewModel.Events)
+                                                    {
+                                                        <li>@evnt.EventTitle (Event)</li>
+                                                    }
+                                                }
+
+                                                <!-- Show buttons only if the current user is the team owner -->
+                                                @if (User.Identity.Name == Model.TeamOwnerUserName)
+                                                {
+                                                    <a href="@Url.Action("AddTeamTask", "Calendar", new { teamId = Model.TeamId, date = currentDay })" class="btn btn-sm btn-primary">Add Task</a>
+                                                    <a href="@Url.Action("AddTeamEvent", "Calendar", new { teamId = Model.TeamId, date = currentDay })" class="btn btn-sm btn-secondary">Add Event</a>
+                                                }
+                                            </ul>
+                                        </td>
+
+                                        currentDay = currentDay.AddDays(1);
+                                    }
+                                    else
+                                    {
+                                        <td></td> <!-- Empty cells for next month's days -->
+                                    }
+                                }
+                            </tr>
+
+                            if (currentDay > lastDayOfMonth)
+                            {
+                                break; // End the loop once the month ends
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
