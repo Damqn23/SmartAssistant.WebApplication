@@ -4,13 +4,8 @@ using SmartAssistant.Shared.Interfaces.Event;
 using SmartAssistant.Shared.Interfaces.Task;
 using SmartAssistant.Shared.Interfaces.Team;
 using SmartAssistant.Shared.Models.Calendar;
-using SmartAssistant.Shared.Models.Event;
-using SmartAssistant.Shared.Models.Task;
 using SmartAssistant.Shared.Models.Team;
-using System;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace SmartAssistant.WebApplication.Controllers
 {
@@ -25,6 +20,34 @@ namespace SmartAssistant.WebApplication.Controllers
             taskService = _taskService;
             eventService = _eventService;
             teamService = _teamService;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var tasks = await taskService.GetTasksByUserIdAsync(userId);
+            var events = await eventService.GetEventsByUserIdAsync(userId);
+
+            var currentMonth = DateTime.Now; // Or allow the user to select the month
+
+            var daysInMonth = Enumerable.Range(1, DateTime.DaysInMonth(currentMonth.Year, currentMonth.Month))
+                .Select(day => new DateTime(currentMonth.Year, currentMonth.Month, day))
+                .ToList();
+
+            var days = daysInMonth.Select(date => new DayViewModel
+            {
+                Date = date,
+                Tasks = tasks.Where(t => t.DueDate.Date == date.Date).ToList(),
+                Events = events.Where(e => e.EventDate.Date == date.Date).ToList()
+            }).ToList();
+
+            var viewModel = new CalendarViewModel
+            {
+                CurrentMonth = currentMonth,
+                Days = days
+            };
+
+            return View(viewModel);
         }
 
         public async Task<IActionResult> TeamIndex(int teamId)
@@ -96,7 +119,7 @@ namespace SmartAssistant.WebApplication.Controllers
         [HttpPost]
         public async Task<IActionResult> AddTeamTask(TeamTaskCreateModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 // Fetch team members again because the model is sent back to the view
                 var teamMembers = await teamService.GetTeamMembersByTeamIdAsync(model.TeamId);
@@ -110,7 +133,6 @@ namespace SmartAssistant.WebApplication.Controllers
 
                 return View(model);
             }
-
             await taskService.AddTeamTaskAsync(model, User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             return RedirectToAction("TeamIndex", new { teamId = model.TeamId });
         }
@@ -151,7 +173,7 @@ namespace SmartAssistant.WebApplication.Controllers
         [HttpPost]
         public async Task<IActionResult> AddTeamEvent(TeamEventCreateModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 // Fetch team members again because the model is sent back to the view
                 var teamMembers = await teamService.GetTeamMembersByTeamIdAsync(model.TeamId);

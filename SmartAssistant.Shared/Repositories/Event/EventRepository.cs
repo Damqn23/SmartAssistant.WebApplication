@@ -94,10 +94,12 @@ namespace SmartAssistant.Shared.Repositories.Event
         public async Task<List<EventModel>> GetEventsByTeamIdAsync(int teamId)
         {
             var events = await context.Events
-                                      .Where(e => e.TeamId == teamId)
-                                      .ToListAsync();
+                .Include(e => e.User) // Ensure the User data is included
+                .Where(e => e.TeamId == teamId)
+                .ToListAsync();
             return mapper.Map<List<EventModel>>(events);
         }
+
 
     }
 }

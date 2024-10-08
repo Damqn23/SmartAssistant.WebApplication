@@ -47,18 +47,40 @@
                                             <ul>
                                                 @if (dayViewModel != null)
                                                 {
+                                                    <!-- List all tasks for the day -->
                                                     @foreach (var task in dayViewModel.Tasks)
                                                     {
-                                                        <li>@task.Description (Task)</li>
+                                                        <li>
+                                                            @task.Description (Task) -
+                                                            @if (task.User != null)
+                                                            {
+                                                                <strong>@task.User.UserName</strong>
+                                                            }
+                                                            else
+                                                            {
+                                                                <em>No user assigned</em>
+                                                            }
+                                                        </li>
                                                     }
 
+                                                    <!-- List all events for the day -->
                                                     @foreach (var evnt in dayViewModel.Events)
                                                     {
-                                                        <li>@evnt.EventTitle (Event)</li>
+                                                        <li>
+                                                            @evnt.EventTitle (Event) -
+                                                            @if (evnt.User != null)
+                                                            {
+                                                                <strong>@evnt.User.UserName</strong>
+                                                            }
+                                                            else
+                                                            {
+                                                                <em>No user assigned</em>
+                                                            }
+                                                        </li>
                                                     }
                                                 }
 
-                                                <!-- Show buttons only if the current user is the team owner -->
+                                                <!-- Show buttons for team owner to add tasks or events -->
                                                 @if (User.Identity.Name == Model.TeamOwnerUserName)
                                                 {
                                                     <a href="@Url.Action("AddTeamTask", "Calendar", new { teamId = Model.TeamId, date = currentDay })" class="btn btn-sm btn-primary">Add Task</a>

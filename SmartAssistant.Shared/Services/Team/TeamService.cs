@@ -29,7 +29,20 @@ namespace SmartAssistant.Shared.Services.Teams
         public async Task<TeamModel> GetTeamByIdAsync(int id)
         {
             var team = await teamRepository.GetByIdAsync(id);
-            var owner = await userRepository.GetUserByIdAsync(team.OwnerId);  // Fetch owner details
+
+            if (team == null)
+            {
+                throw new Exception($"Team with ID {id} was not found.");
+            }
+
+            if (string.IsNullOrEmpty(team.OwnerId))
+            {
+                // Log or handle the case where the OwnerId is missing or null
+                throw new Exception($"Team with ID {id} has no valid owner.");
+            }
+
+            // Fetch the owner's details
+            var owner = await userRepository.GetUserByIdAsync(team.OwnerId);
 
             if (owner != null)
             {
@@ -42,6 +55,7 @@ namespace SmartAssistant.Shared.Services.Teams
 
             return team;
         }
+
 
         public async Task<IEnumerable<TeamModel>> GetAllTeamsAsync(string userId)
         {

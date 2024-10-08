@@ -95,8 +95,9 @@ namespace SmartAssistant.Shared.Repositories
         public async Task<List<TaskModel>> GetTasksByTeamIdAsync(int teamId)
         {
             var tasks = await context.Tasks
-                                     .Where(t => t.TeamId == teamId)
-                                     .ToListAsync();
+                .Include(t => t.User) // Ensure the User data is included
+                .Where(t => t.TeamId == teamId)
+                .ToListAsync();
             return mapper.Map<List<TaskModel>>(tasks);
         }
 

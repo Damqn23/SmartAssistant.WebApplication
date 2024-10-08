@@ -14,6 +14,7 @@ namespace SmartAssistant.Shared.Models.Team
         public DateTime EventDate { get; set; }
         public string AssignedUserId { get; set; } // ID of the team member the event is assigned to
         public IEnumerable<SelectListItem> TeamMembers { get; set; }
+        public string AssignedUserName { get; set; } // Add this property
 
     }
 }
