@@ -19,7 +19,6 @@ namespace SmartAssistant.WebApplication.Data
         public DbSet<SmartAssistant.WebApp.Data.Entities.Task> Tasks { get; set; }
         public DbSet<Reminder> Reminders { get; set; }
         public DbSet<Message> Messages { get; set; }
-        public DbSet<TeamDocument> TeamDocuments { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<Team> Teams { get; set; }
         public DbSet<UserTeam> UserTeams { get; set; }
@@ -50,11 +49,7 @@ namespace SmartAssistant.WebApplication.Data
         .HasForeignKey(m => m.TeamId)
         .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
 
-            builder.Entity<TeamDocument>()
-                .HasOne(td => td.Team)
-                .WithMany(t => t.TeamDocuments)
-                .HasForeignKey(td => td.TeamId)
-                .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
+           
         }
     }
 }

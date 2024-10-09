@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using SmartAssistant.Shared.Interfaces.Event;
 using SmartAssistant.Shared.Interfaces.Task;
 using SmartAssistant.Shared.Interfaces.Team;
+using SmartAssistant.Shared.Models;
 using SmartAssistant.Shared.Models.Calendar;
 using SmartAssistant.Shared.Models.Team;
 using System.Security.Claims;
@@ -94,8 +95,17 @@ namespace SmartAssistant.WebApplication.Controllers
             }
 
             // Fetch team members
-            var teamMembers = await teamService.GetTeamMembersByTeamIdAsync(teamId);
+            var teamMembers = (await teamService.GetTeamMembersByTeamIdAsync(teamId)).ToList();
 
+            // Add the owner to the team members list if not already present
+            if (team.OwnerId != null && !teamMembers.Any(m => m.Id == team.OwnerId))
+            {
+                teamMembers.Add(new UserModel
+                {
+                    Id = team.OwnerId,
+                    UserName = team.OwnerUserName
+                });
+            }
             if (teamMembers == null || !teamMembers.Any())
             {
                 throw new Exception("No team members found.");
@@ -131,6 +141,7 @@ namespace SmartAssistant.WebApplication.Controllers
                     Text = m.UserName
                 });
 
+
                 return View(model);
             }
             await taskService.AddTeamTaskAsync(model, User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
@@ -147,7 +158,17 @@ namespace SmartAssistant.WebApplication.Controllers
             }
 
             // Fetch team members
-            var teamMembers = await teamService.GetTeamMembersByTeamIdAsync(teamId);
+            var teamMembers = (await teamService.GetTeamMembersByTeamIdAsync(teamId)).ToList();
+
+            // Add the owner to the team members list if not already present
+            if (team.OwnerId != null && !teamMembers.Any(m => m.Id == team.OwnerId))
+            {
+                teamMembers.Add(new UserModel
+                {
+                    Id = team.OwnerId,
+                    UserName = team.OwnerUserName
+                });
+            }
 
             if (teamMembers == null || !teamMembers.Any())
             {

@@ -25,6 +25,5 @@ namespace SmartAssistant.WebApp.Data.Entities
 
         public virtual ICollection<Message> Messages { get; set; }
 
-        public virtual ICollection<TeamDocument> TeamDocuments { get; set; }
     }
 }
