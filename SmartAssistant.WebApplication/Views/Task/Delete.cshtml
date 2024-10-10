@@ -1,32 +1,27 @@
 ﻿@using SmartAssistant.Shared.Models.Task
 @model TaskDeleteModel
 
-<h2>Delete Task</h2>
+<div class="container mt-5">
+    <h2 class="display-6 mb-4 text-danger">Delete Task</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+    <h3>Are you sure you want to delete this?</h3>
 
-<div>
-    <h4>@Model.Description</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            Description
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Description
-        </dd>
-        <dt class="col-sm-2">
-            Due Date
-        </dt>
-        <dd class="col-sm-10">
-            @Model.DueDate
-        </dd>
-    </dl>
+    <div class="card border-danger mb-4">
+        <div class="card-body">
+            <h4 class="card-title" style="color: #dc3545;">@Model.Description</h4>
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-2" style="color: #007bff;">Description</dt>
+                <dd class="col-sm-10">@Model.Description</dd>
+                <dt class="col-sm-2" style="color: #007bff;">Due Date</dt>
+                <dd class="col-sm-10">@Model.DueDate.ToString("yyyy-MM-dd HH:mm")</dd>
+            </dl>
+        </div>
+    </div>
 
     <form asp-action="Delete" method="post">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
     </form>
-
 </div>

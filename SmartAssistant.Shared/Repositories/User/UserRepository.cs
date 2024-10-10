@@ -38,22 +38,9 @@ namespace SmartAssistant.Shared.Repositories.User
             return _mapper.Map<List<UserModel>>(users);
         }
 
-        public async Task AddUserAsync(UserModel userModel)
-        {
-            var user = _mapper.Map<SmartAssistant.WebApp.Data.Entities.User>(userModel);
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-        }
+        
 
-        public async Task UpdateUserAsync(UserModel userModel)
-        {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userModel.Id);
-            if (user != null)
-            {
-                _mapper.Map(userModel, user);  // Updates the user entity with the model's data
-                await _context.SaveChangesAsync();
-            }
-        }
+        
 
         public async Task DeleteUserAsync(string userId)
         {

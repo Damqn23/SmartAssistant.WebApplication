@@ -29,12 +29,12 @@ namespace SmartAssistant.Shared.Services.User
 
         public async Task AddUserAsync(UserModel user)
         {
-            await _userRepository.AddUserAsync(user);
+            await _userRepository.AddAsync(user);
         }
 
         public async Task UpdateUserAsync(UserModel user)
         {
-            await _userRepository.UpdateUserAsync(user);
+            await _userRepository.UpdateAsync(user);
         }
 
         public async Task DeleteUserAsync(string userId)

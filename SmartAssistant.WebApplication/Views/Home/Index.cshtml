@@ -2,7 +2,43 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="hero-section text-center bg-light p-5 rounded-3" style="background-color: #f0f8ff;">
+    <h1 class="display-4 mb-3" style="color: #007bff;">Welcome to Smart Assistant</h1>
+    <p class="lead" style="color: #6c757d;">Your smart companion to manage tasks, events, and reminders effortlessly.</p>
+    <a href="/Task/Index" class="btn btn-primary btn-lg me-3" style="background-color: #28a745; border-color: #28a745;">View Tasks</a>
+    <a href="/Event/Index" class="btn btn-secondary btn-lg" style="background-color: #17a2b8; border-color: #17a2b8;">View Events</a>
 </div>
+
+<section class="features-section mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm" style="border-color: #007bff;">
+                    <div class="card-body">
+                        <h5 class="card-title" style="color: #007bff;">Manage Teams</h5>
+                        <p class="card-text" style="color: #6c757d;">Create teams, collaborate, and communicate effectively with the built-in chat feature.</p>
+                        <a href="/Team/Index" class="btn btn-outline-primary" style="color: #007bff; border-color: #007bff;">Go to Teams</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm" style="border-color: #28a745;">
+                    <div class="card-body">
+                        <h5 class="card-title" style="color: #28a745;">Stay on Track</h5>
+                        <p class="card-text" style="color: #6c757d;">Get timely reminders for tasks and events so you never miss out on anything important.</p>
+                        <a href="/Reminder/Index" class="btn btn-outline-success" style="color: #28a745; border-color: #28a745;">View Reminders</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm" style="border-color: #17a2b8;">
+                    <div class="card-body">
+                        <h5 class="card-title" style="color: #17a2b8;">Calendar Overview</h5>
+                        <p class="card-text" style="color: #6c757d;">See all your tasks, events, and reminders in one consolidated calendar view.</p>
+                        <a href="/Calendar/Index" class="btn btn-outline-info" style="color: #17a2b8; border-color: #17a2b8;">Open Calendar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

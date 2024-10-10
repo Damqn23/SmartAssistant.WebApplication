@@ -1,31 +1,33 @@
 ﻿@using SmartAssistant.Shared.Models.Task
 @model TaskCreateModel
 
-<h2>Create New Task</h2>
+<div class="container mt-5">
+    <h2 class="display-6 mb-4" style="color: #007bff;">Create New Task</h2>
 
-<form asp-action="Create">
-    <div class="form-group">
-        <label asp-for="Description" class="control-label"></label>
-        <input asp-for="Description" class="form-control" />
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="DueDate" class="control-label"></label>
-        <input asp-for="DueDate" type="datetime-local" class="form-control" />
-        <span asp-validation-for="DueDate" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="EstimatedTimeToComplete" class="control-label"></label>
-        <input asp-for="EstimatedTimeToComplete" class="form-control" />
-        <span asp-validation-for="EstimatedTimeToComplete" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Priority" class="control-label"></label>
-        <select asp-for="Priority" class="form-control" asp-items="Html.GetEnumSelectList<PriorityLevel>()">
-        </select>
-        <span asp-validation-for="Priority" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Create</button>
-</form>
+    <form asp-action="Create">
+        <div class="form-group mb-3">
+            <label asp-for="Description" class="control-label" style="color: #007bff;"></label>
+            <input asp-for="Description" class="form-control" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="form-group mb-3">
+            <label asp-for="DueDate" class="control-label" style="color: #007bff;"></label>
+            <input asp-for="DueDate" type="datetime-local" class="form-control" />
+            <span asp-validation-for="DueDate" class="text-danger"></span>
+        </div>
+        <div class="form-group mb-3">
+            <label asp-for="EstimatedTimeToComplete" class="control-label" style="color: #007bff;"></label>
+            <input asp-for="EstimatedTimeToComplete" class="form-control" />
+            <span asp-validation-for="EstimatedTimeToComplete" class="text-danger"></span>
+        </div>
+        <div class="form-group mb-3">
+            <label asp-for="Priority" class="control-label" style="color: #007bff;"></label>
+            <select asp-for="Priority" class="form-control" asp-items="Html.GetEnumSelectList<PriorityLevel>()">
+            </select>
+            <span asp-validation-for="Priority" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-success">Create</button>
+    </form>
 
-<a href="@Url.Action("Index")" class="btn btn-secondary">Back to List</a>
+    <a href="@Url.Action("Index")" class="btn btn-secondary mt-3">Back to List</a>
+</div>
