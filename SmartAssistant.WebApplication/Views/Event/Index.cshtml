@@ -1,28 +1,30 @@
 ﻿@model IEnumerable<SmartAssistant.Shared.Models.Event.EventModel>
 
-<h2>Your Events</h2>
+<div class="container mt-5">
+    <h2 class="display-6 mb-4" style="color: #007bff;">Your Events</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Date</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var eventModel in Model)
-        {
+    <table class="table table-hover table-bordered shadow-sm">
+        <thead class="table-primary">
             <tr>
-                <td>@eventModel.EventTitle</td>
-                <td>@eventModel.EventDate</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@eventModel.Id" class="btn btn-warning">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@eventModel.Id" class="btn btn-danger">Delete</a>
-                </td>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var eventModel in Model)
+            {
+                <tr>
+                    <td>@eventModel.EventTitle</td>
+                    <td>@eventModel.EventDate.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@eventModel.Id" class="btn btn-warning btn-sm me-2">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@eventModel.Id" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
-<a asp-action="Create" class="btn btn-primary">Create New Event</a>
+    <a asp-action="Create" class="btn btn-success mt-3">Create New Event</a>
+</div>
