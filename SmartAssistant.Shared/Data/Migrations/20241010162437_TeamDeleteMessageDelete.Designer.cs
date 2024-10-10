@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartAssistant.WebApplication.Data;
 
@@ -11,9 +12,11 @@ using SmartAssistant.WebApplication.Data;
 namespace SmartAssistant.WebApplication.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241010162437_TeamDeleteMessageDelete")]
+    partial class TeamDeleteMessageDelete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -188,7 +191,7 @@ namespace SmartAssistant.WebApplication.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Messages", (string)null);
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("SmartAssistant.WebApp.Data.Entities.Event", b =>
@@ -223,7 +226,7 @@ namespace SmartAssistant.WebApplication.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Events", (string)null);
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("SmartAssistant.WebApp.Data.Entities.Reminder", b =>
@@ -254,7 +257,7 @@ namespace SmartAssistant.WebApplication.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Reminders", (string)null);
+                    b.ToTable("Reminders");
                 });
 
             modelBuilder.Entity("SmartAssistant.WebApp.Data.Entities.Task", b =>
@@ -295,7 +298,7 @@ namespace SmartAssistant.WebApplication.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Tasks", (string)null);
+                    b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("SmartAssistant.WebApp.Data.Entities.Team", b =>
@@ -319,7 +322,7 @@ namespace SmartAssistant.WebApplication.Data.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Teams", (string)null);
+                    b.ToTable("Teams");
                 });
 
             modelBuilder.Entity("SmartAssistant.WebApp.Data.Entities.User", b =>
@@ -399,7 +402,7 @@ namespace SmartAssistant.WebApplication.Data.Migrations
 
                     b.HasIndex("TeamId");
 
-                    b.ToTable("UserTeams", (string)null);
+                    b.ToTable("UserTeams");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

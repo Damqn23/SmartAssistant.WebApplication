@@ -58,7 +58,9 @@ namespace SmartAssistant.Shared.Repositories.Team
 
         public async Task DeleteAsync(TeamModel entity)
         {
-            var teamEntity = await context.Teams.FindAsync(entity.Id);
+            var teamEntity = await context.Teams
+                .Include(t => t.Messages) // Include related messages
+                .FirstOrDefaultAsync(t => t.Id == entity.Id);
 
             if (teamEntity != null)
             {
@@ -67,6 +69,12 @@ namespace SmartAssistant.Shared.Repositories.Team
                 if (userTeams.Any())
                 {
                     context.UserTeams.RemoveRange(userTeams);
+                }
+
+                // Manually delete all messages associated with the team
+                if (teamEntity.Messages != null && teamEntity.Messages.Any())
+                {
+                    context.Messages.RemoveRange(teamEntity.Messages);
                 }
 
                 // Now you can delete the team

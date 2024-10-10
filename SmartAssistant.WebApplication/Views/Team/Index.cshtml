@@ -1,34 +1,34 @@
 ﻿@using SmartAssistant.Shared.Models.Team
 @model IEnumerable<TeamModel>
 
-<h2>Your Teams</h2>
-<a asp-action="Create" class="btn btn-primary">Create New Team</a>
+<div class="container mt-5">
+    <h2 class="display-6 mb-4" style="color: #007bff;">Your Teams</h2>
+    <a asp-action="Create" class="btn btn-success mb-4">Create New Team</a>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Team Name</th>
-            <th>Owner Email</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var team in Model)
-        {
+    <table class="table table-hover table-bordered shadow-sm">
+        <thead class="table-primary">
             <tr>
-                <td>@team.TeamName</td>
-                <td>@team.OwnerUserName"</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@team.Id" class="btn btn-info">Details</a>
-                    @if (User.Identity.Name == team.OwnerUserName)
-                    {
-                    <a asp-action="Delete" asp-route-id="@team.Id" class="btn btn-danger">Delete</a>
-                        
-                    }
-                    <a asp-action="TeamIndex" asp-controller="Calendar" asp-route-teamId="@team.Id" class="btn btn-success">View Calendar</a>
-
-                </td>
+                <th>Team Name</th>
+                <th>Owner Email</th>
+                <th>Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var team in Model)
+            {
+                <tr>
+                    <td>@team.TeamName</td>
+                    <td>@team.OwnerUserName</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@team.Id" class="btn btn-info btn-sm me-2">Details</a>
+                        @if (User.Identity.Name == team.OwnerUserName)
+                        {
+                            <a asp-action="Delete" asp-route-id="@team.Id" class="btn btn-danger btn-sm me-2">Delete</a>
+                        }
+                        <a asp-action="TeamIndex" asp-controller="Calendar" asp-route-teamId="@team.Id" class="btn btn-success btn-sm">View Calendar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
