@@ -1,12 +1,15 @@
 ﻿@model IEnumerable<SmartAssistant.Shared.Models.Team.TeamModel>
 
-<h2>Select a Team Chat</h2>
+<div class="container mt-5">
+    <h2 class="display-6 mb-4" style="color: #007bff;">Select a Team Chat</h2>
 
-<ul>
-    @foreach (var team in Model)
-    {
-        <li>
-            <a href="@Url.Action("TeamChat", "Team", new { teamId = team.Id })">@team.TeamName</a>
-        </li>
-    }
-</ul>
+    <div class="list-group">
+        @foreach (var team in Model)
+        {
+            <a href="@Url.Action("TeamChat", "Team", new { teamId = team.Id })"
+               class="list-group-item list-group-item-action shadow-sm mb-2 rounded">
+                <h5 class="mb-1" style="color: #343a40;">@team.TeamName</h5>
+            </a>
+        }
+    </div>
+</div>

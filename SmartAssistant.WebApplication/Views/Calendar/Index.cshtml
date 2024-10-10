@@ -1,76 +1,77 @@
 ﻿@using SmartAssistant.Shared.Models.Calendar
 @model CalendarViewModel
 
-<h2>Calendar</h2>
+<div class="container mt-5">
+    <h2 class="display-6 mb-4" style="color: #007bff;">Calendar</h2>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Sunday</th>
-            <th>Monday</th>
-            <th>Tuesday</th>
-            <th>Wednesday</th>
-            <th>Thursday</th>
-            <th>Friday</th>
-            <th>Saturday</th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            var firstDayOfMonth = new DateTime(Model.CurrentMonth.Year, Model.CurrentMonth.Month, 1);
-            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+    <table class="table table-bordered shadow-sm">
+        <thead class="table-primary">
+            <tr>
+                <th class="text-center">Sunday</th>
+                <th class="text-center">Monday</th>
+                <th class="text-center">Tuesday</th>
+                <th class="text-center">Wednesday</th>
+                <th class="text-center">Thursday</th>
+                <th class="text-center">Friday</th>
+                <th class="text-center">Saturday</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var firstDayOfMonth = new DateTime(Model.CurrentMonth.Year, Model.CurrentMonth.Month, 1);
+                var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
 
-            var currentDay = firstDayOfMonth;
-            var dayOfWeekOffset = (int)firstDayOfMonth.DayOfWeek;
+                var currentDay = firstDayOfMonth;
+                var dayOfWeekOffset = (int)firstDayOfMonth.DayOfWeek;
 
-            // Start the calendar grid
-            int totalDaysInMonth = DateTime.DaysInMonth(Model.CurrentMonth.Year, Model.CurrentMonth.Month);
+                int totalDaysInMonth = DateTime.DaysInMonth(Model.CurrentMonth.Year, Model.CurrentMonth.Month);
 
-            for (int row = 0; row < 6; row++) // Maximum 6 rows for a month
-            {
-                <tr>
-                    @for (int col = 0; col < 7; col++)
-                    {
-                        if (row == 0 && col < dayOfWeekOffset)
-                        {
-                            <td></td> <!-- Empty cells for previous month's days -->
-                        }
-                        else if (currentDay <= lastDayOfMonth)
-                        {
-                            var dayViewModel = Model.Days.FirstOrDefault(d => d.Date.Date == currentDay.Date);
-
-                            <td>
-                                <strong>@currentDay.Day</strong>
-                                <ul>
-                                    @if (dayViewModel != null)
-                                    {
-                                        @foreach (var task in dayViewModel.Tasks)
-                                        {
-                                            <li>@task.Description (Task)</li>
-                                        }
-
-                                        @foreach (var evnt in dayViewModel.Events)
-                                        {
-                                            <li>@evnt.EventTitle (Event)</li>
-                                        }
-                                    }
-                                </ul>
-                            </td>
-
-                            currentDay = currentDay.AddDays(1);
-                        }
-                        else
-                        {
-                            <td></td> <!-- Empty cells for next month's days -->
-                        }
-                    }
-                </tr>
-
-                if (currentDay > lastDayOfMonth)
+                for (int row = 0; row < 6; row++)
                 {
-                    break; // End the loop once the month ends
+                    <tr>
+                        @for (int col = 0; col < 7; col++)
+                        {
+                            if (row == 0 && col < dayOfWeekOffset)
+                            {
+                                <td class="bg-light"></td> <!-- Empty cells for previous month's days -->
+                            }
+                            else if (currentDay <= lastDayOfMonth)
+                            {
+                                var dayViewModel = Model.Days.FirstOrDefault(d => d.Date.Date == currentDay.Date);
+
+                                <td class="align-top p-2">
+                                    <div class="fw-bold" style="color: #007bff;">@currentDay.Day</div>
+                                    <ul class="list-unstyled mt-2">
+                                        @if (dayViewModel != null)
+                                        {
+                                            @foreach (var task in dayViewModel.Tasks)
+                                            {
+                                                <li class="text-success">&#x2713; @task.Description (Task)</li>
+                                            }
+
+                                            @foreach (var evnt in dayViewModel.Events)
+                                            {
+                                                <li class="text-primary">&#x1F4C5; @evnt.EventTitle (Event)</li>
+                                            }
+                                        }
+                                    </ul>
+                                </td>
+
+                                currentDay = currentDay.AddDays(1);
+                            }
+                            else
+                            {
+                                <td class="bg-light"></td> <!-- Empty cells for next month's days -->
+                            }
+                        }
+                    </tr>
+
+                    if (currentDay > lastDayOfMonth)
+                    {
+                        break; // End the loop once the month ends
+                    }
                 }
             }
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
