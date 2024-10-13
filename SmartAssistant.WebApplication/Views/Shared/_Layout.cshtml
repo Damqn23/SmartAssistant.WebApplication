@@ -7,11 +7,10 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SmartAssistant.WebApplication.styles.css" asp-append-version="true" />
-
 </head>
-<body>
+<body style="background-color: #1c1c1c; color: #fff;">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SmartAssistant.WebApplication</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -21,25 +20,25 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" style="color: #fff;" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link" style="color: #fff;" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Team" asp-action="Chat">Chat</a>
+                            <a class="nav-link" style="color: #fff;" asp-area="" asp-controller="Team" asp-action="Chat">Chat</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Task" asp-action="Index">Tasks</a>
+                            <a class="nav-link" style="color: #fff;" asp-area="" asp-controller="Task" asp-action="Index">Tasks</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Event" asp-action="Index">Events</a>
+                            <a class="nav-link" style="color: #fff;" asp-area="" asp-controller="Event" asp-action="Index">Events</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Calendar" asp-action="Index">Calendar</a>
+                            <a class="nav-link" style="color: #fff;" asp-area="" asp-controller="Calendar" asp-action="Index">Calendar</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Team" asp-action="Index">Teams</a>
+                            <a class="nav-link" style="color: #fff;" asp-area="" asp-controller="Team" asp-action="Index">Teams</a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
@@ -47,6 +46,7 @@
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -55,16 +55,12 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 - SmartAssistant.WebApplication - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2024 - SmartAssistant.WebApplication - <a asp-area="" asp-controller="Home" asp-action="Privacy" style="color: #00c6ff;">Privacy</a>
         </div>
     </footer>
 
-    <!-- Load jQuery -->
-
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
-
 
     <!-- SignalR Integration -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.7/signalr.min.js"></script>
@@ -78,24 +74,23 @@
         }).catch((err) => console.error(err.toString()));
 
         connection.on("ReceiveReminderNotification", function (message) {
-            alert(message); // You can customize this to use a more elegant UI for notifications (e.g., toast notifications).
+            alert(message);
         });
 
-        // Listen for the "UserAddedToTeam" event
         connection.on("UserAddedToTeam", function (message) {
-            alert(message);  // Or show a custom notification
+            alert(message);
         });
 
         connection.on("UserRemovedFromTeam", function (message) {
-            alert(message);  // Show a notification when a user is removed
+            alert(message);
         });
     </script>
 
     <!-- Polling Script for Upcoming Reminders -->
     <script>
         setInterval(function () {
-            $.get('/Reminder/GetUpcomingReminders'); // Poll every minute for upcoming reminders
-        }, 60000); // Check for upcoming reminders every minute
+            $.get('/Reminder/GetUpcomingReminders');
+        }, 60000);
     </script>
 
     @await RenderSectionAsync("Scripts", required: false)
