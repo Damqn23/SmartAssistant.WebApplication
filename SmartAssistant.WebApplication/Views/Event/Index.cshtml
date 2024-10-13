@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<SmartAssistant.Shared.Models.Event.EventModel>
 
 <div class="container mt-5">
-    <h2 class="display-6 mb-4" style="color: #007bff;">Your Events</h2>
+    <h2 class="display-6 mb-4" style="color: #00c6ff;">Your Events</h2>
 
-    <table class="table table-hover table-bordered shadow-sm">
-        <thead class="table-primary">
+    <table class="table table-hover table-bordered shadow-sm" style="background-color: #2a2a2a; color: #fff;">
+        <thead style="background-color: #00c6ff; color: #fff;">
             <tr>
                 <th>Title</th>
                 <th>Date</th>
@@ -14,7 +14,7 @@
         <tbody>
             @foreach (var eventModel in Model)
             {
-                <tr>
+                <tr style="background-color: #2a2a2a;">
                     <td>@eventModel.EventTitle</td>
                     <td>@eventModel.EventDate.ToString("yyyy-MM-dd HH:mm")</td>
                     <td>
@@ -28,3 +28,16 @@
 
     <a asp-action="Create" class="btn btn-success mt-3">Create New Event</a>
 </div>
+
+<style>
+    /* Fix text disappearing on hover */
+    .table-hover tbody tr:hover {
+        background-color: #3c3c3c !important; /* Use a lighter dark shade for hover effect */
+        color: #fff !important; /* Keep text color white */
+    }
+
+        /* Ensure links inside table rows are visible on hover */
+        .table-hover tbody tr:hover a {
+            color: #00c6ff !important; /* Accent color for links on hover */
+        }
+</style>

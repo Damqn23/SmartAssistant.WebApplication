@@ -2,11 +2,11 @@
 @model IEnumerable<TeamModel>
 
 <div class="container mt-5">
-    <h2 class="display-6 mb-4" style="color: #007bff;">Your Teams</h2>
+    <h2 class="display-6 mb-4" style="color: #00c6ff;">Your Teams</h2>
     <a asp-action="Create" class="btn btn-success mb-4">Create New Team</a>
 
-    <table class="table table-hover table-bordered shadow-sm">
-        <thead class="table-primary">
+    <table class="table table-hover table-bordered shadow-sm" style="background-color: #2a2a2a; color: #fff;">
+        <thead style="background-color: #00c6ff; color: #fff;">
             <tr>
                 <th>Team Name</th>
                 <th>Owner Email</th>
@@ -16,7 +16,7 @@
         <tbody>
             @foreach (var team in Model)
             {
-                <tr>
+                <tr style="background-color: #2a2a2a;">
                     <td>@team.TeamName</td>
                     <td>@team.OwnerUserName</td>
                     <td>
@@ -32,3 +32,16 @@
         </tbody>
     </table>
 </div>
+
+<style>
+    /* Custom hover effect to avoid disappearing text */
+    .table-hover tbody tr:hover {
+        background-color: #3c3c3c !important; /* Use a lighter dark shade for hover effect */
+        color: #fff !important; /* Keep text color white */
+    }
+
+        /* Ensure links inside table rows are visible on hover */
+        .table-hover tbody tr:hover a {
+            color: #00c6ff !important; /* Accent color for links on hover */
+        }
+</style>

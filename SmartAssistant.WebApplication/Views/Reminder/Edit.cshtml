@@ -1,24 +1,26 @@
 ﻿@using SmartAssistant.Shared.Models.Reminder
 @model ReminderEditModel
 
-<h2>Edit Reminder</h2>
+<div class="container mt-5">
+    <h2 class="display-6 mb-4" style="color: #00c6ff;">Edit Reminder</h2>
 
-<form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="Id" />
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="Id" />
 
-    <div class="form-group">
-        <label asp-for="ReminderMessage"></label>
-        <input asp-for="ReminderMessage" class="form-control" />
-        <span asp-validation-for="ReminderMessage" class="text-danger"></span>
-    </div>
+        <div class="form-group mb-3">
+            <label asp-for="ReminderMessage" class="control-label" style="color: #00c6ff;"></label>
+            <input asp-for="ReminderMessage" class="form-control" style="background-color: #2a2a2a; color: #fff; border-color: #444;" />
+            <span asp-validation-for="ReminderMessage" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="ReminderDate"></label>
-        <input asp-for="ReminderDate" type="datetime-local" class="form-control" />
-        <span asp-validation-for="ReminderDate" class="text-danger"></span>
-    </div>
+        <div class="form-group mb-3">
+            <label asp-for="ReminderDate" class="control-label" style="color: #00c6ff;"></label>
+            <input asp-for="ReminderDate" type="datetime-local" class="form-control" style="background-color: #2a2a2a; color: #fff; border-color: #444;" />
+            <span asp-validation-for="ReminderDate" class="text-danger"></span>
+        </div>
 
-    <button type="submit" class="btn btn-primary">Save</button>
-</form>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
 
-<a href="@Url.Action("Index")">Back to List</a>
+    <a href="@Url.Action("Index")" class="btn btn-secondary mt-3">Back to List</a>
+</div>

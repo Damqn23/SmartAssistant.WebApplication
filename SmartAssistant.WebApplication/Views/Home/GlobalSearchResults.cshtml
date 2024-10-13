@@ -2,12 +2,12 @@
 @model GlobalSearchViewModel
 
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Search Results for "@ViewContext.HttpContext.Request.Query["searchQuery"]"</h2>
+    <h2 class="text-center mb-4" style="color: #00c6ff;">Search Results for "@ViewContext.HttpContext.Request.Query["searchQuery"]"</h2>
 
     <div class="row">
-        
+
         <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card shadow-sm h-100">
+            <div class="card shadow-sm h-100" style="background-color: #2a2a2a;">
                 <div class="card-header bg-primary text-white">
                     <h4 class="card-title mb-0">Tasks</h4>
                 </div>
@@ -17,7 +17,7 @@
                         <ul class="list-group">
                             @foreach (var task in Model.Tasks)
                             {
-                                <li class="list-group-item">
+                                <li class="list-group-item" style="background-color: #2a2a2a; color: #fff; border-color: #444;">
                                     <strong>Description:</strong> @task.Description
                                 </li>
                             }
@@ -31,9 +31,9 @@
             </div>
         </div>
 
-        
+
         <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card shadow-sm h-100">
+            <div class="card shadow-sm h-100" style="background-color: #2a2a2a;">
                 <div class="card-header bg-info text-white">
                     <h4 class="card-title mb-0">Events</h4>
                 </div>
@@ -43,7 +43,7 @@
                         <ul class="list-group">
                             @foreach (var eventItem in Model.Events)
                             {
-                                <li class="list-group-item">
+                                <li class="list-group-item" style="background-color: #2a2a2a; color: #fff; border-color: #444;">
                                     <strong>Title:</strong> @eventItem.EventTitle
                                 </li>
                             }
@@ -57,9 +57,9 @@
             </div>
         </div>
 
-        
+
         <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card shadow-sm h-100">
+            <div class="card shadow-sm h-100" style="background-color: #2a2a2a;">
                 <div class="card-header bg-success text-white">
                     <h4 class="card-title mb-0">Teams</h4>
                 </div>
@@ -69,7 +69,7 @@
                         <ul class="list-group">
                             @foreach (var team in Model.Teams)
                             {
-                                <li class="list-group-item">
+                                <li class="list-group-item" style="background-color: #2a2a2a; color: #fff; border-color: #444;">
                                     <strong>Team Name:</strong> @team.TeamName
                                 </li>
                             }

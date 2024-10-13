@@ -2,10 +2,10 @@
 @model CalendarViewModel
 
 <div class="container mt-5">
-    <h2 class="display-6 mb-4" style="color: #007bff;">Calendar</h2>
+    <h2 class="display-6 mb-4" style="color: #00c6ff;">Calendar</h2>
 
-    <table class="table table-bordered shadow-sm">
-        <thead class="table-primary">
+    <table class="table table-bordered shadow-sm" style="background-color: #2a2a2a; color: #fff;">
+        <thead style="background-color: #00c6ff; color: #fff;">
             <tr>
                 <th class="text-center">Sunday</th>
                 <th class="text-center">Monday</th>
@@ -24,8 +24,6 @@
                 var currentDay = firstDayOfMonth;
                 var dayOfWeekOffset = (int)firstDayOfMonth.DayOfWeek;
 
-                int totalDaysInMonth = DateTime.DaysInMonth(Model.CurrentMonth.Year, Model.CurrentMonth.Month);
-
                 for (int row = 0; row < 6; row++)
                 {
                     <tr>
@@ -33,14 +31,14 @@
                         {
                             if (row == 0 && col < dayOfWeekOffset)
                             {
-                                <td class="bg-light"></td> <!-- Empty cells for previous month's days -->
+                                <td style="background-color: #444;"></td> <!-- Empty cells for previous month's days -->
                             }
                             else if (currentDay <= lastDayOfMonth)
                             {
                                 var dayViewModel = Model.Days.FirstOrDefault(d => d.Date.Date == currentDay.Date);
 
-                                <td class="align-top p-2">
-                                    <div class="fw-bold" style="color: #007bff;">@currentDay.Day</div>
+                                <td class="align-top p-2" style="background-color: #3c3c3c;">
+                                    <div class="fw-bold" style="color: #00c6ff;">@currentDay.Day</div>
                                     <ul class="list-unstyled mt-2">
                                         @if (dayViewModel != null)
                                         {
@@ -61,7 +59,7 @@
                             }
                             else
                             {
-                                <td class="bg-light"></td> <!-- Empty cells for next month's days -->
+                                <td style="background-color: #444;"></td> <!-- Empty cells for next month's days -->
                             }
                         }
                     </tr>

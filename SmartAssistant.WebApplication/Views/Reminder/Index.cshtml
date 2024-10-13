@@ -1,34 +1,49 @@
 ﻿@using SmartAssistant.Shared.Models.Reminder
 @model IEnumerable<ReminderModel>
 
-<h2>Reminders</h2>
+<div class="container mt-5">
+    <h2 class="display-6 mb-4" style="color: #00c6ff;">Reminders</h2>
 
-<p>
-    <a href="@Url.Action("Create")">Create New</a>
-</p>
+    <p>
+        <a href="@Url.Action("Create")" class="btn btn-success">Create New</a>
+    </p>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Message</th>
-            <th>Date</th>
-            <th>User</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+    <table class="table table-hover table-bordered shadow-sm" style="background-color: #2a2a2a; color: #fff;">
+        <thead style="background-color: #00c6ff; color: #fff;">
             <tr>
-                <td>@(item.ReminderMessage ?? "N/A")</td>
-                <td>@(item.ReminderDate != DateTime.MinValue ? item.ReminderDate.ToString() : "N/A")</td>
-                <td>@(item.User != null ? item.User.Email : "N/A")</td>
-                <td>
-                    <a href="@Url.Action("Details", new { id = item.Id })">Details</a> |
-                    <a href="@Url.Action("Edit", new { id = item.Id })">Edit</a> |
-                    <a href="@Url.Action("Delete", new { id = item.Id })">Delete</a>
-                </td>
+                <th>Message</th>
+                <th>Date</th>
+                <th>User</th>
+                <th>Actions</th>
             </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr style="background-color: #2a2a2a;">
+                    <td>@(item.ReminderMessage ?? "N/A")</td>
+                    <td>@(item.ReminderDate != DateTime.MinValue ? item.ReminderDate.ToString("yyyy-MM-dd HH:mm") : "N/A")</td>
+                    <td>@(item.User != null ? item.User.Email : "N/A")</td>
+                    <td>
+                        <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-info btn-sm">Details</a>
+                        <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<style>
+    /* Custom hover effect to ensure readability */
+    .table-hover tbody tr:hover {
+        background-color: #3c3c3c !important;
+        color: #fff;
+    }
+
+        /* Ensure links inside table are visible on hover */
+        .table-hover tbody tr:hover a {
+            color: #00c6ff !important; /* Accent color for links on hover */
         }
-    </tbody>
-</table>
+</style>

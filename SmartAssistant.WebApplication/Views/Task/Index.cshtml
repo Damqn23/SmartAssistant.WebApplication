@@ -3,12 +3,12 @@
 
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="display-6" style="color: #007bff;">Tasks</h2>
+        <h2 class="display-6" style="color: #00c6ff;">Tasks</h2>
         <a href="@Url.Action("Create")" class="btn btn-success">Create New Task</a>
     </div>
 
-    <table class="table table-hover table-bordered shadow-sm">
-        <thead class="table-primary">
+    <table class="table table-hover table-bordered shadow-sm" style="background-color: #2a2a2a; color: #fff;">
+        <thead style="background-color: #00c6ff; color: #fff;">
             <tr>
                 <th>Description</th>
                 <th>Due Date</th>
@@ -19,7 +19,7 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
+                <tr style="background-color: #2a2a2a;">
                     <td>@item.Description</td>
                     <td>@item.DueDate.ToString("yyyy-MM-dd HH:mm")</td>
                     <td>
@@ -41,3 +41,16 @@
         </tbody>
     </table>
 </div>
+
+<style>
+    /* Custom hover effect to avoid invisibility */
+    .table-hover tbody tr:hover {
+        background-color: #3c3c3c !important; /* A lighter dark shade for hover effect */
+        color: #fff; /* Ensure text stays white */
+    }
+
+        /* Ensure links inside table are visible on hover */
+        .table-hover tbody tr:hover a {
+            color: #00c6ff; /* Accent color for links on hover */
+        }
+</style>

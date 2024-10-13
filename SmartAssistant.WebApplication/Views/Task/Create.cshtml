@@ -2,27 +2,27 @@
 @model TaskCreateModel
 
 <div class="container mt-5">
-    <h2 class="display-6 mb-4" style="color: #007bff;">Create New Task</h2>
+    <h2 class="display-6 mb-4" style="color: #00c6ff;">Create New Task</h2>
 
     <form asp-action="Create">
         <div class="form-group mb-3">
-            <label asp-for="Description" class="control-label" style="color: #007bff;"></label>
-            <input asp-for="Description" class="form-control" />
+            <label asp-for="Description" class="control-label" style="color: #00c6ff;"></label>
+            <input asp-for="Description" class="form-control" style="background-color: #2a2a2a; color: #fff; border-color: #444;" />
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
         <div class="form-group mb-3">
-            <label asp-for="DueDate" class="control-label" style="color: #007bff;"></label>
-            <input asp-for="DueDate" type="datetime-local" class="form-control" />
+            <label asp-for="DueDate" class="control-label" style="color: #00c6ff;"></label>
+            <input asp-for="DueDate" type="datetime-local" class="form-control" style="background-color: #2a2a2a; color: #fff; border-color: #444;" />
             <span asp-validation-for="DueDate" class="text-danger"></span>
         </div>
         <div class="form-group mb-3">
-            <label asp-for="EstimatedTimeToComplete" class="control-label" style="color: #007bff;"></label>
-            <input asp-for="EstimatedTimeToComplete" class="form-control" />
+            <label asp-for="EstimatedTimeToComplete" class="control-label" style="color: #00c6ff;"></label>
+            <input asp-for="EstimatedTimeToComplete" class="form-control" style="background-color: #2a2a2a; color: #fff; border-color: #444;" />
             <span asp-validation-for="EstimatedTimeToComplete" class="text-danger"></span>
         </div>
         <div class="form-group mb-3">
-            <label asp-for="Priority" class="control-label" style="color: #007bff;"></label>
-            <select asp-for="Priority" class="form-control" asp-items="Html.GetEnumSelectList<PriorityLevel>()">
+            <label asp-for="Priority" class="control-label" style="color: #00c6ff;"></label>
+            <select asp-for="Priority" class="form-control" asp-items="Html.GetEnumSelectList<PriorityLevel>()" style="background-color: #2a2a2a; color: #fff; border-color: #444;">
             </select>
             <span asp-validation-for="Priority" class="text-danger"></span>
         </div>

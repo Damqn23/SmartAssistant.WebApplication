@@ -28,7 +28,7 @@
         }
 
         connection.on("ReceiveMessage", function (username, messageContent) {
-            const chatMessage = `<div class="p-2 border-bottom"><strong>${username}:</strong> ${messageContent}</div>`;
+            const chatMessage = `<div class="p-2 border-bottom"><strong style="color: #00c6ff;">${username}:</strong> <span style="color: #fff;">${messageContent}</span></div>`;
             document.getElementById("chatMessages").innerHTML += chatMessage;
         });
 
@@ -36,7 +36,7 @@
             messages.forEach(function (message) {
                 const username = message.UserName ? message.UserName : 'Unknown';
                 const content = message.Content ? message.Content : '';
-                const chatMessage = `<div class="p-2 border-bottom"><strong>${username}:</strong> ${content}</div>`;
+                const chatMessage = `<div class="p-2 border-bottom"><strong style="color: #00c6ff;">${username}:</strong> <span style="color: #fff;">${content}</span></div>`;
                 document.getElementById("chatMessages").innerHTML += chatMessage;
             });
         });
@@ -44,8 +44,8 @@
 </script>
 
 <!-- Chat UI -->
-<div id="chatMessages" class="border rounded p-3 mb-3" style="height: 300px; overflow-y: scroll;"></div>
+<div id="chatMessages" class="border rounded p-3 mb-3" style="height: 300px; background-color: #2a2a2a; color: #fff; overflow-y: scroll;"></div>
 <div class="input-group mb-3">
-    <input type="text" id="messageInput" class="form-control" placeholder="Type a message..." />
+    <input type="text" id="messageInput" class="form-control" style="background-color: #2a2a2a; color: #fff; border-color: #444;" placeholder="Type a message..." />
     <button class="btn btn-primary" onclick="sendMessage()">Send</button>
 </div>
