@@ -25,5 +25,7 @@ namespace SmartAssistant.Shared.Interfaces.Task
 
         System.Threading.Tasks.Task AddTeamTaskAsync(TeamTaskCreateModel model, string userId);
 
+        Task<List<TaskModel>> GetTasksBySearchQueryAsync(string searchQuery);
+
     }
 }

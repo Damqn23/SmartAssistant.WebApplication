@@ -7,6 +7,7 @@ using SmartAssistant.Shared.Models;
 using SmartAssistant.Shared.Models.Reminder;
 using SmartAssistant.Shared.Models.Task;
 using SmartAssistant.Shared.Models.Team;
+using SmartAssistant.Shared.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Composition.Convention;
@@ -123,5 +124,12 @@ namespace SmartAssistant.Shared.Services
         {
             await taskRepository.AddTeamTaskAsync(model);
         }
+
+        public async Task<List<TaskModel>> GetTasksBySearchQueryAsync(string searchQuery)
+        {
+            var tasks = await taskRepository.GetAllAsync();
+            return tasks.Where(t => t.Description.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
     }
 }

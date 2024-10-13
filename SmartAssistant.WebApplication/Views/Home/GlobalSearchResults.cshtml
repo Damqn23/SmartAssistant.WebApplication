@@ -1,0 +1,86 @@
+﻿@using SmartAssistant.Shared.Models
+@model GlobalSearchViewModel
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Search Results for "@ViewContext.HttpContext.Request.Query["searchQuery"]"</h2>
+
+    <div class="row">
+        <!-- Tasks Section -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="card-title mb-0">Tasks</h4>
+                </div>
+                <div class="card-body">
+                    @if (Model.Tasks != null && Model.Tasks.Any())
+                    {
+                        <ul class="list-group">
+                            @foreach (var task in Model.Tasks)
+                            {
+                                <li class="list-group-item">
+                                    <strong>Description:</strong> @task.Description
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No tasks found.</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Events Section -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-info text-white">
+                    <h4 class="card-title mb-0">Events</h4>
+                </div>
+                <div class="card-body">
+                    @if (Model.Events != null && Model.Events.Any())
+                    {
+                        <ul class="list-group">
+                            @foreach (var eventItem in Model.Events)
+                            {
+                                <li class="list-group-item">
+                                    <strong>Title:</strong> @eventItem.EventTitle
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No events found.</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Teams Section -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-success text-white">
+                    <h4 class="card-title mb-0">Teams</h4>
+                </div>
+                <div class="card-body">
+                    @if (Model.Teams != null && Model.Teams.Any())
+                    {
+                        <ul class="list-group">
+                            @foreach (var team in Model.Teams)
+                            {
+                                <li class="list-group-item">
+                                    <strong>Team Name:</strong> @team.TeamName
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No teams found.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,6 +1,7 @@
 ﻿using SmartAssistant.Shared.Interfaces.Event;
 using SmartAssistant.Shared.Models.Event;
 using SmartAssistant.Shared.Models.Team;
+using SmartAssistant.Shared.Repositories.Event;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,5 +79,12 @@ namespace SmartAssistant.Shared.Services.Event
         {
             await eventRepository.AddTeamEventAsync(model);
         }
+
+        public async Task<List<EventModel>> GetEventsBySearchQueryAsync(string searchQuery)
+        {
+            var events = await eventRepository.GetAllAsync();
+            return events.Where(e => e.EventTitle.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
     }
 }

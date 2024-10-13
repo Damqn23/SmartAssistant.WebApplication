@@ -19,6 +19,7 @@ namespace SmartAssistant.Shared.Interfaces.Team
 
         Task<IEnumerable<TeamModel>> GetTeamsByUserIdAsync(string userId);  // Add this method
         Task<IEnumerable<UserModel>> GetTeamMembersByTeamIdAsync(int teamId);
+        Task<List<TeamModel>> GetTeamsBySearchQueryAsync(string searchQuery);
 
     }
 }

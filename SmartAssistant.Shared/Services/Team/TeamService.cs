@@ -4,6 +4,7 @@ using SmartAssistant.Shared.Interfaces.Team;
 using SmartAssistant.Shared.Interfaces.User;
 using SmartAssistant.Shared.Models;
 using SmartAssistant.Shared.Models.Team;
+using SmartAssistant.Shared.Repositories.Team;
 using SmartAssistant.WebApp.Data.Entities;
 using System;
 using System.Collections.Generic;
@@ -155,5 +156,12 @@ namespace SmartAssistant.Shared.Services.Teams
             var members = await teamRepository.GetTeamMembersByTeamIdAsync(teamId);
             return members ?? new List<UserModel>(); // Return empty list if null
         }
+
+        public async Task<List<TeamModel>> GetTeamsBySearchQueryAsync(string searchQuery)
+        {
+            var teams = await teamRepository.GetAllAsync();
+            return teams.Where(t => t.TeamName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
     }
 }

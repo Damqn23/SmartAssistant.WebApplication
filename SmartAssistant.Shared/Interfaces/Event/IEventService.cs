@@ -22,6 +22,7 @@ namespace SmartAssistant.Shared.Interfaces.Event
         Task<List<EventModel>> GetEventsByTeamIdAsync(int teamId);
 
         System.Threading.Tasks.Task AddTeamEventAsync(TeamEventCreateModel model, string userId);
+        Task<List<EventModel>> GetEventsBySearchQueryAsync(string searchQuery);
 
     }
 }
