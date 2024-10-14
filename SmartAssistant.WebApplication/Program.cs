@@ -21,9 +21,11 @@ using SmartAssistant.Shared.Repositories.Team;
 using SmartAssistant.Shared.Repositories.User;
 using SmartAssistant.Shared.Services.Teams;
 using SmartAssistant.Shared.Services.User;
+using SmartAssistant.Shared.Services.Speech;
 
 var builder = WebApplication.CreateBuilder(args);
 
+Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"C:\Users\rauga\OneDrive\Работен плот\The new project\SmartAssistant.WebApplication\SmartAssistant.WebApplication\Config\smartassistant-credentials.json");
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -51,6 +53,8 @@ builder.Services.AddScoped<IEventService, EventService>();
 
 builder.Services.AddHostedService<EventCleanupService>();
 builder.Services.AddSignalR();
+builder.Services.AddSingleton<GoogleSpeechService>();
+
 
 builder.Services.AddSignalR().AddJsonProtocol(options =>
 {
