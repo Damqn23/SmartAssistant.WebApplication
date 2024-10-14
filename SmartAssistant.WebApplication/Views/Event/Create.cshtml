@@ -1,34 +1,36 @@
 ﻿@model SmartAssistant.Shared.Models.Event.EventCreateModel
 
 <div class="container mt-5">
-    <h2 class="display-6 mb-4" style="color: #00c6ff;">Create New Event</h2>
+    <h2 class="display-6 mb-4 text-primary">Create New Event</h2>
 
     <!-- Regular form for manual input -->
     <form asp-action="Create">
-        <div class="form-group mb-3">
-            <label asp-for="EventTitle" class="control-label" style="color: #00c6ff;"></label>
-            <input asp-for="EventTitle" class="form-control" style="background-color: #2a2a2a; color: #fff; border-color: #444;" />
-            <span asp-validation-for="EventTitle" class="text-danger"></span>
+        <div class="card p-4 mb-5 bg-dark text-light">
+            <div class="form-group mb-3">
+                <label asp-for="EventTitle" class="form-label fw-bold"></label>
+                <input asp-for="EventTitle" class="form-control" />
+                <span asp-validation-for="EventTitle" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="EventDate" class="form-label fw-bold"></label>
+                <input asp-for="EventDate" type="datetime-local" class="form-control" />
+                <span asp-validation-for="EventDate" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-success w-100 fw-bold">Create</button>
         </div>
-        <div class="form-group mb-3">
-            <label asp-for="EventDate" class="control-label" style="color: #00c6ff;"></label>
-            <input asp-for="EventDate" type="datetime-local" class="form-control" style="background-color: #2a2a2a; color: #fff; border-color: #444;" />
-            <span asp-validation-for="EventDate" class="text-danger"></span>
-        </div>
-        <button type="submit" class="btn btn-success">Create</button>
     </form>
 
     <!-- Voice Input Section -->
-    <div class="mt-5">
-        <h3 style="color: #00c6ff;">Or use your voice</h3>
-        <p id="voiceStepMessage" style="color: #00c6ff;">Say the event title</p>
-        <button id="startRecording" onclick="startRecording()" class="btn btn-primary">Start Recording</button>
-        <button id="stopRecording" onclick="stopRecording()" class="btn btn-secondary" disabled>Stop Recording</button>
-
-        <input type="hidden" id="audioData" name="audioData" />
+    <div class="card p-4 bg-dark text-light">
+        <h3 class="text-primary mb-3">Or use your voice</h3>
+        <p id="voiceStepMessage" class="text-info">Say the event title</p>
+        <div class="d-flex gap-2">
+            <button id="startRecording" onclick="startRecording()" class="btn btn-primary flex-grow-1 fw-bold">Start Recording</button>
+            <button id="stopRecording" onclick="stopRecording()" class="btn btn-danger flex-grow-1 fw-bold" disabled>Stop Recording</button>
+        </div>
     </div>
 
-    <a asp-action="Index" class="btn btn-secondary mt-3">Back to List</a>
+    <a asp-action="Index" class="btn btn-secondary mt-4 fw-bold">Back to List</a>
 </div>
 
 <!-- Include Recorder.js -->
