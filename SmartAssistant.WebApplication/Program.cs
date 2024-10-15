@@ -54,6 +54,7 @@ builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddHostedService<EventCleanupService>();
 builder.Services.AddSignalR();
 builder.Services.AddSingleton<GoogleSpeechService>();
+builder.Services.AddScoped<SpeechTextExtractionService>();
 
 
 builder.Services.AddSignalR().AddJsonProtocol(options =>

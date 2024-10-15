@@ -16,13 +16,15 @@ namespace SmartAssistant.WebApplication.Controllers
         private readonly IMapper mapper;
         private readonly ITaskService taskService;
         private readonly GoogleSpeechService googleSpeechService;
+        private readonly SpeechTextExtractionService extractionService;
 
-        public EventController(IEventService _eventService, IMapper _mapper, ITaskService _taskService, GoogleSpeechService _googleSpeechService)
+        public EventController(IEventService _eventService, IMapper _mapper, ITaskService _taskService, GoogleSpeechService _googleSpeechService, SpeechTextExtractionService _extractionService)
         {
             eventService = _eventService;
             taskService = _taskService;
             mapper = _mapper;
             googleSpeechService = _googleSpeechService;
+            extractionService = _extractionService;
         }
 
         public async Task<IActionResult> Index()
@@ -52,16 +54,10 @@ namespace SmartAssistant.WebApplication.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> VoiceInput(IFormFile audioFile, string field)
+        public async Task<IActionResult> VoiceInput(IFormFile audioFile)
         {
             try
             {
-                // Validate field value
-                if (string.IsNullOrEmpty(field))
-                {
-                    return Json(new { error = "Field value is missing. Please try again." });
-                }
-
                 // Validate audio file
                 if (audioFile == null || audioFile.Length == 0)
                 {
@@ -91,51 +87,33 @@ namespace SmartAssistant.WebApplication.Controllers
                     return Json(new { error = "User not found. Please log in and try again." });
                 }
 
-                // Handle the recognized text based on the current step
-                switch (field.ToLower())
+                // Use the extraction service to get event details
+                string eventTitle = extractionService.ExtractTitle(recognizedText); // Extract the event title
+                DateTime? eventDate = extractionService.ExtractDate(recognizedText); // Extract the event date and time
+
+                // Handle missing fields
+                if (string.IsNullOrEmpty(eventTitle) || !eventDate.HasValue)
                 {
-                    case "eventtitle":
-                        TempData["EventTitle"] = recognizedText;
-                        return Json(new { nextStep = "eventdate", message = "Please say the event date and time" });
-
-                    case "eventdate":
-                        string normalizedText = recognizedText.ToLower().Trim();
-
-                        DateTime eventDate;
-                        var parser = new Parser();
-                        var parsedDate = parser.Parse(normalizedText);
-
-                        if (parsedDate != null && parsedDate.Start != null)
-                        {
-                            eventDate = parsedDate.Start.Value;
-                        }
-                        else
-                        {
-                            return Json(new { error = "Invalid date format. Please try again with a valid date." });
-                        }
-
-                        TempData["EventDate"] = eventDate;
-
-                        // Now create the event
-                        var eventCreateModel = new EventCreateModel
-                        {
-                            EventTitle = TempData["EventTitle"] as string,
-                            EventDate = (DateTime)TempData["EventDate"]
-                        };
-
-                        await eventService.AddEventAsync(eventCreateModel, userId);
-
-                        return Json(new { success = true, message = "Event created successfully." });
-
-                    default:
-                        return Json(new { error = "Unknown step. Please try again." });
+                    return Json(new { error = "Failed to recognize necessary fields. Please try again." });
                 }
+
+                // Create the event
+                var eventCreateModel = new EventCreateModel
+                {
+                    EventTitle = eventTitle,
+                    EventDate = eventDate.Value
+                };
+
+                await eventService.AddEventAsync(eventCreateModel, userId);
+
+                return Json(new { success = true, message = "Event created successfully." });
             }
             catch (Exception ex)
             {
                 return Json(new { error = "An unexpected error occurred: " + ex.Message });
             }
         }
+
 
         public async Task<IActionResult> Edit(int id)
         {

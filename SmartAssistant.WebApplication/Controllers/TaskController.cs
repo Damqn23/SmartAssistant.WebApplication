@@ -13,12 +13,14 @@ namespace SmartAssistant.WebApplication.Controllers
         private readonly ITaskService taskService;
         private readonly IMapper mapper;
         private readonly GoogleSpeechService googleSpeechService;
+        private readonly SpeechTextExtractionService extractionService;
 
-        public TaskController(ITaskService _taskService, IMapper _mapper, GoogleSpeechService _googleSpeechService)
+        public TaskController(ITaskService _taskService, IMapper _mapper, GoogleSpeechService _googleSpeechService, SpeechTextExtractionService _extractionService)
         {
             taskService = _taskService;
             mapper = _mapper;
             googleSpeechService = _googleSpeechService;
+            extractionService = _extractionService;
         }
         public async Task<IActionResult> Index()
         {
@@ -93,16 +95,10 @@ namespace SmartAssistant.WebApplication.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> VoiceInput(IFormFile audioFile, string field)
+        public async Task<IActionResult> VoiceInput(IFormFile audioFile)
         {
             try
             {
-                // Validate field value
-                if (string.IsNullOrEmpty(field))
-                {
-                    return Json(new { error = "Field value is missing. Please try again." });
-                }
-
                 // Validate audio file
                 if (audioFile == null || audioFile.Length == 0)
                 {
@@ -126,92 +122,38 @@ namespace SmartAssistant.WebApplication.Controllers
                     return Json(new { error = "Speech recognition failed. Please try again." });
                 }
 
+                // Use the extraction service to get task/event details
+                string title = extractionService.ExtractTitle(recognizedText); // Extract the full description
+                DateTime? dueDate = extractionService.ExtractDate(recognizedText);
+                int estimatedTime = (int)extractionService.ExtractEstimatedTime(recognizedText);
+                PriorityLevel priority = extractionService.ExtractPriority(recognizedText);
+
+                // Handle missing fields
+                if (string.IsNullOrEmpty(title) || !dueDate.HasValue)
+                {
+                    return Json(new { error = "Failed to recognize necessary fields. Please try again." });
+                }
+
+                // Now create the task/event (use TaskCreateModel for tasks and EventCreateModel for events)
+                var createModel = new TaskCreateModel
+                {
+                    Description = title,
+                    DueDate = dueDate.Value,
+                    EstimatedTimeToComplete = estimatedTime,
+                    Priority = priority
+                };
+
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                if (string.IsNullOrEmpty(userId))
-                {
-                    return Json(new { error = "User not found. Please log in and try again." });
-                }
+                await taskService.AddTaskAsync(createModel, userId);
 
-                // Handle the recognized text based on the current step
-                switch (field.ToLower())
-                {
-                    case "description":
-                        TempData["Description"] = recognizedText;
-                        return Json(new { nextStep = "duedate", message = "Please say the due date" });
-
-                    case "duedate":
-                        string normalizedText = recognizedText.ToLower().Trim();
-
-                        DateTime dueDate;
-                        var parser = new Parser();
-                        var parsedDate = parser.Parse(normalizedText);
-
-                        if (parsedDate != null && parsedDate.Start != null)
-                        {
-                            dueDate = parsedDate.Start.Value;
-                        }
-                        else
-                        {
-                            return Json(new { error = "Invalid date format. Please try again with a valid date." });
-                        }
-
-                        TempData["DueDate"] = dueDate;
-                        return Json(new { nextStep = "estimatedtime", message = "Please say the estimated time to complete" });
-
-                    case "estimatedtime":
-                        if (int.TryParse(recognizedText, out int estimatedTime))
-                        {
-                            TempData["EstimatedTime"] = estimatedTime;
-                            return Json(new { nextStep = "priority", message = "Please say the priority level (Low, Medium, High)" });
-                        }
-                        else
-                        {
-                            return Json(new { error = "Invalid estimated time. Please provide a number in hours." });
-                        }
-
-                    case "priority":
-                        normalizedText = recognizedText.ToLower().Trim();
-
-                        // Handle variants of "High", "Medium", and "Low"
-                        if (normalizedText == "high" || normalizedText.Contains("hi"))
-                        {
-                            TempData["Priority"] = PriorityLevel.High;
-                        }
-                        else if (normalizedText == "medium" || normalizedText.Contains("med"))
-                        {
-                            TempData["Priority"] = PriorityLevel.Medium;
-                        }
-                        else if (normalizedText == "low" || normalizedText.Contains("lo"))
-                        {
-                            TempData["Priority"] = PriorityLevel.Low;
-                        }
-                        else
-                        {
-                            return Json(new { error = "Invalid priority level. Please say either Low, Medium, or High." });
-                        }
-
-                        // Now create the task
-                        var taskCreateModel = new TaskCreateModel
-                        {
-                            Description = TempData["Description"] as string,
-                            DueDate = (DateTime)TempData["DueDate"],
-                            EstimatedTimeToComplete = (int)TempData["EstimatedTime"],
-                            Priority = (PriorityLevel)TempData["Priority"]
-                        };
-
-                        await taskService.AddTaskAsync(taskCreateModel, userId);
-
-                        return Json(new { success = true, message = "Task created successfully." });
-
-                    default:
-                        return Json(new { error = "Unknown step. Please try again." });
-                }
+                return Json(new { success = true, message = "Task created successfully." });
             }
             catch (Exception ex)
             {
                 return Json(new { error = "An unexpected error occurred: " + ex.Message });
             }
         }
+
 
     }
 }

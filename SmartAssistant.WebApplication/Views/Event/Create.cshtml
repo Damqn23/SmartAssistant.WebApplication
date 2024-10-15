@@ -23,7 +23,7 @@
     <!-- Voice Input Section -->
     <div class="card p-4 bg-dark text-light">
         <h3 class="text-primary mb-3">Or use your voice</h3>
-        <p id="voiceStepMessage" class="text-info">Say the event title</p>
+        <p id="voiceStepMessage" class="text-info">Say the event details</p>
         <div class="d-flex gap-2">
             <button id="startRecording" onclick="startRecording()" class="btn btn-primary flex-grow-1 fw-bold">Start Recording</button>
             <button id="stopRecording" onclick="stopRecording()" class="btn btn-danger flex-grow-1 fw-bold" disabled>Stop Recording</button>
@@ -37,19 +37,12 @@
 <script src="~/js/recorder.js"></script>
 <script>
     let recorder, audioBlob;
-    let currentField = "eventtitle"; // Initialize the field as 'eventtitle' for the first step
-
-    const steps = {
-        "eventtitle": "Say the event title",
-        "eventdate": "Say the event date and time"
-    };
 
     async function startRecording() {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
-            // Initialize the recorder with the audio context
             const input = audioContext.createMediaStreamSource(stream);
             recorder = new Recorder(input, {
                 numChannels: 1, // Use mono channel
@@ -84,7 +77,6 @@
 
         const formData = new FormData();
         formData.append("audioFile", audioBlob, "audio.wav"); // Append the audioBlob correctly to FormData
-        formData.append("field", currentField);
 
         try {
             const response = await fetch(`/Event/VoiceInput`, {
@@ -97,10 +89,6 @@
             if (result.success) {
                 alert(result.message);
                 window.location.href = "/Event/Index"; // Event created
-            } else if (result.nextStep) {
-                currentField = result.nextStep; // Move to the next step
-                document.getElementById('voiceStepMessage').innerText = steps[currentField];
-                alert(result.message);
             } else if (result.error) {
                 alert(result.error);
             }
