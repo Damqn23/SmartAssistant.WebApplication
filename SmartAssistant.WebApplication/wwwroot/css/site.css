@@ -20,3 +20,22 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+#search-results {
+    display: none; /* Hidden by default */
+    position: absolute;
+    width: 100%;
+    background-color: #2a2a2a;
+    z-index: 1000;
+    border: 1px solid #444;
+}
+
+    #search-results .list-group-item {
+        color: #fff;
+        background-color: #2a2a2a;
+        border-color: #444;
+    }
+
+        #search-results .list-group-item:hover {
+            background-color: #444;
+        }

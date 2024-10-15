@@ -65,6 +65,43 @@ namespace SmartAssistant.WebApplication.Controllers
 
             return View("GlobalSearchResults", searchResults); // Show the results
         }
+        [HttpGet]
+        public async Task<IActionResult> SearchSuggestions(string searchQuery)
+        {
+            if (string.IsNullOrEmpty(searchQuery))
+            {
+                return Json(new { results = new List<object>() }); // Return an empty list if no input
+            }
+
+            // Search for tasks, events, and teams based on the search query
+            var tasks = await taskService.GetTasksBySearchQueryAsync(searchQuery);
+            var events = await eventService.GetEventsBySearchQueryAsync(searchQuery);
+            var teams = await teamService.GetTeamsBySearchQueryAsync(searchQuery);
+
+            // Combine the results into a list of anonymous objects (with URL links)
+            var results = tasks.Select(t => new
+            {
+                name = t.Description,
+                type = "Task",
+                url = Url.Action("Details", "Task", new { id = t.Id }) // Replace with the actual details page
+            })
+            .Concat(events.Select(e => new
+            {
+                name = e.EventTitle,
+                type = "Event",
+                url = Url.Action("Details", "Event", new { id = e.Id }) // Replace with the actual details page
+            }))
+            .Concat(teams.Select(te => new
+            {
+                name = te.TeamName,
+                type = "Team",
+                url = Url.Action("Details", "Team", new { id = te.Id }) // Replace with the actual details page
+            }))
+            .ToList();
+
+            return Json(new { results });
+        }
+
 
     }
 }
