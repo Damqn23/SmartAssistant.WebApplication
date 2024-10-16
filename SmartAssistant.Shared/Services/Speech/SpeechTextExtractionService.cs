@@ -13,24 +13,27 @@ namespace SmartAssistant.Shared.Services.Speech
     {
         public string ExtractTitle(string recognizedText)
         {
-            // Improved pattern to catch full date/time expressions, including "tomorrow at 2 PM", "next Sunday"
-            var datePattern = @"(\b(at\s+\d{1,2}(:\d{2})?\s*(AM|PM|am|pm)?)\b|\b(tomorrow|next\s+\w+|on\s+\w+|\d{1,2}(st|nd|rd|th)?)\b)";
+            // Initialize Chronic.NET parser
+            var parser = new Parser();
 
-            // Remove the date/time-related part from the recognized text
-            var title = Regex.Replace(recognizedText, datePattern, "", RegexOptions.IgnoreCase).Trim();
+            // Parse the recognized text for date/time
+            var parsedDate = parser.Parse(recognizedText);
 
-            // Ensure that we remove trailing single words like "PM" or "Sunday" after date/time cleanup
-            var trailingWordsPattern = @"\b(AM|PM|am|pm|Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)\b";
-            title = Regex.Replace(title, trailingWordsPattern, "", RegexOptions.IgnoreCase).Trim();
-
-            // If the title ends up too short or is malformed, fallback to using the full recognized text
-            if (string.IsNullOrWhiteSpace(title) || title.Split(' ').Length <= 1)
+            // If a date is found, remove the recognized date/time portion
+            if (parsedDate != null && parsedDate.Start.HasValue)
             {
-                title = recognizedText;  // Fallback to the full recognized text if the title seems too short
+                // Remove recognized time-related words from the original text manually
+                recognizedText = Regex.Replace(recognizedText, @"\b(tomorrow|next\s+\w+|on\s+\w+|at\s+\d{1,2}(:\d{2})?\s*(AM|PM|am|pm)?)\b", "", RegexOptions.IgnoreCase).Trim();
             }
 
-            return title;
+            // Further remove any time-related parts like "afternoon", "morning", "evening", "p.m."
+            recognizedText = Regex.Replace(recognizedText, @"\b(afternoon|morning|evening|night|today|tonight|p\.?m\.?|a\.?m\.?)\b", "", RegexOptions.IgnoreCase).Trim();
+
+            recognizedText = recognizedText.Trim().TrimEnd('.');
+
+            return recognizedText;
         }
+
         public DateTime? ExtractDate(string recognizedText)
         {
             var parser = new Parser();
@@ -49,15 +52,21 @@ namespace SmartAssistant.Shared.Services.Speech
         }
 
         // Helper function to preprocess and normalize the time format
+        // Helper function to preprocess and normalize the time format
         private string NormalizeTime(string input)
         {
+            // Normalize phrases like "afternoon" to specific times
+            input = Regex.Replace(input, @"\bafternoon\b", "3:00 PM", RegexOptions.IgnoreCase);
+            input = Regex.Replace(input, @"\bmorning\b", "9:00 AM", RegexOptions.IgnoreCase);
+            input = Regex.Replace(input, @"\bevening\b", "6:00 PM", RegexOptions.IgnoreCase);
+            input = Regex.Replace(input, @"\bnight\b", "8:00 PM", RegexOptions.IgnoreCase);
+
             // Regex to capture common spoken time formats like "2 PM" or "3:30 PM"
             var timePattern = @"(\d{1,2})(:\d{2})?\s*(AM|PM|am|pm)?";
             var match = Regex.Match(input, timePattern);
 
             if (match.Success)
             {
-                // Ensure that time is formatted correctly
                 string time = match.Value;
 
                 // If no AM/PM is provided, assume PM for convenience (can be adjusted)
@@ -72,6 +81,7 @@ namespace SmartAssistant.Shared.Services.Speech
 
             return input;
         }
+
 
         public int? ExtractEstimatedTime(string recognizedText)
         {
@@ -91,21 +101,24 @@ namespace SmartAssistant.Shared.Services.Speech
         }
 
         // Helper method to convert written numbers to digits
+        // Helper method to convert written numbers to digits
         private string ConvertNumberWordsToDigits(string input)
         {
             var numberWords = new Dictionary<string, string>
-            {
-                 { "one", "1" },
-                 { "two", "2" },
-                 { "three", "3" },
-                 { "four", "4" },
-                 { "five", "5" },
-                 { "six", "6" },
-                 { "seven", "7" },
-                 { "eight", "8" },
-                 { "nine", "9" },
-                 { "ten", "10" }
-            };
+    {
+        { "one", "1" },
+        { "two", "2" },
+        { "three", "3" },
+        { "four", "4" },
+        { "five", "5" },
+        { "six", "6" },
+        { "seven", "7" },
+        { "eight", "8" },
+        { "nine", "9" },
+        { "ten", "10" },
+        { "eleven", "11" },
+        { "twelve", "12" }
+    };
 
             foreach (var numberWord in numberWords)
             {
@@ -114,6 +127,7 @@ namespace SmartAssistant.Shared.Services.Speech
 
             return input;
         }
+
 
         public PriorityLevel ExtractPriority(string recognizedText)
         {

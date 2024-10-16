@@ -4,7 +4,6 @@
 
 <link rel="stylesheet" href="~/css/site.css" />
 
-
 <div class="hero-section text-center p-5 rounded-3" style="background-color: #1c1c1c;">
     <h1 class="display-4 mb-3" style="color: #00c6ff;">Welcome to Smart Assistant</h1>
     <p class="lead" style="color: #adb5bd;">Your smart companion to manage tasks, events, and reminders effortlessly.</p>
@@ -17,8 +16,15 @@
         <div id="search-results" class="list-group position-absolute" style="width: 100%; z-index: 1000;"></div>
     </form>
 
-    <a href="/Task/Index" class="btn btn-lg me-3" style="background-color: #28a745; color: #fff; border-color: #28a745;">View Tasks</a>
-    <a href="/Event/Index" class="btn btn-lg" style="background-color: #17a2b8; color: #fff; border-color: #17a2b8;">View Events</a>
+    <div class="d-flex justify-content-center mt-4">
+        <a href="/Task/Index" class="btn btn-lg me-3" style="background-color: #28a745; color: #fff; border-color: #28a745;">View Tasks</a>
+        <a href="/Event/Index" class="btn btn-lg me-3" style="background-color: #17a2b8; color: #fff; border-color: #17a2b8;">View Events</a>
+
+        <!-- Voice Command Button (Styled with Bootstrap) -->
+        <button id="voiceCommandButton" class="btn btn-lg" style="background-color: #007bff; color: white;">
+            🎤 Voice Command
+        </button>
+    </div>
 </div>
 
 <section class="features-section mt-5">
@@ -58,6 +64,9 @@
 @section Scripts {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-
+    <!-- Existing script for search functionality -->
     <script src="~/js/search.js"></script>
+
+    <!-- Voice Command Script -->
+    <script src="~/js/voiceAssistant.js"></script>
 }
