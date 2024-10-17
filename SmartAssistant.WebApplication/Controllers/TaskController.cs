@@ -22,10 +22,24 @@ namespace SmartAssistant.WebApplication.Controllers
             googleSpeechService = _googleSpeechService;
             extractionService = _extractionService;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var tasks = await taskService.GetTasksByUserIdAsync(userId);
+
+            switch (sortOrder)
+            {
+                case "priority_asc":
+                    tasks = tasks.OrderBy(t => t.Priority).ToList();
+                    break;
+                case "priority_desc":
+                    tasks = tasks.OrderByDescending(t => t.Priority).ToList();
+                    break;
+                default:
+                    tasks = tasks.OrderBy(t => t.DueDate).ToList(); // Default sorting by Due Date
+                    break;
+            }
+
             return View(tasks);
         }
 

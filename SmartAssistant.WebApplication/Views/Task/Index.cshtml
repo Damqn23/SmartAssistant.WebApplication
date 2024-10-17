@@ -13,6 +13,15 @@
                 <th>Description</th>
                 <th>Due Date</th>
                 <th>Is Completed</th>
+                <th>
+                    @* Add sorting links with Font Awesome icons *@
+                    <a asp-action="Index" asp-route-sortOrder="priority_asc" style="color: #fff; text-decoration: none;">
+                        Priority <i class="fas fa-sort-up"></i>
+                    </a>
+                    <a asp-action="Index" asp-route-sortOrder="priority_desc" style="color: #fff; text-decoration: none;">
+                        <i class="fas fa-sort-down"></i>
+                    </a>
+                </th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -31,6 +40,11 @@
                         {
                             <span class="badge bg-warning text-dark">No</span>
                         }
+                    </td>
+                    <td>
+                        <span class="badge @GetPriorityBadgeClass(item.Priority)">
+                            @GetPriorityText(item.Priority)
+                        </span>
                     </td>
                     <td>
                         <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-warning btn-sm me-2">Edit</a>
@@ -53,4 +67,41 @@
         .table-hover tbody tr:hover a {
             color: #00c6ff; /* Accent color for links on hover */
         }
+
+    /* Styling for sorting arrows */
+    i.fas.fa-sort-up,
+    i.fas.fa-sort-down {
+        font-size: 0.85em; /* Adjust the size of the icons */
+    }
+
+    /* Space the sort arrows more */
+    .table th a {
+        margin-right: 5px;
+    }
 </style>
+
+@functions {
+    // Helper to get the textual representation of priority
+    public string GetPriorityText(int priority)
+    {
+        switch (priority)
+        {
+            case 0: return "Low";
+            case 1: return "Medium";
+            case 2: return "High";
+            default: return "Unknown";
+        }
+    }
+
+    // Helper to get the CSS class based on priority
+    public string GetPriorityBadgeClass(int priority)
+    {
+        switch (priority)
+        {
+            case 0: return "bg-success"; // Green badge for low priority
+            case 1: return "bg-warning text-dark"; // Yellow badge for medium priority
+            case 2: return "bg-danger"; // Red badge for high priority
+            default: return "bg-secondary"; // Gray badge for unknown priority
+        }
+    }
+}
