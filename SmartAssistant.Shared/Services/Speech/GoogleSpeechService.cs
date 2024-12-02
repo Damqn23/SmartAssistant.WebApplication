@@ -5,17 +5,21 @@ namespace SmartAssistant.Shared.Services.Speech
 {
     public class GoogleSpeechService
     {
+
+        private readonly SpeechClient _speechClient;
+
+        public GoogleSpeechService(SpeechClient speechClient = null)
+        {
+            _speechClient = speechClient ?? SpeechClient.Create();
+        }
         public string RecognizeSpeech(byte[] audioBytes)
         {
             try
             {
-                // Create a speech client
-                var speech = SpeechClient.Create();
-
-                // Get the sample rate from the WAV file header
+                // Use the injected _speechClient instead of creating a new instance
                 int sampleRate = GetWavFileSampleRate(audioBytes);
 
-                var response = speech.Recognize(new RecognitionConfig
+                var response = _speechClient.Recognize(new RecognitionConfig
                 {
                     Encoding = RecognitionConfig.Types.AudioEncoding.Linear16,
                     SampleRateHertz = sampleRate,
@@ -36,7 +40,7 @@ namespace SmartAssistant.Shared.Services.Speech
             }
         }
 
-        private int GetWavFileSampleRate(byte[] wavBytes)
+        internal int GetWavFileSampleRate(byte[] wavBytes)
         {
             try
             {

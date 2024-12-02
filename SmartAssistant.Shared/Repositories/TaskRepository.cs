@@ -47,7 +47,7 @@ namespace SmartAssistant.Shared.Repositories
 
         public async Task DeleteAsync(TaskModel entity)
         {
-            var task = await context.Tasks.FindAsync(entity.Id);
+            var task = await context.Tasks.FirstOrDefaultAsync(t => t.Id == entity.Id);
             if (task != null)
             {
                 context.Tasks.Remove(task);
@@ -63,7 +63,7 @@ namespace SmartAssistant.Shared.Repositories
 
         public async Task<TaskModel> GetByIdAsync(int id)
         {
-            var task = await context.Tasks.AsNoTracking().FirstOrDefaultAsync(t => t.Id == id);
+            var task = await context.Tasks.FirstOrDefaultAsync(t => t.Id == id);
             return mapper.Map<TaskModel>(task);
         }
 
@@ -75,7 +75,7 @@ namespace SmartAssistant.Shared.Repositories
 
         public async Task UpdateAsync(TaskModel taskModel)
         {
-            var task = await context.Tasks.FindAsync(taskModel.Id);
+            var task = await context.Tasks.FirstOrDefaultAsync(t => t.Id == taskModel.Id);
 
             if (task != null)
             {
@@ -85,8 +85,10 @@ namespace SmartAssistant.Shared.Repositories
                 task.Priority = taskModel.Priority;
                 task.IsCompleted = taskModel.IsCompleted;
 
-                // Preserve UserId from the original task
                 task.UserId = taskModel.UserId;
+
+                // Ensure entity state is marked as modified
+                context.Entry(task).State = EntityState.Modified;
 
                 await context.SaveChangesAsync();
             }

@@ -26,7 +26,14 @@ namespace SmartAssistant.Shared.Services.CleanUps
             while (!stoppingToken.IsCancellationRequested)
             {
                 await CleanupExpiredTaskAndReminder(stoppingToken);
-                await Task.Delay(cleanUpInterval, stoppingToken);
+                try
+                {
+                    await Task.Delay(cleanUpInterval, stoppingToken);
+                }
+                catch (TaskCanceledException)
+                {
+                    // Ignore the exception since it means the task is being stopped
+                }
             }
         }
 
