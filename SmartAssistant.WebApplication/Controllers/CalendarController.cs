@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SmartAssistant.Shared.Interfaces.Event;
 using SmartAssistant.Shared.Interfaces.Task;
 using SmartAssistant.Shared.Interfaces.Team;
 using SmartAssistant.Shared.Models;
 using SmartAssistant.Shared.Models.Calendar;
+using SmartAssistant.Shared.Models.Event;
+using SmartAssistant.Shared.Models.Task;
 using SmartAssistant.Shared.Models.Team;
 using System.Security.Claims;
 
@@ -15,12 +18,14 @@ namespace SmartAssistant.WebApplication.Controllers
         private readonly ITaskService taskService;
         private readonly IEventService eventService;
         private readonly ITeamService teamService;
+        private readonly IMapper mapper;
 
-        public CalendarController(ITaskService _taskService, IEventService _eventService, ITeamService _teamService)
+        public CalendarController(ITaskService _taskService, IEventService _eventService, ITeamService _teamService, IMapper _mapper)
         {
             taskService = _taskService;
             eventService = _eventService;
             teamService = _teamService;
+            mapper = _mapper;
         }
 
         public async Task<IActionResult> Index()
