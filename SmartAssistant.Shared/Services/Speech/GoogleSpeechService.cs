@@ -1,9 +1,10 @@
 ﻿using Google.Cloud.Speech.V1;
+using SmartAssistant.Shared.Interfaces.Speech;
 using System;
 
 namespace SmartAssistant.Shared.Services.Speech
 {
-    public class GoogleSpeechService
+    public class GoogleSpeechService : IGoogleSpeechService
     {
 
         private readonly SpeechClient _speechClient;

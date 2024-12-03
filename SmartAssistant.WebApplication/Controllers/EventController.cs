@@ -7,6 +7,7 @@ using SmartAssistant.Shared.Services;
 using SmartAssistant.Shared.Services.Speech;
 using System.Security.Claims;
 using Chronic;
+using SmartAssistant.Shared.Interfaces.Speech;
 
 namespace SmartAssistant.WebApplication.Controllers
 {
@@ -15,10 +16,10 @@ namespace SmartAssistant.WebApplication.Controllers
         private readonly IEventService eventService;
         private readonly IMapper mapper;
         private readonly ITaskService taskService;
-        private readonly GoogleSpeechService googleSpeechService;
+        private readonly IGoogleSpeechService googleSpeechService;
         private readonly SpeechTextExtractionService extractionService;
 
-        public EventController(IEventService _eventService, IMapper _mapper, ITaskService _taskService, GoogleSpeechService _googleSpeechService, SpeechTextExtractionService _extractionService)
+        public EventController(IEventService _eventService, IMapper _mapper, ITaskService _taskService, IGoogleSpeechService _googleSpeechService, SpeechTextExtractionService _extractionService)
         {
             eventService = _eventService;
             taskService = _taskService;

@@ -58,9 +58,17 @@ namespace SmartAssistant.Shared.Repositories
 
         public async System.Threading.Tasks.Task UpdateAsync(ReminderModel entity)
         {
-            var reminder = mapper.Map<Reminder>(entity);
-            context.Reminders.Update(reminder);
-            await context.SaveChangesAsync();
+            var reminder = await context.Reminders.FirstOrDefaultAsync(r => r.Id == entity.Id);
+            if (reminder != null)
+            {
+                // Update properties manually
+                reminder.ReminderMessage = entity.ReminderMessage;
+                reminder.ReminderDate = entity.ReminderDate;
+                reminder.UserId = entity.UserId;
+
+                // Save changes
+                await context.SaveChangesAsync();
+            }
         }
 
         public async System.Threading.Tasks.Task UpdateReminderStatusAsync(int reminderId, bool status)

@@ -107,25 +107,23 @@ namespace SmartAssistant.Shared.Repositories.Team
 
         public async Task<IEnumerable<TeamModel>> GetTeamsByUserIdAsync(string userId)
         {
-            // Fetch teams where the user is a member
+            // Get teams where the user is a member
             var memberTeams = await context.Teams
                 .Where(t => t.UserTeams.Any(ut => ut.UserId == userId))
-                .Include(t => t.Owner)
+                .Include(t => t.Owner) // Ensure Owner data is loaded
                 .ToListAsync();
 
-            // Fetch teams where the user is the owner
+            // Get teams where the user is the owner
             var ownedTeams = await context.Teams
                 .Where(t => t.OwnerId == userId)
                 .Include(t => t.Owner)
                 .ToListAsync();
 
-            // Combine both sets of teams and return distinct results
+            // Combine both lists and ensure uniqueness
             var allTeams = memberTeams.Concat(ownedTeams)
-                .GroupBy(t => t.Id)        // Group by Team ID
-                .Select(g => g.First())    // Select only the first occurrence of each team
+                .GroupBy(t => t.Id)
+                .Select(g => g.First())
                 .ToList();
-
-           
 
             return mapper.Map<List<TeamModel>>(allTeams);
         }
@@ -147,9 +145,16 @@ namespace SmartAssistant.Shared.Repositories.Team
 
         public async Task UpdateAsync(TeamModel entity)
         {
-            var teamEntity = mapper.Map<WebApp.Data.Entities.Team>(entity);
-            context.Teams.Update(teamEntity);
-            await context.SaveChangesAsync();
+            var teamEntity = await context.Teams.FirstOrDefaultAsync(t => t.Id == entity.Id);
+            if (teamEntity != null)
+            {
+                // Update properties manually
+                teamEntity.TeamName = entity.TeamName;
+                teamEntity.OwnerId = entity.OwnerId;
+
+                // Save changes
+                await context.SaveChangesAsync();
+            }
         }
 
         public async Task<IEnumerable<TeamModel>> GetTeamsByOwnerIdAsync(string ownerId)

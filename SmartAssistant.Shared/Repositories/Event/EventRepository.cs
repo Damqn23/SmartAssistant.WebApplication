@@ -72,9 +72,17 @@ namespace SmartAssistant.Shared.Repositories.Event
 
         public async Task UpdateAsync(EventModel entity)
         {
-            var eventEntity = mapper.Map<WebApp.Data.Entities.Event>(entity);
-            context.Events.Update(eventEntity);
-            await context.SaveChangesAsync();
+            var eventEntity = await context.Events.FirstOrDefaultAsync(e => e.Id == entity.Id);
+            if (eventEntity != null)
+            {
+                // Manually update properties
+                eventEntity.EventTitle = entity.EventTitle;
+                eventEntity.EventDate = entity.EventDate;
+                eventEntity.UserId = entity.UserId;
+
+                // Save changes
+                await context.SaveChangesAsync();
+            }
         }
 
         public async Task RemoveExpiredEventsAsync()

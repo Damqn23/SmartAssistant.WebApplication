@@ -5,6 +5,7 @@ using SmartAssistant.Shared.Models.Task;
 using SmartAssistant.Shared.Services.Speech;
 using System.Security.Claims;
 using Chronic;
+using SmartAssistant.Shared.Interfaces.Speech;
 
 namespace SmartAssistant.WebApplication.Controllers
 {
@@ -12,10 +13,10 @@ namespace SmartAssistant.WebApplication.Controllers
     {
         private readonly ITaskService taskService;
         private readonly IMapper mapper;
-        private readonly GoogleSpeechService googleSpeechService;
+        private readonly IGoogleSpeechService googleSpeechService;
         private readonly SpeechTextExtractionService extractionService;
 
-        public TaskController(ITaskService _taskService, IMapper _mapper, GoogleSpeechService _googleSpeechService, SpeechTextExtractionService _extractionService)
+        public TaskController(ITaskService _taskService, IMapper _mapper, IGoogleSpeechService _googleSpeechService, SpeechTextExtractionService _extractionService)
         {
             taskService = _taskService;
             mapper = _mapper;
