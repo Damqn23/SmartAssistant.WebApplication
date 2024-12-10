@@ -1,0 +1,78 @@
+﻿@using SmartAssistant.Shared.Models.Admin
+@model AdminViewModel
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Admin Dashboard</h1>
+
+    <!-- Teams Section -->
+    <div class="card shadow mb-4">
+        <div class="card-header">
+            <h2 class="h5 text-center">Teams</h2>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-striped text-center">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Team Name</th>
+                        <th>Owner</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Teams.Any())
+                    {
+                        foreach (var team in Model.Teams)
+                        {
+                            <tr>
+                                <td>@team.Id</td>
+                                <td>@team.TeamName</td>
+                                <td>@team.OwnerUserName</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3">No teams available</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Users Section -->
+    <div class="card shadow">
+        <div class="card-header">
+            <h2 class="h5 text-center">Users</h2>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-striped text-center">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Users.Any())
+                    {
+                        foreach (var user in Model.Users)
+                        {
+                            <tr>
+                                <td>@user.Id</td>
+                                <td>@user.UserName</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="2">No users available</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

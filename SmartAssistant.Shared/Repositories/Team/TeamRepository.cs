@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SmartAssistant.Shared.Interfaces.Team;
 using SmartAssistant.Shared.Models;
+using SmartAssistant.Shared.Models.Event;
+using SmartAssistant.Shared.Models.Task;
 using SmartAssistant.Shared.Models.Team;
 using SmartAssistant.WebApplication.Data;
 using SmartAssistant.WebApplication.Data.Entities;
@@ -175,5 +177,18 @@ namespace SmartAssistant.Shared.Repositories.Team
 
             return mapper.Map<List<UserModel>>(members);
         }
+
+        public async Task<IEnumerable<TaskModel>> GetTasksByTeamIdAsync(int teamId)
+        {
+            var taskEntities = await context.Tasks.Where(t => t.TeamId == teamId).ToListAsync();
+            return mapper.Map<IEnumerable<TaskModel>>(taskEntities); // Use AutoMapper to map entities to models
+        }
+
+        public async Task<IEnumerable<EventModel>> GetEventsByTeamIdAsync(int teamId)
+        {
+            var eventEntities = await context.Events.Where(e => e.TeamId == teamId).ToListAsync();
+            return mapper.Map<IEnumerable<EventModel>>(eventEntities); // Use AutoMapper to map entities to models
+        }
+
     }
 }

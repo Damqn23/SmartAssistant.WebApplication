@@ -1,4 +1,6 @@
 ﻿using SmartAssistant.Shared.Models;
+using SmartAssistant.Shared.Models.Event;
+using SmartAssistant.Shared.Models.Task;
 using SmartAssistant.Shared.Models.Team;
 using System;
 using System.Collections.Generic;
@@ -19,5 +21,7 @@ namespace SmartAssistant.Shared.Interfaces.Team
 
         Task<IEnumerable<UserModel>> GetTeamMembersByTeamIdAsync(int teamId);
 
+        public Task<IEnumerable<TaskModel>> GetTasksByTeamIdAsync(int teamId);
+        public Task<IEnumerable<EventModel>> GetEventsByTeamIdAsync(int teamId);
     }
 }

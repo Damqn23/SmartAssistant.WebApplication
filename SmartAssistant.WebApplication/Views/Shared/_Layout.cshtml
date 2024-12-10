@@ -41,6 +41,13 @@
                         <li class="nav-item">
                             <a class="nav-link" style="color: #fff;" asp-area="" asp-controller="Team" asp-action="Index">Teams</a>
                         </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="@Url.Action("Index", "Admin")">Admin</a>
+                            </li>
+                        }
+
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

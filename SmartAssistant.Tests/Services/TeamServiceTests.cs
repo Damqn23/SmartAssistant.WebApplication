@@ -35,7 +35,7 @@ namespace SmartAssistant.Tests.Services
             _mockHubContext.Setup(x => x.Clients).Returns(mockClients.Object);
             mockClients.Setup(x => x.All).Returns(_mockClientProxy.Object);
 
-            _teamService = new TeamService(_mockTeamRepository.Object, _mockUserRepository.Object, _mockHubContext.Object);
+            
         }
 
         [Fact]

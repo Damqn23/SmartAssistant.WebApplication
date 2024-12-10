@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.Build.Framework;
 using SmartAssistant.Shared.Hubs;
+using SmartAssistant.Shared.Interfaces.Event;
+using SmartAssistant.Shared.Interfaces.Task;
 using SmartAssistant.Shared.Interfaces.Team;
 using SmartAssistant.Shared.Interfaces.User;
 using SmartAssistant.Shared.Models;
@@ -19,12 +22,16 @@ namespace SmartAssistant.Shared.Services.Teams
         private readonly ITeamRepository teamRepository;
         private readonly IUserRepository userRepository;
         private readonly IHubContext<NotificationHub> hubContext;
+        private readonly ITaskRepository taskRepository;
+		private readonly IEventRepository eventRepository;
 
-        public TeamService(ITeamRepository _teamRepository, IUserRepository _userRepository, IHubContext<NotificationHub> _hubContext)
+        public TeamService(ITeamRepository _teamRepository, IUserRepository _userRepository, IHubContext<NotificationHub> _hubContext, ITaskRepository _taskRepository, IEventRepository _eventRepository)
         {
             teamRepository = _teamRepository;
             userRepository = _userRepository;
             hubContext = _hubContext;
+			taskRepository = _taskRepository;
+			eventRepository = _eventRepository;
         }
 
         public async Task<TeamModel> GetTeamByIdAsync(int id)
@@ -94,16 +101,27 @@ namespace SmartAssistant.Shared.Services.Teams
             await teamRepository.RemoveUserFromTeamAsync(teamId, userId);
         }
 
-        public async System.Threading.Tasks.Task DeleteTeamAsync(int id)
-        {
-            var team = await teamRepository.GetByIdAsync(id);
-            if (team != null)
-            {
-                await teamRepository.DeleteAsync(team);
-            }
-        }
+		public async System.Threading.Tasks.Task DeleteTeamAsync(int id)
+		{
+			var tasks = await taskRepository.GetTasksByTeamIdAsync(id);
+			var events = await eventRepository.GetEventsByTeamIdAsync(id);
 
-        public async System.Threading.Tasks.Task AddUserToTeamAsync(int teamId, string userId, string currentUserId)
+			if (tasks.Any() || events.Any())
+			{
+				throw new Exception("The team cannot be deleted because it has pending tasks or events.");
+			}
+
+			var team = await teamRepository.GetByIdAsync(id);
+			if (team == null)
+			{
+				throw new Exception("Team not found.");
+			}
+
+			await teamRepository.DeleteAsync(team);
+		}
+
+
+		public async System.Threading.Tasks.Task AddUserToTeamAsync(int teamId, string userId, string currentUserId)
         {
             var team = await teamRepository.GetByIdAsync(teamId);
             var user = await userRepository.GetUserByIdAsync(userId);
@@ -161,6 +179,27 @@ namespace SmartAssistant.Shared.Services.Teams
         {
             var teams = await teamRepository.GetAllAsync();
             return teams.Where(t => t.TeamName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        public async Task<IEnumerable<TeamModel>> GetAllTeamsAsync()
+        {
+            var teams = await teamRepository.GetAllAsync();
+
+            foreach (var team in teams)
+            {
+                var owner = await userRepository.GetUserByIdAsync(team.OwnerId);
+
+                if (owner != null)
+                {
+                    team.OwnerUserName = owner.UserName; // Set owner's username
+                }
+                else
+                {
+                    team.OwnerUserName = "Unknown"; // Fallback if owner is not found
+                }
+            }
+
+            return teams;
         }
 
     }

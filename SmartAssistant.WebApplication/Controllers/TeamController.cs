@@ -2,6 +2,7 @@
 using SmartAssistant.Shared.Interfaces.Team;
 using SmartAssistant.Shared.Interfaces.User;
 using SmartAssistant.Shared.Models.Team;
+using System.Diagnostics;
 using System.Security.Claims;
 
 namespace SmartAssistant.WebApplication.Controllers
@@ -144,9 +145,26 @@ namespace SmartAssistant.WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _teamService.DeleteTeamAsync(id);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _teamService.DeleteTeamAsync(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                // Pass the TeamErrorViewModel to the custom error view
+                var errorModel = new TeamErrorViewModel
+                {
+                    ErrorMessage = ex.Message,
+                    RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+                };
+
+                return View("~/Views/Team/Error.cshtml", errorModel); // Explicitly specify the custom view path
+            }
         }
+
+
+
 
         public async Task<IActionResult> Chat(int teamId)
         {

@@ -1,0 +1,10 @@
+﻿@model SmartAssistant.Shared.Models.Team.TeamErrorViewModel
+
+<div class="container text-center mt-5">
+    <h1 class="text-danger">Oops! Something went wrong.</h1>
+    <p class="mt-3">@Model.ErrorMessage</p>
+
+    <div class="mt-4">
+        <a href="@Url.Action("Index", "Team")" class="btn btn-primary">Go Back to Teams</a>
+    </div>
+</div>

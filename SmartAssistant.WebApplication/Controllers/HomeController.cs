@@ -102,6 +102,5 @@ namespace SmartAssistant.WebApplication.Controllers
             return Json(new { results });
         }
 
-
     }
 }
