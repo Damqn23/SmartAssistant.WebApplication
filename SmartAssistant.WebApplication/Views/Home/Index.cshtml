@@ -12,7 +12,7 @@
         <input type="text" id="search-input" name="searchQuery" placeholder="Search tasks, events, and teams"
                class="form-control form-control-lg" style="max-width: 400px; margin: 0 auto; background-color: #2a2a2a; color: #fff; border-color: #444;" />
 
-        <!-- Search suggestions will appear here -->
+        
         <div id="search-results" class="list-group position-absolute" style="width: 100%; z-index: 1000;"></div>
     </form>
 
@@ -20,7 +20,7 @@
         <a href="/Task/Index" class="btn btn-lg me-3" style="background-color: #28a745; color: #fff; border-color: #28a745;">View Tasks</a>
         <a href="/Event/Index" class="btn btn-lg me-3" style="background-color: #17a2b8; color: #fff; border-color: #17a2b8;">View Events</a>
 
-        <!-- Voice Command Button (Styled with Bootstrap) -->
+        
         <button id="voiceCommandButton" class="btn btn-lg" style="background-color: #007bff; color: white;">
             🎤 Voice Command
         </button>
@@ -64,9 +64,9 @@
 @section Scripts {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <!-- Existing script for search functionality -->
+   
     <script src="~/js/search.js"></script>
 
-    <!-- Voice Command Script -->
+    
     <script src="~/js/voiceAssistant.js"></script>
 }

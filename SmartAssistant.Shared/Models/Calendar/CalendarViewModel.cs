@@ -10,8 +10,7 @@ namespace SmartAssistant.Shared.Models.Calendar
     {
         public List<DayViewModel> Days { get; set; }
         public DateTime CurrentMonth { get; set; }
-        public string TeamOwnerUserName { get; set; } // Add this property to hold the team owner's username
-        public int TeamId { get; set; } // Add this property
-
+        public string TeamOwnerUserName { get; set; }         
+        public int TeamId { get; set; } 
     }
 }

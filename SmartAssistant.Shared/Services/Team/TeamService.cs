@@ -52,12 +52,10 @@ namespace SmartAssistant.Shared.Services.Teams
 
             if (owner != null)
             {
-                team.OwnerUserName = owner.UserName;  // Set owner's username
-            }
+                team.OwnerUserName = owner.UserName;              }
             else
             {
-                team.OwnerUserName = "Unknown"; // Fallback in case owner not found
-            }
+                team.OwnerUserName = "Unknown";             }
 
             return team;
         }
@@ -69,16 +67,13 @@ namespace SmartAssistant.Shared.Services.Teams
 
             foreach (var team in teams)
             {
-                var owner = await userRepository.GetUserByIdAsync(team.OwnerId);  // Fetch owner details
-
+                var owner = await userRepository.GetUserByIdAsync(team.OwnerId);  
                 if (owner != null)
                 {
-                    team.OwnerUserName = owner.UserName;  // Set owner's username
-                }
+                    team.OwnerUserName = owner.UserName;                  }
                 else
                 {
-                    team.OwnerUserName = "Unknown"; // Fallback in case owner not found
-                }
+                    team.OwnerUserName = "Unknown";                 }
             }
 
             return teams;
@@ -170,8 +165,7 @@ namespace SmartAssistant.Shared.Services.Teams
         public async Task<IEnumerable<UserModel>> GetTeamMembersByTeamIdAsync(int teamId)
         {
             var members = await teamRepository.GetTeamMembersByTeamIdAsync(teamId);
-            return members ?? new List<UserModel>(); // Return empty list if null
-        }
+            return members ?? new List<UserModel>();         }
 
         public async Task<List<TeamModel>> GetTeamsBySearchQueryAsync(string searchQuery)
         {
@@ -189,12 +183,10 @@ namespace SmartAssistant.Shared.Services.Teams
 
                 if (owner != null)
                 {
-                    team.OwnerUserName = owner.UserName; // Set owner's username
-                }
+                    team.OwnerUserName = owner.UserName;                 }
                 else
                 {
-                    team.OwnerUserName = "Unknown"; // Fallback if owner is not found
-                }
+                    team.OwnerUserName = "Unknown";                 }
             }
 
             return teams;

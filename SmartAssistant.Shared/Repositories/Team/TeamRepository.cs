@@ -31,11 +31,9 @@ namespace SmartAssistant.Shared.Repositories.Team
         }
         public async Task AddAsync(TeamModel entity)
         {
-            var teamEntity = mapper.Map<WebApp.Data.Entities.Team>(entity);  // Map to Team entity
-
+            var teamEntity = mapper.Map<WebApp.Data.Entities.Team>(entity);  
             context.Teams.Add(teamEntity);
-            await context.SaveChangesAsync();  // Ensure this is called only once
-        }
+            await context.SaveChangesAsync();          }
 
 
         public async Task AddUserToTeamAsync(string userId, int teamId)
@@ -47,8 +45,7 @@ namespace SmartAssistant.Shared.Repositories.Team
 
             var userTeam = new UserTeam
             {
-                UserId = userId,  // This should now be correctly set
-                TeamId = teamId
+                UserId = userId,                  TeamId = teamId
             };
 
             await context.UserTeams.AddAsync(userTeam);
@@ -59,8 +56,7 @@ namespace SmartAssistant.Shared.Repositories.Team
         public async Task DeleteAsync(TeamModel entity)
         {
             var teamEntity = await context.Teams
-                .Include(t => t.Messages) // Include related messages
-                .FirstOrDefaultAsync(t => t.Id == entity.Id);
+                .Include(t => t.Messages)                 .FirstOrDefaultAsync(t => t.Id == entity.Id);
 
             if (teamEntity != null)
             {
@@ -85,8 +81,7 @@ namespace SmartAssistant.Shared.Repositories.Team
         public async Task<IEnumerable<TeamModel>> GetAllAsync()
         {
             var teams = await context.Teams
-                .Include(t => t.Owner)  // Eager load the Owner property
-                .ToListAsync();
+                .Include(t => t.Owner)                  .ToListAsync();
 
             return mapper.Map<List<TeamModel>>(teams);  
         }
@@ -106,8 +101,7 @@ namespace SmartAssistant.Shared.Repositories.Team
         {
             var memberTeams = await context.Teams
                 .Where(t => t.UserTeams.Any(ut => ut.UserId == userId))
-                .Include(t => t.Owner) // Ensure Owner data is loaded
-                .ToListAsync();
+                .Include(t => t.Owner)                 .ToListAsync();
 
             var ownedTeams = await context.Teams
                 .Where(t => t.OwnerId == userId)
@@ -161,8 +155,7 @@ namespace SmartAssistant.Shared.Repositories.Team
         {
             var members = await context.UserTeams
                                        .Where(ut => ut.TeamId == teamId)
-                                       .Select(ut => ut.User) // Ensure 'User' is properly included
-                                       .ToListAsync();
+                                       .Select(ut => ut.User)                                        .ToListAsync();
 
             return mapper.Map<List<UserModel>>(members);
         }
@@ -170,14 +163,12 @@ namespace SmartAssistant.Shared.Repositories.Team
         public async Task<IEnumerable<TaskModel>> GetTasksByTeamIdAsync(int teamId)
         {
             var taskEntities = await context.Tasks.Where(t => t.TeamId == teamId).ToListAsync();
-            return mapper.Map<IEnumerable<TaskModel>>(taskEntities); // Use AutoMapper to map entities to models
-        }
+            return mapper.Map<IEnumerable<TaskModel>>(taskEntities);         }
 
         public async Task<IEnumerable<EventModel>> GetEventsByTeamIdAsync(int teamId)
         {
             var eventEntities = await context.Events.Where(e => e.TeamId == teamId).ToListAsync();
-            return mapper.Map<IEnumerable<EventModel>>(eventEntities); // Use AutoMapper to map entities to models
-        }
+            return mapper.Map<IEnumerable<EventModel>>(eventEntities);         }
 
     }
 }

@@ -35,8 +35,7 @@ namespace SmartAssistant.Shared.Services.Speech
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message); // Log the actual error for debugging
-                return string.Empty;
+                Console.WriteLine(ex.Message);                 return string.Empty;
             }
         }
 
@@ -48,8 +47,7 @@ namespace SmartAssistant.Shared.Services.Speech
             }
             catch (Exception)
             {
-                return 16000; // Return default sample rate if unable to read from header
-            }
+                return 16000;             }
         }
     }
 }

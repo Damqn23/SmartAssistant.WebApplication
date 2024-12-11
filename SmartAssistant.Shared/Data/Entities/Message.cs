@@ -16,18 +16,15 @@ namespace SmartAssistant.Shared.Data.Entities
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(ContentMaxLength)]  // Limit the content length to 1000 characters (for example)
-        public string Content { get; set; }
+        [MaxLength(ContentMaxLength)]          public string Content { get; set; }
 
         [Required]
         [ForeignKey("User")]
-        public string UserId { get; set; }  // AspNetUsers
-        public virtual User User { get; set; }
+        public string UserId { get; set; }          public virtual User User { get; set; }
 
         [Required]
         [ForeignKey("Team")]
-        public int TeamId { get; set; }  // Teams
-        public virtual Team Team { get; set; }
+        public int TeamId { get; set; }          public virtual Team Team { get; set; }
 
         [Required]
         public DateTime SentAt { get; set; }

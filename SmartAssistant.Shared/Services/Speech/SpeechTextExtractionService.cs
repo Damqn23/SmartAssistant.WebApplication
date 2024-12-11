@@ -62,8 +62,7 @@ namespace SmartAssistant.Shared.Services.Speech
 
                 if (!time.Contains("AM", StringComparison.OrdinalIgnoreCase) && !time.Contains("PM", StringComparison.OrdinalIgnoreCase))
                 {
-                    time += " PM"; // Assuming PM if AM/PM is not specified
-                }
+                    time += " PM";                 }
 
                 input = Regex.Replace(input, timePattern, time);
             }
@@ -84,8 +83,7 @@ namespace SmartAssistant.Shared.Services.Speech
                 return int.Parse(match.Groups[1].Value);
             }
 
-            return 1; //Default value
-        }
+            return 1;         }
 
         private string ConvertNumberWordsToDigits(string input)
         {
@@ -126,8 +124,7 @@ namespace SmartAssistant.Shared.Services.Speech
             }
             else
             {
-                return PriorityLevel.Low; //Default value
-            }
+                return PriorityLevel.Low;             }
         }
     }
 }

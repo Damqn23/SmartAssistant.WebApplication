@@ -12,6 +12,5 @@ namespace SmartAssistant.Shared.Models.Event
         public string EventTitle { get; set; }
         public DateTime EventDate { get; set; }
         public string UserId { get; set; }
-        public UserModel User { get; set; } // Add this navigation property to associate the user
-    }
+        public UserModel User { get; set; }     }
 }

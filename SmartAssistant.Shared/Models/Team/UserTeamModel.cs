@@ -8,10 +8,6 @@ namespace SmartAssistant.Shared.Models.Team
 {
     public class UserTeamModel
     {
-        public string UserId { get; set; }  // User foreign key
-        public UserModel User { get; set; }  // Navigation property to UserModel
-
-        public int TeamId { get; set; }  // Team foreign key
-        public TeamModel Team { get; set; }  // Navigation property to TeamModel
-    }
+        public string UserId { get; set; }          public UserModel User { get; set; }  
+        public int TeamId { get; set; }          public TeamModel Team { get; set; }      }
 }

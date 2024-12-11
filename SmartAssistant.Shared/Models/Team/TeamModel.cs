@@ -8,10 +8,5 @@ namespace SmartAssistant.Shared.Models.Team
 {
     public class TeamModel
     {
-        public int Id { get; set; }  // Unique identifier
-        public string TeamName { get; set; }  // Team name
-        public string OwnerId { get; set; }  // Owner (creator) of the team
-        public string OwnerUserName { get; set; }  // Owner's username (instead of email)
-        public List<UserModel> Members { get; set; } = new List<UserModel>();  // List of team members
-    }
+        public int Id { get; set; }          public string TeamName { get; set; }          public string OwnerId { get; set; }          public string OwnerUserName { get; set; }          public List<UserModel> Members { get; set; } = new List<UserModel>();      }
 }

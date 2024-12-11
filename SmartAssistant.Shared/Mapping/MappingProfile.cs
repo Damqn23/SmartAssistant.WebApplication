@@ -51,8 +51,7 @@ namespace SmartAssistant.Shared.Mapping
             CreateMap<EventModel, EventEditModel>();
 
             CreateMap<Team, TeamModel>()
-    .ForMember(dest => dest.OwnerUserName, opt => opt.MapFrom(src => src.Owner.UserName));  // Ensure Owner's UserName is mapped
-
+    .ForMember(dest => dest.OwnerUserName, opt => opt.MapFrom(src => src.Owner.UserName));  
 
 
 

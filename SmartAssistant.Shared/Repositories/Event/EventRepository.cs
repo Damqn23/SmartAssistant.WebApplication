@@ -37,8 +37,7 @@ namespace SmartAssistant.Shared.Repositories.Event
                 TeamId = entity.TeamId,
                 EventTitle = entity.EventTitle,
                 EventDate = entity.EventDate,
-                UserId = entity.AssignedUserId // Assign to a team member
-            };
+                UserId = entity.AssignedUserId             };
             await context.Events.AddAsync(eventEntity);
             await context.SaveChangesAsync();
         }
@@ -100,8 +99,7 @@ namespace SmartAssistant.Shared.Repositories.Event
         public async Task<List<EventModel>> GetEventsByTeamIdAsync(int teamId)
         {
             var events = await context.Events
-                .Include(e => e.User) // Ensure the User data is included
-                .Where(e => e.TeamId == teamId)
+                .Include(e => e.User)                 .Where(e => e.TeamId == teamId)
                 .ToListAsync();
             return mapper.Map<List<EventModel>>(events);
         }

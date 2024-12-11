@@ -17,8 +17,7 @@ namespace SmartAssistant.Shared.Interfaces.Team
 
         System.Threading.Tasks.Task RemoveUserFromTeamAsync(int teamId, string userId);
 
-        Task<IEnumerable<TeamModel>> GetTeamsByOwnerIdAsync(string ownerId); // Add this line
-
+        Task<IEnumerable<TeamModel>> GetTeamsByOwnerIdAsync(string ownerId); 
         Task<IEnumerable<UserModel>> GetTeamMembersByTeamIdAsync(int teamId);
 
         public Task<IEnumerable<TaskModel>> GetTasksByTeamIdAsync(int teamId);

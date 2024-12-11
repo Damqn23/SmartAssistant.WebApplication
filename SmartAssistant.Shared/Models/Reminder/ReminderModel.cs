@@ -5,8 +5,7 @@ namespace SmartAssistant.Shared.Models.Reminder
 {
     public class ReminderModel
     {
-        public int Id { get; set; } // Make nullable
-
+        public int Id { get; set; } 
         [Required(ErrorMessage = "Reminder message is required")]
         public string ReminderMessage { get; set; }
 

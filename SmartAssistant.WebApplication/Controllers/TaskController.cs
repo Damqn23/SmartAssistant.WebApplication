@@ -37,7 +37,7 @@ namespace SmartAssistant.WebApplication.Controllers
                     tasks = tasks.OrderByDescending(t => t.Priority).ToList();
                     break;
                 default:
-                    tasks = tasks.OrderBy(t => t.DueDate).ToList(); // Default sorting by Due Date
+                    tasks = tasks.OrderBy(t => t.DueDate).ToList(); 
                     break;
             }
 
@@ -133,7 +133,7 @@ namespace SmartAssistant.WebApplication.Controllers
                     return Json(new { error = "Speech recognition failed. Please try again." });
                 }
 
-                string title = extractionService.ExtractTitle(recognizedText); // Extract the full description
+                string title = extractionService.ExtractTitle(recognizedText); 
                 DateTime? dueDate = extractionService.ExtractDate(recognizedText);
                 int estimatedTime = (int)extractionService.ExtractEstimatedTime(recognizedText);
                 PriorityLevel priority = extractionService.ExtractPriority(recognizedText);

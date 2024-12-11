@@ -46,8 +46,7 @@ namespace SmartAssistant.Shared.Services
             var reminderCreateModel = new ReminderCreateModel
             {
                 ReminderMessage = $"You have {task.Description} coming up at {task.DueDate}",
-                ReminderDate = task.DueDate.AddHours(-1),  // Reminder set for 1 hour before task's due date
-            };
+                ReminderDate = task.DueDate.AddHours(-1),              };
 
             await reminderService.AddReminderAsync(reminderCreateModel, userId);
 
@@ -95,8 +94,7 @@ namespace SmartAssistant.Shared.Services
                 EstimatedTimeToComplete = taskEditModel.EstimatedTimeToComplete,
                 Priority = (int)taskEditModel.Priority,
                 IsCompleted = taskEditModel.IsCompleted,
-                UserId = existingTask.UserId // Preserve the original UserId
-            };
+                UserId = existingTask.UserId             };
 
             await taskRepository.UpdateAsync(task);
         }

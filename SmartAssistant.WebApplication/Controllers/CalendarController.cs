@@ -34,7 +34,7 @@ namespace SmartAssistant.WebApplication.Controllers
             var tasks = await taskService.GetTasksByUserIdAsync(userId);
             var events = await eventService.GetEventsByUserIdAsync(userId);
 
-            var currentMonth = DateTime.Now; // Or allow the user to select the month
+            var currentMonth = DateTime.Now; 
 
             var daysInMonth = Enumerable.Range(1, DateTime.DaysInMonth(currentMonth.Year, currentMonth.Month))
                 .Select(day => new DateTime(currentMonth.Year, currentMonth.Month, day))
@@ -120,8 +120,8 @@ namespace SmartAssistant.WebApplication.Controllers
                 DueDate = date,
                 TeamMembers = teamMembers.Select(m => new SelectListItem
                 {
-                    Value = m.Id,   // Assuming UserId is a string or a valid value for the dropdown
-                    Text = m.UserName   // Assuming UserName is the display name
+                    Value = m.Id,   
+                    Text = m.UserName   
                 })
             };
 
@@ -179,8 +179,8 @@ namespace SmartAssistant.WebApplication.Controllers
                 EventDate = date,
                 TeamMembers = teamMembers.Select(m => new SelectListItem
                 {
-                    Value = m.Id,   // Assuming UserId is a string or a valid value for the dropdown
-                    Text = m.UserName   // Assuming UserName is the display name
+                    Value = m.Id,   
+                    Text = m.UserName   
                 })
             };
 

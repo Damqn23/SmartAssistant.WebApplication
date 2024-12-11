@@ -14,12 +14,9 @@ namespace SmartAssistant.Shared.Interfaces.Team
         Task<IEnumerable<TeamModel>> GetAllTeamsAsync(string userId);
         Task<IEnumerable<TeamModel>> GetAllTeamsAsync();
         System.Threading.Tasks.Task CreateTeamAsync(TeamCreateModel teamCreateModel, string ownerId);
-        System.Threading.Tasks.Task AddUserToTeamAsync(int teamId, string userId, string currentUserId);  // Updated to accept 3 arguments
-        System.Threading.Tasks.Task RemoveUserFromTeamAsync(int teamId, string userId, string currentUserId);  // Updated to accept 3 arguments
-        System.Threading.Tasks.Task DeleteTeamAsync(int id);
+        System.Threading.Tasks.Task AddUserToTeamAsync(int teamId, string userId, string currentUserId);          System.Threading.Tasks.Task RemoveUserFromTeamAsync(int teamId, string userId, string currentUserId);          System.Threading.Tasks.Task DeleteTeamAsync(int id);
 
-        Task<IEnumerable<TeamModel>> GetTeamsByUserIdAsync(string userId);  // Add this method
-        Task<IEnumerable<UserModel>> GetTeamMembersByTeamIdAsync(int teamId);
+        Task<IEnumerable<TeamModel>> GetTeamsByUserIdAsync(string userId);          Task<IEnumerable<UserModel>> GetTeamMembersByTeamIdAsync(int teamId);
         Task<List<TeamModel>> GetTeamsBySearchQueryAsync(string searchQuery);
 
     }

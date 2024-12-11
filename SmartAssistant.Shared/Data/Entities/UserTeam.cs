@@ -8,12 +8,10 @@ namespace SmartAssistant.WebApplication.Data.Entities
     {
         [Required]
         [ForeignKey("User")]
-        public string UserId { get; set; }  // User foreign key
-        public User User { get; set; }
+        public string UserId { get; set; }          public User User { get; set; }
 
         [Required]
         [ForeignKey("Team")]
-        public int TeamId { get; set; }  // Team foreign key
-        public Team Team { get; set; }
+        public int TeamId { get; set; }          public Team Team { get; set; }
     }
 }

@@ -39,8 +39,7 @@ namespace SmartAssistant.Shared.Repositories
                 DueDate = entity.DueDate,
                 EstimatedTimeToComplete = entity.EstimatedTimeToComplete,
                 Priority = entity.Priority,
-                UserId = entity.AssignedUserId // Assign to a team member
-            };
+                UserId = entity.AssignedUserId             };
             await context.Tasks.AddAsync(task);
             await context.SaveChangesAsync();
         }
@@ -96,8 +95,7 @@ namespace SmartAssistant.Shared.Repositories
         public async Task<List<TaskModel>> GetTasksByTeamIdAsync(int teamId)
         {
             var tasks = await context.Tasks
-                .Include(t => t.User) // Ensure the User data is included
-                .Where(t => t.TeamId == teamId)
+                .Include(t => t.User)                 .Where(t => t.TeamId == teamId)
                 .ToListAsync();
             return mapper.Map<List<TaskModel>>(tasks);
         }

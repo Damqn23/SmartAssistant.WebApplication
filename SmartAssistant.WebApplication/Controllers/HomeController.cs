@@ -47,7 +47,7 @@ namespace SmartAssistant.WebApplication.Controllers
         {
             if (string.IsNullOrEmpty(searchQuery))
             {
-                return View("Index"); // Return home page if no query is provided
+                return View("Index"); 
             }
 
             var tasks = await taskService.GetTasksBySearchQueryAsync(searchQuery);
@@ -61,14 +61,14 @@ namespace SmartAssistant.WebApplication.Controllers
                 Teams = teams
             };
 
-            return View("GlobalSearchResults", searchResults); // Show the results
+            return View("GlobalSearchResults", searchResults); 
         }
         [HttpGet]
         public async Task<IActionResult> SearchSuggestions(string searchQuery)
         {
             if (string.IsNullOrEmpty(searchQuery))
             {
-                return Json(new { results = new List<object>() }); // Return an empty list if no input
+                return Json(new { results = new List<object>() }); 
             }
 
             var tasks = await taskService.GetTasksBySearchQueryAsync(searchQuery);
@@ -79,19 +79,19 @@ namespace SmartAssistant.WebApplication.Controllers
             {
                 name = t.Description,
                 type = "Task",
-                url = Url.Action("Details", "Task", new { id = t.Id }) // Replace with the actual details page
+                url = Url.Action("Details", "Task", new { id = t.Id }) 
             })
             .Concat(events.Select(e => new
             {
                 name = e.EventTitle,
                 type = "Event",
-                url = Url.Action("Details", "Event", new { id = e.Id }) // Replace with the actual details page
+                url = Url.Action("Details", "Event", new { id = e.Id }) 
             }))
             .Concat(teams.Select(te => new
             {
                 name = te.TeamName,
                 type = "Team",
-                url = Url.Action("Details", "Team", new { id = te.Id }) // Replace with the actual details page
+                url = Url.Action("Details", "Team", new { id = te.Id }) 
             }))
             .ToList();
 

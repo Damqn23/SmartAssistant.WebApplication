@@ -84,8 +84,8 @@ namespace SmartAssistant.WebApplication.Controllers
                     return Json(new { error = "User not found. Please log in and try again." });
                 }
 
-                string eventTitle = extractionService.ExtractTitle(recognizedText); // Extract the event title
-                DateTime? eventDate = extractionService.ExtractDate(recognizedText); // Extract the event date and time
+                string eventTitle = extractionService.ExtractTitle(recognizedText); 
+                DateTime? eventDate = extractionService.ExtractDate(recognizedText); 
 
                 if (string.IsNullOrEmpty(eventTitle) || !eventDate.HasValue)
                 {

@@ -46,7 +46,6 @@ namespace SmartAssistant.WebApplication.Data
         .HasOne(m => m.Team)
         .WithMany(t => t.Messages)
         .HasForeignKey(m => m.TeamId)
-        .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete to avoid conflicts
-        }
+        .OnDelete(DeleteBehavior.Restrict);         }
     }
 }

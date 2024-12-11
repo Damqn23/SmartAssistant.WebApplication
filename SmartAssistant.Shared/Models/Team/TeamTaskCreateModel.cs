@@ -14,9 +14,7 @@ namespace SmartAssistant.Shared.Models.Team
         public DateTime DueDate { get; set; }
         public int EstimatedTimeToComplete { get; set; }
         public int Priority { get; set; }
-        public string AssignedUserId { get; set; } // ID of the team member the task is assigned to
-        public IEnumerable<SelectListItem> TeamMembers { get; set; }
-        public string AssignedUserName { get; set; } // Add this property
-
+        public string AssignedUserId { get; set; }         public IEnumerable<SelectListItem> TeamMembers { get; set; }
+        public string AssignedUserName { get; set; } 
     }
 }

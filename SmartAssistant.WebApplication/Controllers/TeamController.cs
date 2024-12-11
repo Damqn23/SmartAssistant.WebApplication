@@ -75,7 +75,7 @@ namespace SmartAssistant.WebApplication.Controllers
         public async Task<IActionResult> AddUserToTeam(int teamId, string userName)
         {
             var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value;
-            var user = await _userRepository.GetUserByUserNameAsync(userName);  // Fetch user by UserName
+            var user = await _userRepository.GetUserByUserNameAsync(userName);  
 
             if (user == null)
             {
@@ -85,7 +85,7 @@ namespace SmartAssistant.WebApplication.Controllers
 
             try
             {
-                await _teamService.AddUserToTeamAsync(teamId, user.Id, currentUserId);  // Use UserId for internal handling, ensure only creator can add
+                await _teamService.AddUserToTeamAsync(teamId, user.Id, currentUserId);  
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -101,7 +101,7 @@ namespace SmartAssistant.WebApplication.Controllers
         public async Task<IActionResult> RemoveUserFromTeam(int teamId, string userName)
         {
             var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value;
-            var user = await _userRepository.GetUserByUserNameAsync(userName);  // Fetch user by UserName
+            var user = await _userRepository.GetUserByUserNameAsync(userName);  
 
             if (user == null)
             {
@@ -111,7 +111,7 @@ namespace SmartAssistant.WebApplication.Controllers
 
             try
             {
-                await _teamService.RemoveUserFromTeamAsync(teamId, user.Id, currentUserId);  // Ensure only creator can remove
+                await _teamService.RemoveUserFromTeamAsync(teamId, user.Id, currentUserId);  
             }
             catch (UnauthorizedAccessException ex)
             {

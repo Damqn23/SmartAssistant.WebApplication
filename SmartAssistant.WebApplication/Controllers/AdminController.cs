@@ -22,8 +22,8 @@ namespace SmartAssistant.WebApplication.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var teams = await _teamService.GetAllTeamsAsync(); // Fetch all teams
-            var users = await _userService.GetAllUsersAsync(); // Fetch all users
+            var teams = await _teamService.GetAllTeamsAsync(); 
+            var users = await _userService.GetAllUsersAsync(); 
 
             var model = new AdminViewModel
             {
