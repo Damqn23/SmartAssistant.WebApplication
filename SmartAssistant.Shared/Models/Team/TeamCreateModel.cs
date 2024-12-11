@@ -10,7 +10,8 @@ namespace SmartAssistant.Shared.Models.Team
     public class TeamCreateModel
     {
         [Required(ErrorMessage = "Team name is required")]
-        [MaxLength(100)]
+        [MaxLength(100, ErrorMessage = "Team name cannot exceed 100 characters")]
+        [Display(Name = "Team Name", Prompt = "Enter the name of the team")]
         public string TeamName { get; set; }
     }
 }

@@ -12,7 +12,8 @@ namespace SmartAssistant.Shared.Models.Team
         public int TeamId { get; set; }
         public string EventTitle { get; set; }
         public DateTime EventDate { get; set; }
-        public string AssignedUserId { get; set; }         public IEnumerable<SelectListItem> TeamMembers { get; set; }
+        public string AssignedUserId { get; set; }         
+        public IEnumerable<SelectListItem> TeamMembers { get; set; }
         public string AssignedUserName { get; set; } 
     }
 }
