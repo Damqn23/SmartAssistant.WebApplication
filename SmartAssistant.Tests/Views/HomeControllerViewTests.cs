@@ -36,10 +36,8 @@ namespace SmartAssistant.Tests.Views
         [Fact]
         public void Index_ShouldReturnView()
         {
-            // Act
             var result = _controller.Index();
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.Null(viewResult.Model);
         }
@@ -47,10 +45,8 @@ namespace SmartAssistant.Tests.Views
         [Fact]
         public void Privacy_ShouldReturnView()
         {
-            // Act
             var result = _controller.Privacy();
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.Null(viewResult.Model);
         }
@@ -58,7 +54,6 @@ namespace SmartAssistant.Tests.Views
         [Fact]
         public async Task GlobalSearch_ShouldReturnViewWithSearchResults()
         {
-            // Arrange
             var searchQuery = "test";
             var tasks = new List<TaskModel>
             {
@@ -80,10 +75,8 @@ namespace SmartAssistant.Tests.Views
             _mockEventService.Setup(s => s.GetEventsBySearchQueryAsync(searchQuery)).ReturnsAsync(events);
             _mockTeamService.Setup(s => s.GetTeamsBySearchQueryAsync(searchQuery)).ReturnsAsync(teams);
 
-            // Act
             var result = await _controller.GlobalSearch(searchQuery);
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsType<GlobalSearchViewModel>(viewResult.Model);
 
@@ -95,13 +88,10 @@ namespace SmartAssistant.Tests.Views
         [Fact]
         public async Task GlobalSearch_ShouldReturnIndexViewWhenQueryIsEmpty()
         {
-            // Arrange
             var searchQuery = string.Empty;
 
-            // Act
             var result = await _controller.GlobalSearch(searchQuery);
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.Equal("Index", viewResult.ViewName);
         }

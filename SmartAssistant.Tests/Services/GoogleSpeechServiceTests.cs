@@ -23,7 +23,6 @@ namespace SmartAssistant.Tests.Services
         [Fact]
         public void RecognizeSpeech_ShouldReturnTranscript_WhenAudioIsRecognized()
         {
-            // Arrange
             var audioBytes = new byte[100]; // Mock audio bytes
             var mockResponse = new RecognizeResponse
             {
@@ -39,7 +38,6 @@ namespace SmartAssistant.Tests.Services
                 }
             };
 
-            // Setup mock SpeechClient to return the mocked response
             _mockSpeechClient
                 .Setup(client => client.Recognize(
                     It.IsAny<RecognitionConfig>(),
@@ -47,17 +45,14 @@ namespace SmartAssistant.Tests.Services
                     null)) // Optional argument explicitly set
                 .Returns(mockResponse);
 
-            // Act
             var result = _googleSpeechService.RecognizeSpeech(audioBytes);
 
-            // Assert
             Assert.Equal("Hello World", result);
         }
 
         [Fact]
         public void RecognizeSpeech_ShouldReturnEmptyString_WhenNoResults()
         {
-            // Arrange
             var audioBytes = new byte[100]; // Mock audio bytes
             var mockResponse = new RecognizeResponse();
 
@@ -68,23 +63,18 @@ namespace SmartAssistant.Tests.Services
                     null))
                 .Returns(mockResponse);
 
-            // Act
             var result = _googleSpeechService.RecognizeSpeech(audioBytes);
 
-            // Assert
             Assert.Equal(string.Empty, result);
         }
 
         [Fact]
         public void GetWavFileSampleRate_ShouldReturnDefaultSampleRate_WhenInvalidWavBytes()
         {
-            // Arrange
             var invalidWavBytes = new byte[10]; // Invalid WAV header
 
-            // Act
             var result = _googleSpeechService.GetWavFileSampleRate(invalidWavBytes);
 
-            // Assert
             Assert.Equal(16000, result); // Default sample rate
         }
     }

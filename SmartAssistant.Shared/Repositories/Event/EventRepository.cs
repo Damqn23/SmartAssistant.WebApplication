@@ -75,12 +75,10 @@ namespace SmartAssistant.Shared.Repositories.Event
             var eventEntity = await context.Events.FirstOrDefaultAsync(e => e.Id == entity.Id);
             if (eventEntity != null)
             {
-                // Manually update properties
                 eventEntity.EventTitle = entity.EventTitle;
                 eventEntity.EventDate = entity.EventDate;
                 eventEntity.UserId = entity.UserId;
 
-                // Save changes
                 await context.SaveChangesAsync();
             }
         }

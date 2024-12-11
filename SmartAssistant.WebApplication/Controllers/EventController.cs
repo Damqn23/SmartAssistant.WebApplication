@@ -59,13 +59,11 @@ namespace SmartAssistant.WebApplication.Controllers
         {
             try
             {
-                // Validate audio file
                 if (audioFile == null || audioFile.Length == 0)
                 {
                     return Json(new { error = "Audio file is missing. Please record again." });
                 }
 
-                // Convert audio file to byte array
                 byte[] audioBytes;
                 using (var memoryStream = new MemoryStream())
                 {
@@ -73,10 +71,8 @@ namespace SmartAssistant.WebApplication.Controllers
                     audioBytes = memoryStream.ToArray();
                 }
 
-                // Send audio to Google Speech API
                 var recognizedText = googleSpeechService.RecognizeSpeech(audioBytes);
 
-                // Validate recognized text
                 if (string.IsNullOrEmpty(recognizedText))
                 {
                     return Json(new { error = "Speech recognition failed. Please try again." });
@@ -88,17 +84,14 @@ namespace SmartAssistant.WebApplication.Controllers
                     return Json(new { error = "User not found. Please log in and try again." });
                 }
 
-                // Use the extraction service to get event details
                 string eventTitle = extractionService.ExtractTitle(recognizedText); // Extract the event title
                 DateTime? eventDate = extractionService.ExtractDate(recognizedText); // Extract the event date and time
 
-                // Handle missing fields
                 if (string.IsNullOrEmpty(eventTitle) || !eventDate.HasValue)
                 {
                     return Json(new { error = "Failed to recognize necessary fields. Please try again." });
                 }
 
-                // Create the event
                 var eventCreateModel = new EventCreateModel
                 {
                     EventTitle = eventTitle,

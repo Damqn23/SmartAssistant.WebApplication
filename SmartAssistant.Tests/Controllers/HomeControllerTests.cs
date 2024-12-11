@@ -45,35 +45,28 @@ namespace SmartAssistant.Tests.Controllers
         [Fact]
         public void Index_ShouldReturnView()
         {
-            // Act
             var result = _controller.Index();
 
-            // Assert
             Assert.IsType<ViewResult>(result);
         }
 
         [Fact]
         public void Privacy_ShouldReturnView()
         {
-            // Act
             var result = _controller.Privacy();
 
-            // Assert
             Assert.IsType<ViewResult>(result);
         }
 
         [Fact]
         public void Error_ShouldReturnViewWithErrorViewModel()
         {
-            // Arrange
             var httpContext = new DefaultHttpContext();
             httpContext.TraceIdentifier = "test-trace-id";
             _controller.ControllerContext.HttpContext = httpContext;
 
-            // Act
             var result = _controller.Error();
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsType<ErrorViewModel>(viewResult.Model);
             Assert.Equal("test-trace-id", model.RequestId);
@@ -82,7 +75,6 @@ namespace SmartAssistant.Tests.Controllers
         [Fact]
         public async Task GlobalSearch_ShouldReturnViewWithSearchResults()
         {
-            // Arrange
             var searchQuery = "Test";
             var tasks = new List<TaskModel>
             {
@@ -101,10 +93,8 @@ namespace SmartAssistant.Tests.Controllers
             _mockEventService.Setup(s => s.GetEventsBySearchQueryAsync(searchQuery)).ReturnsAsync(events);
             _mockTeamService.Setup(s => s.GetTeamsBySearchQueryAsync(searchQuery)).ReturnsAsync(teams);
 
-            // Act
             var result = await _controller.GlobalSearch(searchQuery);
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.Equal("GlobalSearchResults", viewResult.ViewName);
             var model = Assert.IsType<GlobalSearchViewModel>(viewResult.Model);
@@ -116,10 +106,8 @@ namespace SmartAssistant.Tests.Controllers
         [Fact]
         public async Task GlobalSearch_ShouldReturnIndexViewWhenQueryIsEmpty()
         {
-            // Act
             var result = await _controller.GlobalSearch("");
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.Equal("Index", viewResult.ViewName);
         } 

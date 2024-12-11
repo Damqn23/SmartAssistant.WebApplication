@@ -20,10 +20,11 @@
                     <td>@team.TeamName</td>
                     <td>@team.OwnerUserName</td>
                     <td>
-                        <a asp-action="Details" asp-route-id="@team.Id" class="btn btn-info btn-sm me-2">Details</a>
+                        
                         @if (User.Identity.Name == team.OwnerUserName)
                         {
                             <a asp-action="Delete" asp-route-id="@team.Id" class="btn btn-danger btn-sm me-2">Delete</a>
+                            <a asp-action="Details" asp-route-id="@team.Id" class="btn btn-info btn-sm me-2">Details</a>
                         }
                         <a asp-action="TeamIndex" asp-controller="Calendar" asp-route-teamId="@team.Id" class="btn btn-success btn-sm">View Calendar</a>
                     </td>

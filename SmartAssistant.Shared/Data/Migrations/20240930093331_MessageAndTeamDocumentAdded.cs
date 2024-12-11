@@ -5,10 +5,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SmartAssistant.WebApplication.Data.Migrations
 {
-    /// <inheritdoc />
     public partial class MessageAndTeamDocumentAdded : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
@@ -122,7 +120,6 @@ namespace SmartAssistant.WebApplication.Data.Migrations
                 column: "UploadedBy");
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

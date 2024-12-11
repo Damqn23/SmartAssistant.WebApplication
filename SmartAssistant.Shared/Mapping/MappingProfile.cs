@@ -60,10 +60,8 @@ namespace SmartAssistant.Shared.Mapping
             CreateMap<TeamModel, Team>();
             CreateMap<TeamCreateModel, Team>();
 
-            // Mapping for User
             CreateMap<User, UserModel>().ReverseMap();
 
-            // Mapping for UserTeam
             CreateMap<UserTeam, UserTeamModel>().ReverseMap();
 
             

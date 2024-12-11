@@ -1,0 +1,62 @@
+﻿@{
+    ViewData["Title"] = "Page Not Found";
+}
+
+<div class="container text-center mt-5">
+    <h1 class="text-danger display-1">404</h1>
+    <h2 class="text-dark">Oops! Page Not Found</h2>
+    <p class="mt-3 text-muted">
+        It seems the page you're looking for doesn't exist or has been moved. <br />
+        Let’s get you back on track.
+    </p>
+    <div class="mt-4">
+        <a href="@Url.Action("Index", "Home")" class="btn btn-primary btn-lg custom-btn">
+            <i class="fas fa-home"></i> Go Home
+        </a>
+    </div>
+    <div class="mt-5">
+        <img src="https://cdn-icons-png.flaticon.com/512/753/753345.png"
+             alt="Lost"
+             class="img-fluid error-image">
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    h1 {
+        font-size: 6rem;
+        color: #dc3545;
+        transition: transform 0.3s ease-in-out;
+    }
+
+        h1:hover {
+            transform: scale(1.1);
+        }
+
+    h2 {
+        font-size: 1.8rem;
+        color: #343a40;
+    }
+
+    .custom-btn {
+        background-color: #007bff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1.2rem;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+        .custom-btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+    .error-image {
+        max-width: 300px;
+        margin-top: 20px;
+    }
+</style>

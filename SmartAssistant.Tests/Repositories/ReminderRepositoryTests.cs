@@ -15,7 +15,6 @@ namespace SmartAssistant.Tests.Repositories
 
         public ReminderRepositoryTests()
         {
-            // Initialize AutoMapper (mock or real configuration depending on setup)
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<ReminderModel, SmartAssistant.WebApp.Data.Entities.Reminder>().ReverseMap();
@@ -26,7 +25,6 @@ namespace SmartAssistant.Tests.Repositories
         [Fact]
         public async Task AddAsync_ShouldAddReminderToDatabase()
         {
-            // Arrange
             using var context = CreateDbContext();
             var repository = new ReminderRepository(context, _mapper);
             var reminder = new ReminderModel
@@ -36,10 +34,8 @@ namespace SmartAssistant.Tests.Repositories
                 UserId = "user123"
             };
 
-            // Act
             await repository.AddAsync(reminder);
 
-            // Assert
             var addedReminder = context.Reminders.FirstOrDefault(r => r.ReminderMessage == "Test Reminder");
             Assert.NotNull(addedReminder);
             Assert.Equal("Test Reminder", addedReminder.ReminderMessage);
@@ -48,7 +44,6 @@ namespace SmartAssistant.Tests.Repositories
         [Fact]
         public async Task GetByIdAsync_ShouldReturnCorrectReminder()
         {
-            // Arrange
             using var context = CreateDbContext();
             var repository = new ReminderRepository(context, _mapper);
             var reminderEntity = new SmartAssistant.WebApp.Data.Entities.Reminder
@@ -60,10 +55,8 @@ namespace SmartAssistant.Tests.Repositories
             context.Reminders.Add(reminderEntity);
             await context.SaveChangesAsync();
 
-            // Act
             var result = await repository.GetByIdAsync(reminderEntity.Id);
 
-            // Assert
             Assert.NotNull(result);
             Assert.Equal(reminderEntity.ReminderMessage, result.ReminderMessage);
         }
@@ -71,7 +64,6 @@ namespace SmartAssistant.Tests.Repositories
         [Fact]
         public async Task DeleteAsync_ShouldRemoveReminderFromDatabase()
         {
-            // Arrange
             using var context = CreateDbContext();
             var repository = new ReminderRepository(context, _mapper);
             var reminderEntity = new SmartAssistant.WebApp.Data.Entities.Reminder
@@ -85,10 +77,8 @@ namespace SmartAssistant.Tests.Repositories
 
             var reminderModel = _mapper.Map<ReminderModel>(reminderEntity);
 
-            // Act
             await repository.DeleteAsync(reminderModel);
 
-            // Assert
             var deletedReminder = context.Reminders.FirstOrDefault(r => r.Id == reminderEntity.Id);
             Assert.Null(deletedReminder);
         }
@@ -96,7 +86,6 @@ namespace SmartAssistant.Tests.Repositories
         [Fact]
         public async Task UpdateAsync_ShouldUpdateReminder()
         {
-            // Arrange
             using var context = CreateDbContext();
             var repository = new ReminderRepository(context, _mapper);
 
@@ -112,10 +101,8 @@ namespace SmartAssistant.Tests.Repositories
             var updatedReminderModel = _mapper.Map<ReminderModel>(reminderEntity);
             updatedReminderModel.ReminderMessage = "Updated Reminder Message";
 
-            // Act
             await repository.UpdateAsync(updatedReminderModel);
 
-            // Assert
             var updatedReminder = context.Reminders.FirstOrDefault(r => r.Id == reminderEntity.Id);
             Assert.NotNull(updatedReminder);
             Assert.Equal("Updated Reminder Message", updatedReminder.ReminderMessage);
@@ -124,7 +111,6 @@ namespace SmartAssistant.Tests.Repositories
         [Fact]
         public async Task GetRemindersByUserIdAsync_ShouldReturnUserReminders()
         {
-            // Arrange
             using var context = CreateDbContext();
             var repository = new ReminderRepository(context, _mapper);
             var reminders = new List<SmartAssistant.WebApp.Data.Entities.Reminder>
@@ -137,10 +123,8 @@ namespace SmartAssistant.Tests.Repositories
             context.Reminders.AddRange(reminders);
             await context.SaveChangesAsync();
 
-            // Act
             var result = await repository.GetRemindersByUserIdAsync("user1");
 
-            // Assert
             Assert.NotNull(result);
             Assert.Equal(2, result.Count);
             Assert.All(result, r => Assert.Equal("user1", r.UserId));
@@ -149,7 +133,6 @@ namespace SmartAssistant.Tests.Repositories
         [Fact]
         public async Task GetRemindersDueSoonAsync_ShouldReturnUpcomingReminders()
         {
-            // Arrange
             using var context = CreateDbContext();
             var repository = new ReminderRepository(context, _mapper);
             var currentTime = DateTime.Now;
@@ -163,10 +146,8 @@ namespace SmartAssistant.Tests.Repositories
             context.Reminders.AddRange(reminders);
             await context.SaveChangesAsync();
 
-            // Act
             var result = await repository.GetRemindersDueSoonAsync(10);
 
-            // Assert
             Assert.NotNull(result);
             Assert.Single(result); // Only one reminder is due within the next 10 minutes
             Assert.Equal("Reminder 1", result[0].ReminderMessage);

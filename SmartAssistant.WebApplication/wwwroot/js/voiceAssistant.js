@@ -13,7 +13,6 @@
     };
 });
 
-// Function to process the voice command and navigate to the appropriate controller
 function processVoiceCommand(command) {
     if (command.includes("go to tasks")) {
         window.location.href = "/Task/Index";  // Navigate to Task list

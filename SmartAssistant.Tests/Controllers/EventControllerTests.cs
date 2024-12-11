@@ -58,7 +58,6 @@ namespace SmartAssistant.Tests.Controllers
         [Fact]
         public async Task Index_ShouldReturnViewWithEvents()
         {
-            // Arrange
             var events = new List<EventModel>
             {
                 new EventModel { Id = 1, EventTitle = "Event 1" }
@@ -66,10 +65,8 @@ namespace SmartAssistant.Tests.Controllers
             _mockEventService.Setup(s => s.GetEventsByUserIdAsync("test-user-id"))
                 .ReturnsAsync(events);
 
-            // Act
             var result = await _controller.Index();
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<IEnumerable<EventModel>>(viewResult.Model);
             Assert.Single(model);
@@ -78,13 +75,10 @@ namespace SmartAssistant.Tests.Controllers
         [Fact]
         public async Task Create_ShouldRedirectToIndexOnValidModel()
         {
-            // Arrange
             var eventCreateModel = new EventCreateModel { EventTitle = "New Event" };
 
-            // Act
             var result = await _controller.Create(eventCreateModel);
 
-            // Assert
             var redirectResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Index", redirectResult.ActionName);
         }
@@ -92,14 +86,11 @@ namespace SmartAssistant.Tests.Controllers
         [Fact]
         public async Task Create_ShouldReturnViewOnInvalidModel()
         {
-            // Arrange
             _controller.ModelState.AddModelError("EventTitle", "Required");
             var eventCreateModel = new EventCreateModel();
 
-            // Act
             var result = await _controller.Create(eventCreateModel);
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.Equal(eventCreateModel, viewResult.Model);
         }
@@ -107,17 +98,14 @@ namespace SmartAssistant.Tests.Controllers
         [Fact]
         public async Task Edit_ShouldReturnViewWithEditModel()
         {
-            // Arrange
             var eventModel = new EventModel { Id = 1, EventTitle = "Test Event" };
             var editModel = new EventEditModel { Id = 1, EventTitle = "Test Event" };
 
             _mockEventService.Setup(s => s.GetEventByIdAsync(1)).ReturnsAsync(eventModel);
             _mockMapper.Setup(m => m.Map<EventEditModel>(eventModel)).Returns(editModel);
 
-            // Act
             var result = await _controller.Edit(1);
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.Equal(editModel, viewResult.Model);
         }
@@ -125,23 +113,18 @@ namespace SmartAssistant.Tests.Controllers
         [Fact]
         public async Task Edit_ShouldReturnNotFoundWhenEventDoesNotExist()
         {
-            // Arrange
             _mockEventService.Setup(s => s.GetEventByIdAsync(1)).ReturnsAsync((EventModel)null);
 
-            // Act
             var result = await _controller.Edit(1);
 
-            // Assert
             Assert.IsType<NotFoundResult>(result);
         }
 
         [Fact]
         public async Task DeleteConfirmed_ShouldRedirectToIndex()
         {
-            // Act
             var result = await _controller.DeleteConfirmed(1);
 
-            // Assert
             var redirectResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Index", redirectResult.ActionName);
         }
@@ -149,7 +132,6 @@ namespace SmartAssistant.Tests.Controllers
         [Fact]
         public async Task GetCalendarEvents_ShouldReturnJsonWithEventsAndTasks()
         {
-            // Arrange
             var events = new List<EventModel>
             {
                 new EventModel { EventTitle = "Event 1", EventDate = DateTime.Now }
@@ -162,10 +144,8 @@ namespace SmartAssistant.Tests.Controllers
             _mockEventService.Setup(s => s.GetEventsByUserIdAsync("test-user-id")).ReturnsAsync(events);
             _mockTaskService.Setup(s => s.GetTasksByUserIdAsync("test-user-id")).ReturnsAsync(tasks);
 
-            // Act
             var result = await _controller.GetCalendarEvents();
 
-            // Assert
             var jsonResult = Assert.IsType<JsonResult>(result);
             var data = jsonResult.Value as IEnumerable<object>;
             Assert.NotNull(data);

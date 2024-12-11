@@ -15,14 +15,12 @@ namespace SmartAssistant.Shared.Data
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-            // Create Admin Role
             var adminRoleExists = await roleManager.RoleExistsAsync("Admin");
             if (!adminRoleExists)
             {
                 await roleManager.CreateAsync(new IdentityRole("Admin"));
             }
 
-            // Assign the Admin Role to a User
             var user = await userManager.FindByEmailAsync("admin@example.com");
             if (user != null && !await userManager.IsInRoleAsync(user, "Admin"))
             {

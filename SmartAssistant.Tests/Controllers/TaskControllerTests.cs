@@ -30,7 +30,6 @@ namespace SmartAssistant.Tests.Controllers
             _mockMapper = new Mock<IMapper>();
             _mockGoogleSpeechService = new Mock<IGoogleSpeechService>();
 
-            // Use the real SpeechTextExtractionService instance
             _realExtractionService = new SpeechTextExtractionService();
 
             _controller = new TaskController(
@@ -40,7 +39,6 @@ namespace SmartAssistant.Tests.Controllers
                 _realExtractionService
             );
 
-            // Mock user context
             var user = new ClaimsPrincipal(new ClaimsIdentity(new[]
             {
             new Claim(ClaimTypes.NameIdentifier, "test-user-id")
@@ -55,7 +53,6 @@ namespace SmartAssistant.Tests.Controllers
         [Fact]
         public async Task Index_ShouldReturnViewWithTasksSortedByPriorityAscending()
         {
-            // Arrange
             var tasks = new List<TaskModel>
             {
                 new TaskModel { Priority = 2, DueDate = DateTime.Now },
@@ -64,10 +61,8 @@ namespace SmartAssistant.Tests.Controllers
             _mockTaskService.Setup(s => s.GetTasksByUserIdAsync("test-user-id"))
                 .ReturnsAsync(tasks);
 
-            // Act
             var result = await _controller.Index("priority_asc");
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<List<TaskModel>>(viewResult.Model);
             Assert.Equal(1, model.First().Priority); // Sorted by priority ascending
@@ -76,13 +71,10 @@ namespace SmartAssistant.Tests.Controllers
         [Fact]
         public async Task Create_ShouldRedirectToIndexOnSuccess()
         {
-            // Arrange
             var taskCreateModel = new TaskCreateModel { Description = "Test Task" };
 
-            // Act
             var result = await _controller.Create(taskCreateModel);
 
-            // Assert
             var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Index", redirectToActionResult.ActionName);
         }
@@ -90,14 +82,11 @@ namespace SmartAssistant.Tests.Controllers
         [Fact]
         public async Task Create_ShouldReturnViewOnInvalidModelState()
         {
-            // Arrange
             _controller.ModelState.AddModelError("Description", "Required");
             var taskCreateModel = new TaskCreateModel();
 
-            // Act
             var result = await _controller.Create(taskCreateModel);
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.Equal(taskCreateModel, viewResult.Model);
         }
@@ -105,17 +94,14 @@ namespace SmartAssistant.Tests.Controllers
         [Fact]
         public async Task Edit_Get_ShouldReturnViewWithEditModel()
         {
-            // Arrange
             var task = new TaskModel { Id = 1, Description = "Test Task" };
             _mockTaskService.Setup(s => s.GetTaskByIdAsync(1)).ReturnsAsync(task);
 
             var editModel = new TaskEditModel { Id = 1, Description = "Test Task" };
             _mockMapper.Setup(m => m.Map<TaskEditModel>(task)).Returns(editModel);
 
-            // Act
             var result = await _controller.Edit(1);
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.Equal(editModel, viewResult.Model);
         }
@@ -123,13 +109,10 @@ namespace SmartAssistant.Tests.Controllers
         [Fact]
         public async Task Edit_Post_ShouldRedirectToIndexOnSuccess()
         {
-            // Arrange
             var editModel = new TaskEditModel { Id = 1, Description = "Updated Task" };
 
-            // Act
             var result = await _controller.Edit(editModel);
 
-            // Assert
             var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Index", redirectToActionResult.ActionName);
         }
@@ -137,17 +120,14 @@ namespace SmartAssistant.Tests.Controllers
         [Fact]
         public async Task Delete_Get_ShouldReturnViewWithDeleteModel()
         {
-            // Arrange
             var task = new TaskModel { Id = 1, Description = "Test Task" };
             _mockTaskService.Setup(s => s.GetTaskByIdAsync(1)).ReturnsAsync(task);
 
             var deleteModel = new TaskDeleteModel { Id = 1, Description = "Test Task" };
             _mockMapper.Setup(m => m.Map<TaskDeleteModel>(task)).Returns(deleteModel);
 
-            // Act
             var result = await _controller.Delete(1);
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.Equal(deleteModel, viewResult.Model);
         }
@@ -155,10 +135,8 @@ namespace SmartAssistant.Tests.Controllers
         [Fact]
         public async Task DeleteConfirmed_ShouldRedirectToIndexOnSuccess()
         {
-            // Act
             var result = await _controller.DeleteConfirmed(1);
 
-            // Assert
             var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Index", redirectToActionResult.ActionName);
         }

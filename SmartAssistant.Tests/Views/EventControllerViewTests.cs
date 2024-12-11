@@ -57,7 +57,6 @@ namespace SmartAssistant.Tests.Views
         [Fact]
         public async Task Index_ShouldReturnViewWithEvents()
         {
-            // Arrange
             var events = new List<EventModel>
     {
         new EventModel { Id = 1, EventTitle = "Test Event 1", EventDate = DateTime.Now },
@@ -66,10 +65,8 @@ namespace SmartAssistant.Tests.Views
 
             _mockEventService.Setup(s => s.GetEventsByUserIdAsync(It.IsAny<string>())).ReturnsAsync(events);
 
-            // Act
             var result = await _controller.Index();
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<IEnumerable<EventModel>>(viewResult.Model);
             Assert.Equal(2, model.Count());
@@ -78,10 +75,8 @@ namespace SmartAssistant.Tests.Views
         [Fact]
         public void Create_Get_ShouldReturnView()
         {
-            // Act
             var result = _controller.Create();
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.Null(viewResult.Model);
         }
@@ -89,7 +84,6 @@ namespace SmartAssistant.Tests.Views
         [Fact]
         public async Task Create_Post_ShouldRedirectToIndexOnSuccess()
         {
-            // Arrange
             var createModel = new EventCreateModel
             {
                 EventTitle = "New Event",
@@ -98,10 +92,8 @@ namespace SmartAssistant.Tests.Views
 
             _mockEventService.Setup(s => s.AddEventAsync(It.IsAny<EventCreateModel>(), It.IsAny<string>())).Returns(Task.CompletedTask);
 
-            // Act
             var result = await _controller.Create(createModel);
 
-            // Assert
             var redirectResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Index", redirectResult.ActionName);
         }
@@ -109,7 +101,6 @@ namespace SmartAssistant.Tests.Views
         [Fact]
         public async Task Create_Post_ShouldReturnViewOnInvalidModelState()
         {
-            // Arrange
             var createModel = new EventCreateModel
             {
                 EventTitle = "",
@@ -117,10 +108,8 @@ namespace SmartAssistant.Tests.Views
             };
             _controller.ModelState.AddModelError("EventTitle", "Required");
 
-            // Act
             var result = await _controller.Create(createModel);
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.Equal(createModel, viewResult.Model);
         }
@@ -128,7 +117,6 @@ namespace SmartAssistant.Tests.Views
         [Fact]
         public async Task Edit_Get_ShouldReturnViewWithEditModel()
         {
-            // Arrange
             var eventModel = new EventModel
             {
                 Id = 1,
@@ -144,10 +132,8 @@ namespace SmartAssistant.Tests.Views
                 EventDate = eventModel.EventDate
             });
 
-            // Act
             var result = await _controller.Edit(1);
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsType<EventEditModel>(viewResult.Model);
             Assert.Equal(1, model.Id);
@@ -156,7 +142,6 @@ namespace SmartAssistant.Tests.Views
         [Fact]
         public async Task Edit_Post_ShouldRedirectToIndexOnSuccess()
         {
-            // Arrange
             var editModel = new EventEditModel
             {
                 Id = 1,
@@ -165,10 +150,8 @@ namespace SmartAssistant.Tests.Views
             };
             _mockEventService.Setup(s => s.UpdateEventAsync(editModel)).Returns(Task.CompletedTask);
 
-            // Act
             var result = await _controller.Edit(editModel);
 
-            // Assert
             var redirectResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Index", redirectResult.ActionName);
         }
@@ -176,7 +159,6 @@ namespace SmartAssistant.Tests.Views
         [Fact]
         public async Task Edit_Post_ShouldReturnViewOnInvalidModelState()
         {
-            // Arrange
             var editModel = new EventEditModel
             {
                 Id = 1,
@@ -185,10 +167,8 @@ namespace SmartAssistant.Tests.Views
             };
             _controller.ModelState.AddModelError("EventTitle", "Required");
 
-            // Act
             var result = await _controller.Edit(editModel);
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.Equal(editModel, viewResult.Model);
         }
@@ -196,7 +176,6 @@ namespace SmartAssistant.Tests.Views
         [Fact]
         public async Task Delete_Get_ShouldReturnViewWithDeleteModel()
         {
-            // Arrange
             var eventModel = new EventModel
             {
                 Id = 1,
@@ -205,10 +184,8 @@ namespace SmartAssistant.Tests.Views
             };
             _mockEventService.Setup(s => s.GetEventByIdAsync(1)).ReturnsAsync(eventModel);
 
-            // Act
             var result = await _controller.Delete(1);
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsType<EventModel>(viewResult.Model);
             Assert.Equal(1, model.Id);
@@ -217,13 +194,10 @@ namespace SmartAssistant.Tests.Views
         [Fact]
         public async Task Delete_Post_ShouldRedirectToIndexOnSuccess()
         {
-            // Arrange
             _mockEventService.Setup(s => s.DeleteEventAsync(1)).Returns(Task.CompletedTask);
 
-            // Act
             var result = await _controller.DeleteConfirmed(1);
 
-            // Assert
             var redirectResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Index", redirectResult.ActionName);
         }

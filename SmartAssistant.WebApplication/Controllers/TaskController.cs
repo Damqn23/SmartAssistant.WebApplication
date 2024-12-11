@@ -114,13 +114,11 @@ namespace SmartAssistant.WebApplication.Controllers
         {
             try
             {
-                // Validate audio file
                 if (audioFile == null || audioFile.Length == 0)
                 {
                     return Json(new { error = "Audio file is missing. Please record again." });
                 }
 
-                // Convert audio file to byte array
                 byte[] audioBytes;
                 using (var memoryStream = new MemoryStream())
                 {
@@ -128,28 +126,23 @@ namespace SmartAssistant.WebApplication.Controllers
                     audioBytes = memoryStream.ToArray();
                 }
 
-                // Send audio to Google Speech API
                 var recognizedText = googleSpeechService.RecognizeSpeech(audioBytes);
 
-                // Validate recognized text
                 if (string.IsNullOrEmpty(recognizedText))
                 {
                     return Json(new { error = "Speech recognition failed. Please try again." });
                 }
 
-                // Use the extraction service to get task/event details
                 string title = extractionService.ExtractTitle(recognizedText); // Extract the full description
                 DateTime? dueDate = extractionService.ExtractDate(recognizedText);
                 int estimatedTime = (int)extractionService.ExtractEstimatedTime(recognizedText);
                 PriorityLevel priority = extractionService.ExtractPriority(recognizedText);
 
-                // Handle missing fields
                 if (string.IsNullOrEmpty(title) || !dueDate.HasValue)
                 {
                     return Json(new { error = "Failed to recognize necessary fields. Please try again." });
                 }
 
-                // Now create the task/event (use TaskCreateModel for tasks and EventCreateModel for events)
                 var createModel = new TaskCreateModel
                 {
                     Description = title,

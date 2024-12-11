@@ -50,12 +50,10 @@ namespace SmartAssistant.WebApplication.Controllers
                 return View("Index"); // Return home page if no query is provided
             }
 
-            // Get tasks, events, and teams based on the search query
             var tasks = await taskService.GetTasksBySearchQueryAsync(searchQuery);
             var events = await eventService.GetEventsBySearchQueryAsync(searchQuery);
             var teams = await teamService.GetTeamsBySearchQueryAsync(searchQuery);
 
-            // Combine the results into a search view model
             var searchResults = new GlobalSearchViewModel
             {
                 Tasks = tasks,
@@ -73,12 +71,10 @@ namespace SmartAssistant.WebApplication.Controllers
                 return Json(new { results = new List<object>() }); // Return an empty list if no input
             }
 
-            // Search for tasks, events, and teams based on the search query
             var tasks = await taskService.GetTasksBySearchQueryAsync(searchQuery);
             var events = await eventService.GetEventsBySearchQueryAsync(searchQuery);
             var teams = await teamService.GetTeamsBySearchQueryAsync(searchQuery);
 
-            // Combine the results into a list of anonymous objects (with URL links)
             var results = tasks.Select(t => new
             {
                 name = t.Description,

@@ -10,7 +10,6 @@ namespace SmartAssistant.WebApp.Data.Entities
     public class User : IdentityUser
     {      
 
-        // Navigation properties
         public ICollection<Task> Tasks { get; set; } = new List<Task>(); // User tasks
         public ICollection<Reminder> Reminders { get; set; } = new List<Reminder>(); // User reminders
 

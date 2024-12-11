@@ -5,10 +5,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SmartAssistant.WebApplication.Data.Migrations
 {
-    /// <inheritdoc />
     public partial class EntitiesAdded : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -342,7 +340,6 @@ namespace SmartAssistant.WebApplication.Data.Migrations
                 column: "TeamForeignKey");
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

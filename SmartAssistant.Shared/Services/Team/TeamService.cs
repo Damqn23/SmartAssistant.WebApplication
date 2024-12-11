@@ -45,11 +45,9 @@ namespace SmartAssistant.Shared.Services.Teams
 
             if (string.IsNullOrEmpty(team.OwnerId))
             {
-                // Log or handle the case where the OwnerId is missing or null
                 throw new Exception($"Team with ID {id} has no valid owner.");
             }
 
-            // Fetch the owner's details
             var owner = await userRepository.GetUserByIdAsync(team.OwnerId);
 
             if (owner != null)

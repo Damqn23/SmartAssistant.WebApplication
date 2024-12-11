@@ -17,7 +17,6 @@ namespace SmartAssistant.Tests.Repositories
 
         public TeamRepositoryTests()
         {
-            // Initialize AutoMapper
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<TeamModel, SmartAssistant.WebApp.Data.Entities.Team>().ReverseMap();
@@ -29,15 +28,12 @@ namespace SmartAssistant.Tests.Repositories
         [Fact]
         public async Task AddAsync_ShouldAddTeamToDatabase()
         {
-            // Arrange
             using var context = CreateDbContext();
             var repository = new TeamRepository(context, _mapper, null);
             var team = new TeamModel { TeamName = "Test Team", OwnerId = "owner123" };
 
-            // Act
             await repository.AddAsync(team);
 
-            // Assert
             var addedTeam = context.Teams.FirstOrDefault(t => t.TeamName == "Test Team");
             Assert.NotNull(addedTeam);
             Assert.Equal("Test Team", addedTeam.TeamName);
@@ -46,7 +42,6 @@ namespace SmartAssistant.Tests.Repositories
         [Fact]
         public async Task AddUserToTeamAsync_ShouldAddUserToTeam()
         {
-            // Arrange
             using var context = CreateDbContext();
             var repository = new TeamRepository(context, _mapper, null);
 
@@ -54,10 +49,8 @@ namespace SmartAssistant.Tests.Repositories
             context.Teams.Add(team);
             await context.SaveChangesAsync();
 
-            // Act
             await repository.AddUserToTeamAsync("user123", team.Id);
 
-            // Assert
             var userTeam = context.UserTeams.FirstOrDefault(ut => ut.TeamId == team.Id && ut.UserId == "user123");
             Assert.NotNull(userTeam);
             Assert.Equal(team.Id, userTeam.TeamId);
@@ -67,7 +60,6 @@ namespace SmartAssistant.Tests.Repositories
         [Fact]
         public async Task DeleteAsync_ShouldRemoveTeamFromDatabase()
         {
-            // Arrange
             using var context = CreateDbContext();
             var repository = new TeamRepository(context, _mapper, null);
 
@@ -77,10 +69,8 @@ namespace SmartAssistant.Tests.Repositories
 
             var teamModel = _mapper.Map<TeamModel>(team);
 
-            // Act
             await repository.DeleteAsync(teamModel);
 
-            // Assert
             var deletedTeam = context.Teams.FirstOrDefault(t => t.Id == team.Id);
             Assert.Null(deletedTeam);
         }
@@ -88,7 +78,6 @@ namespace SmartAssistant.Tests.Repositories
         [Fact]
         public async Task GetByIdAsync_ShouldReturnCorrectTeam()
         {
-            // Arrange
             using var context = CreateDbContext();
             var repository = new TeamRepository(context, _mapper, null);
 
@@ -99,10 +88,8 @@ namespace SmartAssistant.Tests.Repositories
             context.Teams.Add(team);
             await context.SaveChangesAsync();
 
-            // Act
             var result = await repository.GetByIdAsync(team.Id);
 
-            // Assert
             Assert.NotNull(result);
             Assert.Equal("Test Team", result.TeamName);
             Assert.Equal("owner123", result.OwnerId);
@@ -113,7 +100,6 @@ namespace SmartAssistant.Tests.Repositories
         [Fact]
         public async Task UpdateAsync_ShouldUpdateTeam()
         {
-            // Arrange
             using var context = CreateDbContext();
             var repository = new TeamRepository(context, _mapper, null);
 
@@ -124,10 +110,8 @@ namespace SmartAssistant.Tests.Repositories
             var updatedTeamModel = _mapper.Map<TeamModel>(team);
             updatedTeamModel.TeamName = "Updated Team Name";
 
-            // Act
             await repository.UpdateAsync(updatedTeamModel);
 
-            // Assert
             var updatedTeam = context.Teams.FirstOrDefault(t => t.Id == team.Id);
             Assert.NotNull(updatedTeam);
             Assert.Equal("Updated Team Name", updatedTeam.TeamName);
@@ -136,7 +120,6 @@ namespace SmartAssistant.Tests.Repositories
         [Fact]
         public async Task GetTeamMembersByTeamIdAsync_ShouldReturnTeamMembers()
         {
-            // Arrange
             using var context = CreateDbContext();
             var repository = new TeamRepository(context, _mapper, null);
 
@@ -154,10 +137,8 @@ namespace SmartAssistant.Tests.Repositories
             );
             await context.SaveChangesAsync();
 
-            // Act
             var result = await repository.GetTeamMembersByTeamIdAsync(team.Id);
 
-            // Assert
             Assert.NotNull(result);
             Assert.Equal(2, result.Count());
             Assert.Contains(result, u => u.UserName == "User 1");

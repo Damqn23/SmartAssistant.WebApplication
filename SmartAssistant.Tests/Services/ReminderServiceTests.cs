@@ -26,7 +26,6 @@ namespace SmartAssistant.Tests.Services
             _mockHubContext = new Mock<IHubContext<NotificationHub>>();
             _mockClientProxy = new Mock<IClientProxy>();
 
-            // Setup the HubContext mock
             var mockClients = new Mock<IHubClients>();
             _mockHubContext.Setup(x => x.Clients).Returns(mockClients.Object);
             mockClients.Setup(x => x.User(It.IsAny<string>())).Returns(_mockClientProxy.Object);
@@ -37,7 +36,6 @@ namespace SmartAssistant.Tests.Services
         [Fact]
         public async Task AddReminderAsync_ShouldAddReminder()
         {
-            // Arrange
             var reminderModel = new ReminderCreateModel
             {
                 ReminderMessage = "Test Reminder",
@@ -46,10 +44,8 @@ namespace SmartAssistant.Tests.Services
 
             var userId = "123";
 
-            // Act
             var result = await _reminderService.AddReminderAsync(reminderModel, userId);
 
-            // Assert
             result.ReminderMessage.Should().Be(reminderModel.ReminderMessage);
             result.ReminderDate.Should().Be(reminderModel.ReminderDate);
             result.UserId.Should().Be(userId);
@@ -60,24 +56,20 @@ namespace SmartAssistant.Tests.Services
         [Fact]
         public async Task DeleteReminderAsync_ShouldDeleteReminder_WhenReminderExists()
         {
-            // Arrange
             var reminderId = 1;
             var reminder = new ReminderModel { Id = reminderId };
 
             _mockReminderRepository.Setup(r => r.GetByIdAsync(reminderId))
                                    .ReturnsAsync(reminder);
 
-            // Act
             await _reminderService.DeleteReminderAsync(reminderId);
 
-            // Assert
             _mockReminderRepository.Verify(r => r.DeleteAsync(reminder), Times.Once);
         }
 
         [Fact]
         public async Task GetAllRemindersAsync_ShouldReturnAllReminders()
         {
-            // Arrange
             var reminders = new List<ReminderModel>
             {
                 new ReminderModel { Id = 1, ReminderMessage = "Reminder 1" },
@@ -86,10 +78,8 @@ namespace SmartAssistant.Tests.Services
 
             _mockReminderRepository.Setup(r => r.GetAllAsync()).ReturnsAsync(reminders);
 
-            // Act
             var result = await _reminderService.GetAllRemindersAsync();
 
-            // Assert
             result.Should().BeEquivalentTo(reminders);
             _mockReminderRepository.Verify(r => r.GetAllAsync(), Times.Once);
         }
@@ -97,16 +87,13 @@ namespace SmartAssistant.Tests.Services
         [Fact]
         public async Task GetReminderByIdAsync_ShouldReturnReminder_WhenExists()
         {
-            // Arrange
             var reminderId = 1;
             var reminder = new ReminderModel { Id = reminderId };
 
             _mockReminderRepository.Setup(r => r.GetByIdAsync(reminderId)).ReturnsAsync(reminder);
 
-            // Act
             var result = await _reminderService.GetReminderByIdAsync(reminderId);
 
-            // Assert
             result.Should().BeEquivalentTo(reminder);
             _mockReminderRepository.Verify(r => r.GetByIdAsync(reminderId), Times.Once);
         }
@@ -114,7 +101,6 @@ namespace SmartAssistant.Tests.Services
         [Fact]
         public async Task GetRemindersDueSoonAsync_ShouldNotifyUsers()
         {
-            // Arrange
             var minutes = 10;
             var reminders = new List<ReminderModel>
     {
@@ -129,7 +115,6 @@ namespace SmartAssistant.Tests.Services
 
             _mockReminderRepository.Setup(r => r.GetRemindersDueSoonAsync(minutes)).ReturnsAsync(reminders);
 
-            // Mock the ClientProxy's SendAsync behavior
             _mockClientProxy
                 .Setup(client => client.SendCoreAsync(
                     It.Is<string>(method => method == "ReceiveReminderNotification"),
@@ -137,14 +122,11 @@ namespace SmartAssistant.Tests.Services
                     default))
                 .Returns(Task.CompletedTask);
 
-            // Act
             var result = await _reminderService.GetRemindersDueSoonAsync(minutes);
 
-            // Assert
             result.Should().BeEquivalentTo(reminders);
             _mockReminderRepository.Verify(r => r.GetRemindersDueSoonAsync(minutes), Times.Once);
 
-            // Verify that SendCoreAsync was called on the client proxy
             _mockClientProxy.Verify(client => client.SendCoreAsync(
                 It.Is<string>(method => method == "ReceiveReminderNotification"),
                 It.IsAny<object[]>(),

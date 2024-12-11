@@ -18,7 +18,6 @@ namespace SmartAssistant.WebApplication.Controllers
             _userRepository = userRepository;
         }
 
-        // GET: /Team/Index
         public async Task<IActionResult> Index()
         {
             var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
@@ -32,7 +31,6 @@ namespace SmartAssistant.WebApplication.Controllers
 
 
 
-        // GET: /Team/Details/{id}
         public async Task<IActionResult> Details(int id)
         {
             var team = await _teamService.GetTeamByIdAsync(id);
@@ -43,14 +41,12 @@ namespace SmartAssistant.WebApplication.Controllers
             return View(team);
         }
 
-        // GET: /Team/Create
         public IActionResult Create()
         {
             var model = new TeamCreateModel();
             return View(model);
         }
 
-        // POST: /Team/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(TeamCreateModel model)
@@ -60,7 +56,6 @@ namespace SmartAssistant.WebApplication.Controllers
                 var ownerId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
                 if (ownerId != null)
                 {
-                    // Ensure that the team is not created twice by mistake
                     await _teamService.CreateTeamAsync(model, ownerId);
                 }
                 else
@@ -75,7 +70,6 @@ namespace SmartAssistant.WebApplication.Controllers
             return View(model);
         }
 
-        // POST: /Team/AddUserToTeam/{teamId}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddUserToTeam(int teamId, string userName)
@@ -102,7 +96,6 @@ namespace SmartAssistant.WebApplication.Controllers
             return RedirectToAction("Details", new { id = teamId });
         }
 
-        // POST: /Team/RemoveUserFromTeam/{teamId}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveUserFromTeam(int teamId, string userName)
@@ -129,7 +122,6 @@ namespace SmartAssistant.WebApplication.Controllers
             return RedirectToAction("Details", new { id = teamId });
         }
 
-        // GET: /Team/Delete/{id}
         public async Task<IActionResult> Delete(int id)
         {
             var team = await _teamService.GetTeamByIdAsync(id);
@@ -140,7 +132,6 @@ namespace SmartAssistant.WebApplication.Controllers
             return View(team);
         }
 
-        // POST: /Team/Delete/{id}
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -152,7 +143,6 @@ namespace SmartAssistant.WebApplication.Controllers
             }
             catch (Exception ex)
             {
-                // Pass the TeamErrorViewModel to the custom error view
                 var errorModel = new TeamErrorViewModel
                 {
                     ErrorMessage = ex.Message,

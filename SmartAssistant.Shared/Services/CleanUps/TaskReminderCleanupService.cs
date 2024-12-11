@@ -32,7 +32,6 @@ namespace SmartAssistant.Shared.Services.CleanUps
                 }
                 catch (TaskCanceledException)
                 {
-                    // Ignore the exception since it means the task is being stopped
                 }
             }
         }

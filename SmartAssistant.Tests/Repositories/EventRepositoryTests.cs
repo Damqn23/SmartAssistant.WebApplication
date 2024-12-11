@@ -15,7 +15,6 @@ namespace SmartAssistant.Tests.Repositories
 
         public EventRepositoryTests()
         {
-            // Initialize AutoMapper (mock or real configuration depending on setup)
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<EventModel, SmartAssistant.WebApp.Data.Entities.Event>().ReverseMap();
@@ -26,7 +25,6 @@ namespace SmartAssistant.Tests.Repositories
         [Fact]
         public async Task AddAsync_ShouldAddEventToDatabase()
         {
-            // Arrange
             using var context = CreateDbContext();
             var repository = new EventRepository(context, _mapper);
             var eventModel = new EventModel
@@ -36,10 +34,8 @@ namespace SmartAssistant.Tests.Repositories
                 UserId = "user123"
             };
 
-            // Act
             await repository.AddAsync(eventModel);
 
-            // Assert
             var addedEvent = context.Events.FirstOrDefault(e => e.EventTitle == "Test Event");
             Assert.NotNull(addedEvent);
             Assert.Equal("Test Event", addedEvent.EventTitle);
@@ -48,7 +44,6 @@ namespace SmartAssistant.Tests.Repositories
         [Fact]
         public async Task GetByIdAsync_ShouldReturnCorrectEvent()
         {
-            // Arrange
             using var context = CreateDbContext();
             var repository = new EventRepository(context, _mapper);
             var eventEntity = new SmartAssistant.WebApp.Data.Entities.Event
@@ -60,10 +55,8 @@ namespace SmartAssistant.Tests.Repositories
             context.Events.Add(eventEntity);
             await context.SaveChangesAsync();
 
-            // Act
             var result = await repository.GetByIdAsync(eventEntity.Id);
 
-            // Assert
             Assert.NotNull(result);
             Assert.Equal(eventEntity.EventTitle, result.EventTitle);
         }
@@ -71,7 +64,6 @@ namespace SmartAssistant.Tests.Repositories
         [Fact]
         public async Task DeleteAsync_ShouldRemoveEventFromDatabase()
         {
-            // Arrange
             using var context = CreateDbContext();
             var repository = new EventRepository(context, _mapper);
             var eventEntity = new SmartAssistant.WebApp.Data.Entities.Event
@@ -85,10 +77,8 @@ namespace SmartAssistant.Tests.Repositories
 
             var eventModel = _mapper.Map<EventModel>(eventEntity);
 
-            // Act
             await repository.DeleteAsync(eventModel);
 
-            // Assert
             var deletedEvent = context.Events.FirstOrDefault(e => e.Id == eventEntity.Id);
             Assert.Null(deletedEvent);
         }
@@ -96,7 +86,6 @@ namespace SmartAssistant.Tests.Repositories
         [Fact]
         public async Task UpdateAsync_ShouldUpdateEvent()
         {
-            // Arrange
             using var context = CreateDbContext();
             var repository = new EventRepository(context, _mapper);
             var eventEntity = new SmartAssistant.WebApp.Data.Entities.Event
@@ -111,10 +100,8 @@ namespace SmartAssistant.Tests.Repositories
             var updatedEventModel = _mapper.Map<EventModel>(eventEntity);
             updatedEventModel.EventTitle = "Updated Event Title";
 
-            // Act
             await repository.UpdateAsync(updatedEventModel);
 
-            // Assert
             var updatedEvent = context.Events.FirstOrDefault(e => e.Id == eventEntity.Id);
             Assert.NotNull(updatedEvent);
             Assert.Equal("Updated Event Title", updatedEvent.EventTitle);
@@ -124,7 +111,6 @@ namespace SmartAssistant.Tests.Repositories
         [Fact]
         public async Task RemoveExpiredEventsAsync_ShouldRemoveExpiredEvents()
         {
-            // Arrange
             using var context = CreateDbContext();
             var repository = new EventRepository(context, _mapper);
             var currentTime = DateTime.Now;
@@ -137,10 +123,8 @@ namespace SmartAssistant.Tests.Repositories
             context.Events.AddRange(events);
             await context.SaveChangesAsync();
 
-            // Act
             await repository.RemoveExpiredEventsAsync();
 
-            // Assert
             var remainingEvents = context.Events.ToList();
             Assert.Single(remainingEvents);
             Assert.Equal("Upcoming Event", remainingEvents[0].EventTitle);
@@ -149,7 +133,6 @@ namespace SmartAssistant.Tests.Repositories
         [Fact]
         public async Task GetEventsByUserIdAsync_ShouldReturnUserEvents()
         {
-            // Arrange
             using var context = CreateDbContext();
             var repository = new EventRepository(context, _mapper);
             var userEvents = new List<SmartAssistant.WebApp.Data.Entities.Event>
@@ -162,10 +145,8 @@ namespace SmartAssistant.Tests.Repositories
             context.Events.AddRange(userEvents);
             await context.SaveChangesAsync();
 
-            // Act
             var result = await repository.GetEventsByUserIdAsync("user1");
 
-            // Assert
             Assert.NotNull(result);
             Assert.Equal(2, result.Count);
             Assert.All(result, e => Assert.Equal("user1", e.UserId));

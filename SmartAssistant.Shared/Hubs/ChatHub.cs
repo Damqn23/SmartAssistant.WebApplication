@@ -18,7 +18,6 @@ namespace SmartAssistant.Shared.Hubs
             context = _context;
         }
 
-        // Add user to team chat group and send previous messages
         public async Task JoinTeamChat(int teamId)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, teamId.ToString());
@@ -43,11 +42,9 @@ namespace SmartAssistant.Shared.Hubs
 
 
 
-        // Send a message to the team
         public async Task SendMessageToTeam(int teamId, string userId, string messageContent)
         {
 
-            // Create and save the message
             var message = new SmartAssistant.Shared.Data.Entities.Message
             {
                 TeamId = teamId,
@@ -60,7 +57,6 @@ namespace SmartAssistant.Shared.Hubs
             await context.SaveChangesAsync();
 
             var user = await context.Users.FindAsync(userId);
-            // Broadcast the message to all users in the team group
             await Clients.Group(teamId.ToString()).SendAsync("ReceiveMessage", user.UserName, messageContent);
         }
 

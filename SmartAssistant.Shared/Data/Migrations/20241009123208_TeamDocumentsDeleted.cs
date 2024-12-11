@@ -5,17 +5,14 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SmartAssistant.WebApplication.Data.Migrations
 {
-    /// <inheritdoc />
     public partial class TeamDocumentsDeleted : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "TeamDocuments");
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(

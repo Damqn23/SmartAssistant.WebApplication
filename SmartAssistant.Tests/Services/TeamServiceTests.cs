@@ -30,7 +30,6 @@ namespace SmartAssistant.Tests.Services
             _mockHubContext = new Mock<IHubContext<NotificationHub>>();
             _mockClientProxy = new Mock<IClientProxy>();
 
-            // Set up HubContext mock
             var mockClients = new Mock<IHubClients>();
             _mockHubContext.Setup(x => x.Clients).Returns(mockClients.Object);
             mockClients.Setup(x => x.All).Returns(_mockClientProxy.Object);
@@ -41,17 +40,14 @@ namespace SmartAssistant.Tests.Services
         [Fact]
         public async Task CreateTeamAsync_ShouldCreateTeam()
         {
-            // Arrange
             var teamCreateModel = new TeamCreateModel
             {
                 TeamName = "Test Team"
             };
             var ownerId = "user123";
 
-            // Act
             await _teamService.CreateTeamAsync(teamCreateModel, ownerId);
 
-            // Assert
             _mockTeamRepository.Verify(r => r.AddAsync(It.Is<TeamModel>(
                 t => t.TeamName == teamCreateModel.TeamName && t.OwnerId == ownerId)), Times.Once);
         }
@@ -59,7 +55,6 @@ namespace SmartAssistant.Tests.Services
         [Fact]
         public async Task AddUserToTeamAsync_ShouldAddUser_WhenAuthorized()
         {
-            // Arrange
             var teamId = 1;
             var userId = "user123";
             var currentUserId = "owner123";
@@ -69,7 +64,6 @@ namespace SmartAssistant.Tests.Services
             _mockTeamRepository.Setup(r => r.GetByIdAsync(teamId)).ReturnsAsync(team);
             _mockUserRepository.Setup(r => r.GetUserByIdAsync(userId)).ReturnsAsync(user);
 
-            // Mock the SignalR `SendCoreAsync` behavior
             _mockClientProxy
                 .Setup(client => client.SendCoreAsync(
                     It.Is<string>(method => method == "UserAddedToTeam"),
@@ -77,10 +71,8 @@ namespace SmartAssistant.Tests.Services
                     default))
                 .Returns(Task.CompletedTask);
 
-            // Act
             await _teamService.AddUserToTeamAsync(teamId, userId, currentUserId);
 
-            // Assert
             _mockTeamRepository.Verify(r => r.AddUserToTeamAsync(userId, teamId), Times.Once);
             _mockClientProxy.Verify(client => client.SendCoreAsync(
                 It.Is<string>(method => method == "UserAddedToTeam"),
@@ -91,7 +83,6 @@ namespace SmartAssistant.Tests.Services
         [Fact]
         public async Task RemoveUserFromTeamAsync_ShouldRemoveUser_WhenAuthorized()
         {
-            // Arrange
             var teamId = 1;
             var userId = "user123";
             var currentUserId = "owner123";
@@ -101,7 +92,6 @@ namespace SmartAssistant.Tests.Services
             _mockTeamRepository.Setup(r => r.GetByIdAsync(teamId)).ReturnsAsync(team);
             _mockUserRepository.Setup(r => r.GetUserByIdAsync(userId)).ReturnsAsync(user);
 
-            // Mock the SignalR `SendCoreAsync` behavior
             _mockClientProxy
                 .Setup(client => client.SendCoreAsync(
                     It.Is<string>(method => method == "UserRemovedFromTeam"),
@@ -109,10 +99,8 @@ namespace SmartAssistant.Tests.Services
                     default))
                 .Returns(Task.CompletedTask);
 
-            // Act
             await _teamService.RemoveUserFromTeamAsync(teamId, userId, currentUserId);
 
-            // Assert
             _mockTeamRepository.Verify(r => r.RemoveUserFromTeamAsync(teamId, userId), Times.Once);
             _mockClientProxy.Verify(client => client.SendCoreAsync(
                 It.Is<string>(method => method == "UserRemovedFromTeam"),
@@ -123,7 +111,6 @@ namespace SmartAssistant.Tests.Services
         [Fact]
         public async Task GetTeamByIdAsync_ShouldReturnTeam_WhenExists()
         {
-            // Arrange
             var teamId = 1;
             var team = new TeamModel { Id = teamId, OwnerId = "owner123" };
             var owner = new UserModel { Id = "owner123", UserName = "John Doe" };
@@ -131,10 +118,8 @@ namespace SmartAssistant.Tests.Services
             _mockTeamRepository.Setup(r => r.GetByIdAsync(teamId)).ReturnsAsync(team);
             _mockUserRepository.Setup(r => r.GetUserByIdAsync(team.OwnerId)).ReturnsAsync(owner);
 
-            // Act
             var result = await _teamService.GetTeamByIdAsync(teamId);
 
-            // Assert
             result.Should().BeEquivalentTo(team);
             result.OwnerUserName.Should().Be(owner.UserName);
         }
@@ -142,7 +127,6 @@ namespace SmartAssistant.Tests.Services
         [Fact]
         public async Task GetAllTeamsAsync_ShouldReturnTeamsForUser()
         {
-            // Arrange
             var userId = "user123";
             var teams = new List<TeamModel>
             {
@@ -159,10 +143,8 @@ namespace SmartAssistant.Tests.Services
             _mockUserRepository.Setup(r => r.GetUserByIdAsync(It.IsAny<string>())).ReturnsAsync((string ownerId) =>
                 owners.FirstOrDefault(o => o.Id == ownerId));
 
-            // Act
             var result = await _teamService.GetAllTeamsAsync(userId);
 
-            // Assert
             result.Should().HaveCount(2);
             result.First().OwnerUserName.Should().Be("John Doe");
             result.Last().OwnerUserName.Should().Be("Jane Doe");

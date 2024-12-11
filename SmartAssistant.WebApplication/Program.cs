@@ -29,13 +29,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"C:\Users\rauga\OneDrive\Работен плот\The new project\SmartAssistant.WebApplication\SmartAssistant.WebApplication\Config\smartassistant-credentials.json");
 
-// Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-// Add Identity with Role Support
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>() // Enable roles
     .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -76,19 +74,20 @@ builder.Services.AddScoped<UserResolver>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("/Error"); // Handle 500 errors
+    app.UseStatusCodePagesWithReExecute("/Error/{0}"); // Handle status codes like 404
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 
 app.UseRouting();
 
@@ -106,7 +105,6 @@ app.UseEndpoints(endpoints =>
     endpoints.MapHub<ChatHub>("/chatHub");
 });
 
-// Role and Admin User Initialization
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -114,14 +112,12 @@ using (var scope = app.Services.CreateScope())
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
     var userManager = services.GetRequiredService<UserManager<User>>(); // Use your custom User class
 
-    // Create Admin Role
     var adminRoleExists = await roleManager.RoleExistsAsync("Admin");
     if (!adminRoleExists)
     {
         await roleManager.CreateAsync(new IdentityRole("Admin"));
     }
 
-    // Assign Admin Role to a User
     var adminEmail = "admin@example.com";
     var user = await userManager.FindByEmailAsync(adminEmail);
     if (user != null && !await userManager.IsInRoleAsync(user, "Admin"))
@@ -130,4 +126,4 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-app.Run();
+await app.RunAsync();

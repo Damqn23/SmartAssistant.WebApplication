@@ -43,14 +43,12 @@ namespace SmartAssistant.Shared.Services
 
             await taskRepository.AddAsync(task);
 
-            // Automatically create a reminder for the task, set 1 hour before the task's due date
             var reminderCreateModel = new ReminderCreateModel
             {
                 ReminderMessage = $"You have {task.Description} coming up at {task.DueDate}",
                 ReminderDate = task.DueDate.AddHours(-1),  // Reminder set for 1 hour before task's due date
             };
 
-            // Add the reminder to the database (but don't send notification yet)
             await reminderService.AddReminderAsync(reminderCreateModel, userId);
 
         }
@@ -82,7 +80,6 @@ namespace SmartAssistant.Shared.Services
 
         public async Task UpdateTaskAsync(TaskEditModel taskEditModel)
         {
-            // Fetch the original task from the repository to preserve UserId
             var existingTask = await taskRepository.GetByIdAsync(taskEditModel.Id);
 
             if (existingTask == null)
@@ -90,7 +87,6 @@ namespace SmartAssistant.Shared.Services
                 throw new Exception("Task not found");
             }
 
-            // Map the changes from TaskEditModel to TaskModel
             var task = new TaskModel
             {
                 Id = taskEditModel.Id,

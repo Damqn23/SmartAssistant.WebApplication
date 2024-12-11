@@ -30,7 +30,6 @@ namespace SmartAssistant.Tests.Views
         [Fact]
         public async Task Index_ShouldReturnViewWithReminders()
         {
-            // Arrange
             var reminders = new List<ReminderModel>
     {
         new ReminderModel { Id = 1, ReminderMessage = "Test Reminder 1", ReminderDate = DateTime.Now },
@@ -49,10 +48,8 @@ namespace SmartAssistant.Tests.Views
                 HttpContext = mockHttpContext.Object
             };
 
-            // Act
             var result = await _controller.Index();
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<IEnumerable<ReminderModel>>(viewResult.Model);
             Assert.Equal(2, model.Count());
@@ -61,10 +58,8 @@ namespace SmartAssistant.Tests.Views
         [Fact]
         public void Create_Get_ShouldReturnView()
         {
-            // Act
             var result = _controller.Create();
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.Null(viewResult.Model);
         }
@@ -72,16 +67,13 @@ namespace SmartAssistant.Tests.Views
         [Fact]
         public async Task Edit_Get_ShouldReturnViewWithEditModel()
         {
-            // Arrange
             var reminder = new ReminderModel { Id = 1, ReminderMessage = "Test Reminder", ReminderDate = DateTime.Now };
             var editModel = new ReminderEditModel { Id = 1, ReminderMessage = "Test Reminder", ReminderDate = DateTime.Now };
             _mockReminderService.Setup(s => s.GetReminderByIdAsync(1)).ReturnsAsync(reminder);
             _mockMapper.Setup(m => m.Map<ReminderEditModel>(reminder)).Returns(editModel);
 
-            // Act
             var result = await _controller.Edit(1);
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsType<ReminderEditModel>(viewResult.Model);
             Assert.Equal(1, model.Id);
@@ -90,16 +82,13 @@ namespace SmartAssistant.Tests.Views
         [Fact]
         public async Task Delete_Get_ShouldReturnViewWithDeleteModel()
         {
-            // Arrange
             var reminder = new ReminderModel { Id = 1, ReminderMessage = "Test Reminder", ReminderDate = DateTime.Now };
             var deleteModel = new ReminderDeleteModel { Id = 1, ReminderMessage = "Test Reminder", ReminderDate = DateTime.Now };
             _mockReminderService.Setup(s => s.GetReminderByIdAsync(1)).ReturnsAsync(reminder);
             _mockMapper.Setup(m => m.Map<ReminderDeleteModel>(reminder)).Returns(deleteModel);
 
-            // Act
             var result = await _controller.Delete(1);
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsType<ReminderDeleteModel>(viewResult.Model);
             Assert.Equal(1, model.Id);
@@ -108,13 +97,10 @@ namespace SmartAssistant.Tests.Views
         [Fact]
         public async Task DeleteConfirmed_ShouldRedirectToIndex()
         {
-            // Arrange
             _mockReminderService.Setup(s => s.DeleteReminderAsync(1)).Returns(Task.CompletedTask);
 
-            // Act
             var result = await _controller.DeleteConfirmed(1);
 
-            // Assert
             var redirectResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Index", redirectResult.ActionName);
         }
@@ -122,14 +108,11 @@ namespace SmartAssistant.Tests.Views
         [Fact]
         public async Task Details_ShouldReturnViewWithReminder()
         {
-            // Arrange
             var reminder = new ReminderModel { Id = 1, ReminderMessage = "Test Reminder", ReminderDate = DateTime.Now };
             _mockReminderService.Setup(s => s.GetReminderByIdAsync(1)).ReturnsAsync(reminder);
 
-            // Act
             var result = await _controller.Details(1);
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsType<ReminderModel>(viewResult.Model);
             Assert.Equal(1, model.Id);

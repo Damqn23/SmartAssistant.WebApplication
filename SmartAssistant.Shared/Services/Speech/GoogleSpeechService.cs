@@ -17,7 +17,6 @@ namespace SmartAssistant.Shared.Services.Speech
         {
             try
             {
-                // Use the injected _speechClient instead of creating a new instance
                 int sampleRate = GetWavFileSampleRate(audioBytes);
 
                 var response = _speechClient.Recognize(new RecognitionConfig
@@ -45,7 +44,6 @@ namespace SmartAssistant.Shared.Services.Speech
         {
             try
             {
-                // WAV file header has sample rate at byte offset 24 (4 bytes, little-endian)
                 return BitConverter.ToInt32(wavBytes, 24);
             }
             catch (Exception)

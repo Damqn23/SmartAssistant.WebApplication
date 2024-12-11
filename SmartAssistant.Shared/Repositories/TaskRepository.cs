@@ -87,7 +87,6 @@ namespace SmartAssistant.Shared.Repositories
 
                 task.UserId = taskModel.UserId;
 
-                // Ensure entity state is marked as modified
                 context.Entry(task).State = EntityState.Modified;
 
                 await context.SaveChangesAsync();

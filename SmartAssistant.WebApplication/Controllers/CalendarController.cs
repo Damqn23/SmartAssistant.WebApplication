@@ -99,10 +99,8 @@ namespace SmartAssistant.WebApplication.Controllers
                 return Unauthorized("Only the team owner can add tasks.");
             }
 
-            // Fetch team members
             var teamMembers = (await teamService.GetTeamMembersByTeamIdAsync(teamId)).ToList();
 
-            // Add the owner to the team members list if not already present
             if (team.OwnerId != null && !teamMembers.Any(m => m.Id == team.OwnerId))
             {
                 teamMembers.Add(new UserModel
@@ -116,7 +114,6 @@ namespace SmartAssistant.WebApplication.Controllers
                 throw new Exception("No team members found.");
             }
 
-            // Populate the TeamTaskCreateModel with team members
             var model = new TeamTaskCreateModel
             {
                 TeamId = teamId,
@@ -136,10 +133,8 @@ namespace SmartAssistant.WebApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Fetch team members again because the model is sent back to the view
                 var teamMembers = await teamService.GetTeamMembersByTeamIdAsync(model.TeamId);
 
-                // Populate the TeamMembers dropdown again in case of validation failure
                 model.TeamMembers = teamMembers.Select(m => new SelectListItem
                 {
                     Value = m.Id,
@@ -162,10 +157,8 @@ namespace SmartAssistant.WebApplication.Controllers
                 return Unauthorized("Only the team owner can add events.");
             }
 
-            // Fetch team members
             var teamMembers = (await teamService.GetTeamMembersByTeamIdAsync(teamId)).ToList();
 
-            // Add the owner to the team members list if not already present
             if (team.OwnerId != null && !teamMembers.Any(m => m.Id == team.OwnerId))
             {
                 teamMembers.Add(new UserModel
@@ -180,7 +173,6 @@ namespace SmartAssistant.WebApplication.Controllers
                 throw new Exception("No team members found.");
             }
 
-            // Populate the TeamEventCreateModel with team members
             var model = new TeamEventCreateModel
             {
                 TeamId = teamId,
@@ -201,10 +193,8 @@ namespace SmartAssistant.WebApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Fetch team members again because the model is sent back to the view
                 var teamMembers = await teamService.GetTeamMembersByTeamIdAsync(model.TeamId);
 
-                // Populate the TeamMembers dropdown again in case of validation failure
                 model.TeamMembers = teamMembers.Select(m => new SelectListItem
                 {
                     Value = m.Id,

@@ -61,12 +61,10 @@ namespace SmartAssistant.Shared.Repositories
             var reminder = await context.Reminders.FirstOrDefaultAsync(r => r.Id == entity.Id);
             if (reminder != null)
             {
-                // Update properties manually
                 reminder.ReminderMessage = entity.ReminderMessage;
                 reminder.ReminderDate = entity.ReminderDate;
                 reminder.UserId = entity.UserId;
 
-                // Save changes
                 await context.SaveChangesAsync();
             }
         }

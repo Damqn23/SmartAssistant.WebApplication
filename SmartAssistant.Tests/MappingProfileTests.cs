@@ -20,7 +20,6 @@ namespace SmartAssistant.Tests
 
         public MappingProfileTests()
         {
-            // Initialize AutoMapper configuration
             _configuration = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>());
             _mapper = _configuration.CreateMapper();
         }
@@ -28,7 +27,6 @@ namespace SmartAssistant.Tests
         [Fact]
         public void Team_To_TeamModel_ShouldMapCorrectly()
         {
-            // Arrange
             var team = new Team
             {
                 Id = 2,
@@ -37,10 +35,8 @@ namespace SmartAssistant.Tests
                 Owner = new User { Id = "owner123", UserName = "OwnerName" }
             };
 
-            // Act
             var result = _mapper.Map<TeamModel>(team);
 
-            // Assert
             Assert.NotNull(result);
             Assert.Equal(team.Id, result.Id);
             Assert.Equal(team.TeamName, result.TeamName);
@@ -51,7 +47,6 @@ namespace SmartAssistant.Tests
         [Fact]
         public void TaskModel_To_TaskEntity_ShouldMapCorrectly()
         {
-            // Arrange
             var taskModel = new TaskModel
             {
                 Id = 3,
@@ -60,10 +55,8 @@ namespace SmartAssistant.Tests
                 UserId = "user123"
             };
 
-            // Act
             var result = _mapper.Map<SmartAssistant.WebApp.Data.Entities.Task>(taskModel);
 
-            // Assert
             Assert.NotNull(result);
             Assert.Equal(taskModel.Id, result.Id);
             Assert.Equal(taskModel.Description, result.Description);
@@ -74,7 +67,6 @@ namespace SmartAssistant.Tests
         [Fact]
         public void Event_To_EventModel_ShouldMapCorrectly()
         {
-            // Arrange
             var eventEntity = new Event
             {
                 Id = 4,
@@ -83,10 +75,8 @@ namespace SmartAssistant.Tests
                 UserId = "user456"
             };
 
-            // Act
             var result = _mapper.Map<EventModel>(eventEntity);
 
-            // Assert
             Assert.NotNull(result);
             Assert.Equal(eventEntity.Id, result.Id);
             Assert.Equal(eventEntity.EventTitle, result.EventTitle);

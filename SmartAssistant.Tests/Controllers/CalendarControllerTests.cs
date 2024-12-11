@@ -58,7 +58,6 @@ namespace SmartAssistant.Tests.Controllers
         [Fact]
         public async Task Index_ShouldReturnViewWithCalendarViewModel()
         {
-            // Arrange
             var tasks = new List<TaskModel>
             {
                 new TaskModel { Description = "Task 1", DueDate = DateTime.Today }
@@ -72,10 +71,8 @@ namespace SmartAssistant.Tests.Controllers
             _mockTaskService.Setup(s => s.GetTasksByUserIdAsync("test-user-id")).ReturnsAsync(tasks);
             _mockEventService.Setup(s => s.GetEventsByUserIdAsync("test-user-id")).ReturnsAsync(events);
 
-            // Act
             var result = await _controller.Index();
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsType<CalendarViewModel>(viewResult.Model);
             Assert.NotEmpty(model.Days);
@@ -84,17 +81,14 @@ namespace SmartAssistant.Tests.Controllers
         [Fact]
         public async Task TeamIndex_ShouldReturnViewWithTeamCalendar()
         {
-            // Arrange
             var team = new TeamModel { Id = 1, TeamName = "Test Team", OwnerUserName = "test-username" };
 
             _mockTeamService.Setup(s => s.GetTeamByIdAsync(1)).ReturnsAsync(team);
             _mockTaskService.Setup(s => s.GetTasksByTeamIdAsync(1)).ReturnsAsync(new List<TaskModel>());
             _mockEventService.Setup(s => s.GetEventsByTeamIdAsync(1)).ReturnsAsync(new List<EventModel>());
 
-            // Act
             var result = await _controller.TeamIndex(1);
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsType<CalendarViewModel>(viewResult.Model);
             Assert.Equal("test-username", model.TeamOwnerUserName);
@@ -103,7 +97,6 @@ namespace SmartAssistant.Tests.Controllers
         [Fact]
         public async Task AddTeamTask_Get_ShouldReturnViewWithModel()
         {
-            // Arrange
             var team = new TeamModel { Id = 1, TeamName = "Test Team", OwnerUserName = "test-username", OwnerId = "test-owner-id" };
             var teamMembers = new List<UserModel>
             {
@@ -113,10 +106,8 @@ namespace SmartAssistant.Tests.Controllers
             _mockTeamService.Setup(s => s.GetTeamByIdAsync(1)).ReturnsAsync(team);
             _mockTeamService.Setup(s => s.GetTeamMembersByTeamIdAsync(1)).ReturnsAsync(teamMembers);
 
-            // Act
             var result = await _controller.AddTeamTask(1, DateTime.Today);
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsType<TeamTaskCreateModel>(viewResult.Model);
             Assert.Equal(1, model.TeamId);
@@ -128,7 +119,6 @@ namespace SmartAssistant.Tests.Controllers
         [Fact]
         public async Task AddTeamEvent_Get_ShouldReturnViewWithModel()
         {
-            // Arrange
             var team = new TeamModel { Id = 1, TeamName = "Test Team", OwnerUserName = "test-username", OwnerId = "test-owner-id" };
             var teamMembers = new List<UserModel>
             {
@@ -138,10 +128,8 @@ namespace SmartAssistant.Tests.Controllers
             _mockTeamService.Setup(s => s.GetTeamByIdAsync(1)).ReturnsAsync(team);
             _mockTeamService.Setup(s => s.GetTeamMembersByTeamIdAsync(1)).ReturnsAsync(teamMembers);
 
-            // Act
             var result = await _controller.AddTeamEvent(1, DateTime.Today);
 
-            // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsType<TeamEventCreateModel>(viewResult.Model);
             Assert.Equal(1, model.TeamId);

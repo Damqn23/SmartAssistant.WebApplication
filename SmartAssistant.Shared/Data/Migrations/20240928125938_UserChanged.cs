@@ -4,10 +4,8 @@
 
 namespace SmartAssistant.WebApplication.Data.Migrations
 {
-    /// <inheritdoc />
     public partial class UserChanged : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
@@ -53,7 +51,6 @@ namespace SmartAssistant.WebApplication.Data.Migrations
                 onDelete: ReferentialAction.Restrict);
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(

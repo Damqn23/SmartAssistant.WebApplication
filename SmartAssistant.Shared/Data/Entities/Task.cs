@@ -21,7 +21,6 @@ namespace SmartAssistant.WebApp.Data.Entities
         [Required]
         public DateTime DueDate { get; set; } // Due date for the task
 
-        // New properties
         [Range(1, 1440, ErrorMessage = "Time must be between 1 minute and 24 hours.")]
         public int EstimatedTimeToComplete { get; set; } // Time required in minutes
 

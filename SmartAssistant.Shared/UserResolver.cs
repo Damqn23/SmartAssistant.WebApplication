@@ -27,7 +27,6 @@ namespace SmartAssistant.Shared
 
             if (httpContext == null || !httpContext.User.Identity.IsAuthenticated)
             {
-                // Handle non-HTTP or unauthenticated cases (e.g., return null or some default user)
                 return null;
             }
 
@@ -38,7 +37,6 @@ namespace SmartAssistant.Shared
                 return new UserModel
                 {
                     Id = userId,
-                    // Populate other user properties as needed
                 };
             }
 

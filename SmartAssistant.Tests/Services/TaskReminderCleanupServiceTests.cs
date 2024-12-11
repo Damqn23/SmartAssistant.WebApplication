@@ -23,7 +23,6 @@ namespace SmartAssistant.Tests.Services
 
         public TaskReminderCleanupServiceTests()
         {
-            // Mocks
             _mockRootServiceProvider = new Mock<IServiceProvider>();
             _mockScopedServiceProvider = new Mock<IServiceProvider>();
             _mockScopeFactory = new Mock<IServiceScopeFactory>();
@@ -31,22 +30,18 @@ namespace SmartAssistant.Tests.Services
             _mockTaskService = new Mock<ITaskService>();
             _mockReminderService = new Mock<IReminderService>();
 
-            // Setup the root IServiceProvider to return the IServiceScopeFactory
             _mockRootServiceProvider
                 .Setup(sp => sp.GetService(typeof(IServiceScopeFactory)))
                 .Returns(_mockScopeFactory.Object);
 
-            // Setup the IServiceScopeFactory to create a mock IServiceScope
             _mockScopeFactory
                 .Setup(sf => sf.CreateScope())
                 .Returns(_mockServiceScope.Object);
 
-            // Setup the IServiceScope to return the scoped IServiceProvider
             _mockServiceScope
                 .Setup(s => s.ServiceProvider)
                 .Returns(_mockScopedServiceProvider.Object);
 
-            // Setup the scoped IServiceProvider to return ITaskService and IReminderService
             _mockScopedServiceProvider
                 .Setup(sp => sp.GetService(typeof(ITaskService)))
                 .Returns(_mockTaskService.Object);
@@ -55,20 +50,16 @@ namespace SmartAssistant.Tests.Services
                 .Setup(sp => sp.GetService(typeof(IReminderService)))
                 .Returns(_mockReminderService.Object);
 
-            // Create an instance of TaskReminderCleanupService
             _taskReminderCleanupService = new TaskReminderCleanupService(_mockRootServiceProvider.Object);
         }
 
         [Fact]
         public async Task CleanupExpiredTaskAndReminder_ShouldCallServices()
         {
-            // Arrange
             var cancellationToken = new CancellationTokenSource().Token;
 
-            // Act
             await _taskReminderCleanupService.StartAsync(cancellationToken);
 
-            // Assert
             _mockTaskService.Verify(ts => ts.RemoveExpiredTasksAsync(), Times.AtLeastOnce);
             _mockReminderService.Verify(rs => rs.RemoveExpiredRemindersAsync(), Times.AtLeastOnce);
         }
@@ -76,15 +67,12 @@ namespace SmartAssistant.Tests.Services
         [Fact]
         public async Task ExecuteAsync_ShouldRespectCancellationToken()
         {
-            // Arrange
             var cts = new CancellationTokenSource();
             cts.CancelAfter(TimeSpan.FromMilliseconds(100)); // Cancel quickly
             var token = cts.Token;
 
-            // Act
             var executeTask = _taskReminderCleanupService.StartAsync(token);
 
-            // Assert
             await executeTask;
             _mockTaskService.Verify(ts => ts.RemoveExpiredTasksAsync(), Times.AtMostOnce);
             _mockReminderService.Verify(rs => rs.RemoveExpiredRemindersAsync(), Times.AtMostOnce);

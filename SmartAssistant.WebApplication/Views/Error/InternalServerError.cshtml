@@ -1,0 +1,62 @@
+﻿@{
+    ViewData["Title"] = "Internal Server Error";
+}
+
+<div class="container text-center mt-5">
+    <h1 class="text-danger display-1">500</h1>
+    <h2 class="text-dark">Oops! Something went wrong</h2>
+    <p class="mt-3 text-muted">
+        We apologize for the inconvenience. Our team has been notified and is working on a fix. <br />
+        In the meantime, you can return to the homepage.
+    </p>
+    <div class="mt-4">
+        <a href="@Url.Action("Index", "Home")" class="btn btn-warning btn-lg custom-btn">
+            <i class="fas fa-home"></i> Back to Home
+        </a>
+    </div>
+    <div class="mt-5">
+        <img src="https://cdn-icons-png.flaticon.com/512/564/564619.png"
+             alt="Server Error"
+             class="img-fluid error-image">
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #f8d7da;
+    }
+
+    h1 {
+        font-size: 6rem;
+        color: #dc3545;
+        transition: transform 0.3s ease-in-out;
+    }
+
+        h1:hover {
+            transform: scale(1.1);
+        }
+
+    h2 {
+        font-size: 1.8rem;
+        color: #343a40;
+    }
+
+    .custom-btn {
+        background-color: #ffc107;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1.2rem;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+        .custom-btn:hover {
+            background-color: #e0a800;
+            transform: scale(1.05);
+        }
+
+    .error-image {
+        max-width: 300px;
+        margin-top: 20px;
+    }
+</style>

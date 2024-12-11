@@ -77,7 +77,6 @@ namespace SmartAssistant.Shared.Services
 
             foreach (var reminder in upcomingReminders)
             {
-                // Notify the user via SignalR when the reminder is due
                 await hubContext.Clients.User(reminder.UserId).SendAsync("ReceiveReminderNotification",
                     $"Reminder: {reminder.ReminderMessage} is coming up at {reminder.ReminderDate}");
             }

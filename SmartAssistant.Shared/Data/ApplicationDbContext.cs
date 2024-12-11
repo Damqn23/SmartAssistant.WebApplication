@@ -27,25 +27,21 @@ namespace SmartAssistant.WebApplication.Data
 
             builder.Entity<User>().ToTable("AspNetUsers");
 
-            // Configure UserTeam composite key
             builder.Entity<UserTeam>()
                 .HasKey(ut => new { ut.UserId, ut.TeamId });
 
-            // Configure UserTeam and User relationship
             builder.Entity<UserTeam>()
                 .HasOne(ut => ut.User)
                 .WithMany(u => u.UserTeams)
                 .HasForeignKey(ut => ut.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Configure UserTeam and Team relationship
             builder.Entity<UserTeam>()
                 .HasOne(ut => ut.Team)
                 .WithMany(t => t.UserTeams)
                 .HasForeignKey(ut => ut.TeamId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Configure Message and Team relationship
             builder.Entity<Message>()
         .HasOne(m => m.Team)
         .WithMany(t => t.Messages)
